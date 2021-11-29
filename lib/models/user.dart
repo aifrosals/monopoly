@@ -13,4 +13,16 @@ class User {
       required this.loops,
       required this.presence,
       this.currentSlot});
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      credits: json['credits'] ?? 0,
+      dice: json['dice'] ?? 0,
+      loops: json['loops'] ?? 0,
+      presence: json['presence'],
+      currentSlot: json['current_slot'],
+    );
+  }
+
 }

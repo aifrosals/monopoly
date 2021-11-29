@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:monopoly/pages/login_page.dart';
+import 'package:monopoly/providers/board_provider.dart';
+import 'package:monopoly/providers/dice_provider.dart';
+import 'package:monopoly/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<BoardProvider>(
+      create: (context) => BoardProvider(),
+    ),
+    ChangeNotifierProvider<UserProvider>(
+      create: (context) => UserProvider(),
+    ),
+    ChangeNotifierProvider<DiceProvider>(
+      create: (context) => DiceProvider(),
+    )
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -24,7 +39,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.grey,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const LoginPage(),
+      //const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
