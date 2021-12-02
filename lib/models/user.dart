@@ -4,7 +4,7 @@ class User {
   int dice;
   int credits;
   int loops;
-  bool presence;
+  String presence;
 
   User(
       {required this.id,
@@ -25,4 +25,14 @@ class User {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'credits': credits,
+      'loops': loops,
+      'presence': presence,
+      'current_slot': currentSlot,
+      'dice': dice,
+    };
+  }
 }

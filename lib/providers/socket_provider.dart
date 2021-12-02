@@ -1,27 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:monopoly/models/user.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class SocketProvider extends ChangeNotifier {
-  io.Socket socket = io.io('http://192.168.10.7:3000/', <String, dynamic>{
+  io.Socket socket = io.io('http://192.168.10.10:3000/', <String, dynamic>{
     'transports': ['websocket'],
     'autoConnect': false,
   });
 
-  SocketProvider() {
-    debugPrint('this is reached');
+  List<User> _users = [];
 
-    // socket.onConnecting((_) {
-    // debugPrint('connect');
-    // socket.emit('msg', 'test');
-    // });
+  SocketProvider(User user) {
+    debugPrint('this is the user ${user.id}');
     socket.connect();
     socket.onConnect((data) => debugPrint('Connected'));
-    socket.onDisconnect((_) => debugPrint('disconnect'));
+    socket.emit('online', user.id);
+    socket.on('checkUsers', (data) => updateSlotPresence(data));
+    socket.onDisconnect((_) {
+      debugPrint('disconnect');
+    });
+  }
+
+  updateSlotPresence(dynamic data) {
+    try {
+      debugPrint('data $data');
+      data as List;
+      _users = data.map((e) => User.fromJson(e)).toList();
+      _users.removeWhere((element) => element.presence == 'online');
+    } catch (error, st) {
+      debugPrint('$error $st');
+    } finally {
+      notifyListeners();
+    }
   }
 
   disconnect() {
     socket.disconnect();
-    //  socket.dispose();
+    socket.dispose();
   }
 
   @override
@@ -29,4 +44,6 @@ class SocketProvider extends ChangeNotifier {
     disconnect();
     super.dispose();
   }
+
+  List<User> get users => _users;
 }
