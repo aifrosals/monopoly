@@ -34,6 +34,10 @@ class SocketProvider extends ChangeNotifier {
     }
   }
 
+  updateUserCurrentSlot(User user) {
+    socket.emit('userMove', user.toJson());
+  }
+
   disconnect() {
     socket.disconnect();
     socket.dispose();

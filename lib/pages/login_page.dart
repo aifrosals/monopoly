@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +11,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final diceProvider = Provider.of<DiceProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,8 +28,14 @@ class LoginPage extends StatelessWidget {
             TextButton(
                 style: TextButton.styleFrom(
                     primary: Colors.pink, backgroundColor: Colors.grey[200]),
-                onPressed: () {
-                  userProvider.login('user1');
+                onPressed: () async {
+                  showDialog(
+                      context: context,
+                      builder: (context) =>
+                          const Center(child: CircularProgressIndicator()));
+                  await userProvider.login('user1');
+                  diceProvider.resetFace();
+                  Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -37,8 +45,14 @@ class LoginPage extends StatelessWidget {
             TextButton(
                 style: TextButton.styleFrom(
                     primary: Colors.pink, backgroundColor: Colors.grey[200]),
-                onPressed: () {
-                  userProvider.login('user2');
+                onPressed: () async {
+                  showDialog(
+                      context: context,
+                      builder: (context) =>
+                          const Center(child: CircularProgressIndicator()));
+                  await userProvider.login('user2');
+                  diceProvider.resetFace();
+                  Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -48,8 +62,14 @@ class LoginPage extends StatelessWidget {
             TextButton(
                 style: TextButton.styleFrom(
                     primary: Colors.pink, backgroundColor: Colors.grey[200]),
-                onPressed: () {
-                  userProvider.login('user3');
+                onPressed: () async {
+                  showDialog(
+                      context: context,
+                      builder: (context) =>
+                          const Center(child: CircularProgressIndicator()));
+                  await userProvider.login('user3');
+                  diceProvider.resetFace();
+                  Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
