@@ -5,7 +5,12 @@ import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'services/connection_status_singleton.dart';
+
 void main() {
+//  ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
+//  connectionStatus.initialize();
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<BoardProvider>(
       create: (context) => BoardProvider(),

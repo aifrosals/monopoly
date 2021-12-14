@@ -9,12 +9,12 @@ import 'package:http/http.dart' as http;
 class UserProvider extends ChangeNotifier {
   final _scrollController = ScrollController();
 
-  final User _user = User(
+   User _user = User(
       presence: 'offline',
       loops: 0,
-      dice: 5,
+      dice: 0,
       credits: 0,
-      id: 'user1',
+      id: '',
       currentSlot: 0);
 
   login(String id) async {
@@ -34,8 +34,10 @@ class UserProvider extends ChangeNotifier {
       );
       debugPrint(response.body);
       var resData = json.decode(response.body);
-      user.id = id;
-      user.currentSlot = resData['current_slot'];
+      //  user.id = id;
+      //   user.currentSlot = resData['current_slot'];
+      debugPrint(' credits from server ${resData['credits']}');
+      _user = User.fromJson(resData);
     } catch (error, st) {
       debugPrint('UserProvider $error $st');
     } finally {

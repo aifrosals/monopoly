@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monopoly/models/user.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -31,15 +32,62 @@ class BoardPage extends StatelessWidget {
                         height: 80,
                         child: Padding(
                           padding: const EdgeInsets.all(3.0),
-                          child: ListTile(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
-                            tileColor: boardProvider.slots[index].color,
-                            title: Text(boardProvider.slots[index].name,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 20)),
+                            child: ListTile(
+                                onTap: () {
+                                  List<User> offlineUsers =
+                                      socketProvider.getOfflineUserData(index);
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => Dialog(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    const Text(
+                                                      'Offline Users',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: offlineUsers
+                                                          .map(
+                                                              (e) => Text(e.id))
+                                                          .toList(),
+                                                    )
+                                                  ]),
+                                            ),
+                                          ));
+                                },
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                tileColor: boardProvider.slots[index].color,
+                                title: Text(boardProvider.slots[index].name,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 20)),
+                                trailing:
+                                    socketProvider.getOfflineUsers(index) != 0
+                                        ? Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.indigo[200]),
+                                            child: Center(
+                                                child: Text(
+                                                    '${socketProvider.getOfflineUsers(index)}',
+                                                    style: const TextStyle(
+                                                        color: Colors.white))),
+                                          )
+                                        : const SizedBox()),
                           ),
-                        ),
                       ),
                       index == userProvider.user.currentSlot
                           ? Positioned(
@@ -72,17 +120,57 @@ class BoardPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('dice', style: TextStyle(color: Colors.white)),
-                  diceProvider.face != 0
-                      ? Text('${diceProvider.face}',
-                          style: const TextStyle(color: Colors.white))
-                      : const SizedBox()
+                    diceProvider.face != 0
+                        ? Text('${diceProvider.face}',
+                            style: const TextStyle(color: Colors.white))
+                        : const SizedBox()
+                  ],
+                );
+              }),
+              backgroundColor: Colors.pinkAccent,
+            );
+          }),
+          bottomNavigationBar: Container(
+            height: 20,
+            color: Colors.purple,
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Credits: ${userProvider.user.credits}',
+                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                  )
                 ],
-              );
-            }),
-            backgroundColor: Colors.pinkAccent,
-          );
-        }),
-      ),
+              )
+            ]),
+          )
+          // BottomNavigationBar(
+          //   items: const <BottomNavigationBarItem>[
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.home),
+          //       label: 'Home',
+          //       backgroundColor: Colors.red,
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.business),
+          //       label: 'Business',
+          //       backgroundColor: Colors.green,
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.school),
+          //       label: 'School',
+          //       backgroundColor: Colors.purple,
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.settings),
+          //       label: 'Settings',
+          //       backgroundColor: Colors.pink,
+          //     ),
+          //   ],
+          //
+          // ),
+          ),
     );
   }
 }
