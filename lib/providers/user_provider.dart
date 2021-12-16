@@ -61,6 +61,12 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  updateUser(User user) {
+    debugPrint('update user gets called ${user.credits}');
+    _user = user;
+    notifyListeners();
+  }
+
   User get user => _user;
 
   ScrollController get scrollController => _scrollController;

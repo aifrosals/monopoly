@@ -28,6 +28,7 @@ class BoardProvider extends ChangeNotifier {
 
   getBoardSlots() async {
     try {
+      debugPrint('called');
       Uri url = Uri.parse('${ApiConstants.domain}${ApiConstants.slots}');
       // var body = {'id': id};
       debugPrint('$url');

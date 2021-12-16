@@ -1,9 +1,13 @@
-import 'dart:async';
+import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/api/api_constants.dart';
+import 'package:monopoly/config/values.dart';
 import 'package:monopoly/models/user.dart';
-import 'package:monopoly/services/connection_status_singleton.dart';
+import 'package:http/http.dart' as http;
+import 'package:monopoly/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
@@ -26,6 +30,7 @@ class SocketProvider extends ChangeNotifier {
     socket.onConnect((data) => userConnected(user));
     // socket.emit('online', user.id);
     socket.on('checkUsers', (data) => updateSlotPresence(data));
+    socket.on('buy_land', (data) => notifyBuyLand(user));
     socket.onDisconnect((_) {
       debugPrint('disconnect');
     });
@@ -34,6 +39,80 @@ class SocketProvider extends ChangeNotifier {
   userConnected(User user) {
     socket.emit('online', user.id);
     debugPrint('Connected');
+  }
+
+  notifyBuyLand(User user) {
+    //TODO: smooth the flow of dialog with prevention of closing
+    try {
+      debugPrint('buy land is triggered');
+      showDialog(
+          context: Values.navigatorKey.currentContext!,
+          builder: (context) => Dialog(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Buy Land'),
+                    const Text('Buy Land for 50 credits'),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                                onPressed: () async {
+                                  Uri url = Uri.parse(
+                                      '${ApiConstants.domain}${ApiConstants.buyLand}');
+                                  var body = {
+                                    'userId': user.id,
+                                    'slotIndex': user.currentSlot
+                                  };
+                                  debugPrint('$url');
+                                  var response = await http.post(
+                                    url,
+                                    body: json.encode(body),
+                                    //TODO: add token
+                                    headers: {
+                                      'Content-Type': 'application/json'
+                                      // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
+                                      //'${user.token}',
+                                    },
+                                  );
+                                  debugPrint(
+                                      'notify buy land ${response.body}');
+                                  if (response.statusCode == 200) {
+                                    User user = User.fromJson(
+                                        json.decode(response.body));
+                                    Provider.of<UserProvider>(
+                                            Values.navigatorKey.currentContext!,
+                                            listen: false)
+                                        .updateUser(user);
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => Dialog(
+                                              child: Text('Land is purchased'),
+                                            ));
+                                  } else {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => Dialog(
+                                              child: Text(response.body),
+                                            ));
+                                  }
+                                },
+                                child: const Text('yes')),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('No')),
+                          ]),
+                    )
+                  ],
+                ),
+              ));
+    } catch (error, st) {
+      debugPrint('SocketProvider $error $st');
+    }
   }
 
   updateSlotPresence(dynamic data) {

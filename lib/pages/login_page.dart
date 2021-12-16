@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final diceProvider = Provider.of<DiceProvider>(context, listen: false);
+    final boardProvider = Provider.of<BoardProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,6 +36,7 @@ class LoginPage extends StatelessWidget {
                       builder: (context) =>
                           const Center(child: CircularProgressIndicator()));
                   await userProvider.login('user1');
+                  await boardProvider.getBoardSlots();
                   diceProvider.resetFace();
                   Navigator.pop(context);
                   Navigator.push(
@@ -51,6 +54,7 @@ class LoginPage extends StatelessWidget {
                       builder: (context) =>
                           const Center(child: CircularProgressIndicator()));
                   await userProvider.login('user2');
+                  await boardProvider.getBoardSlots();
                   diceProvider.resetFace();
                   Navigator.pop(context);
                   Navigator.push(
@@ -68,6 +72,7 @@ class LoginPage extends StatelessWidget {
                       builder: (context) =>
                           const Center(child: CircularProgressIndicator()));
                   await userProvider.login('user3');
+                  await boardProvider.getBoardSlots();
                   diceProvider.resetFace();
                   Navigator.pop(context);
                   Navigator.push(

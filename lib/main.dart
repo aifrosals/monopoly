@@ -5,6 +5,7 @@ import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'config/values.dart';
 import 'services/connection_status_singleton.dart';
 
 void main() {
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: Values.navigatorKey,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.

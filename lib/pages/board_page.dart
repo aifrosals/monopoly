@@ -137,10 +137,13 @@ class BoardPage extends StatelessWidget {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Credits: ${userProvider.user.credits}',
-                    style: const TextStyle(color: Colors.white, fontSize: 12),
-                  )
+                  Consumer<UserProvider>(
+                      builder: (context, userProvider, child) {
+                    return Text(
+                      'Credits: ${userProvider.user.credits}',
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    );
+                  })
                 ],
               )
             ]),

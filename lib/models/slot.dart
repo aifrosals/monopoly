@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monopoly/config/color_util.dart';
+import 'package:monopoly/config/extensions.dart';
 
 class Slot {
   String name;
@@ -22,8 +22,8 @@ class Slot {
   factory Slot.fromJson(Map<String, dynamic> json) {
     return Slot(
         name: json['name'],
-        type: json['type'],
-        color: ColorUtil.randomColor(),
+        type: json['current_type'],
+        color: json['color'].toString().toColor(),
         initialType: json['initial_type'],
         price: json['land_price'],
         owner: json['owner'],
