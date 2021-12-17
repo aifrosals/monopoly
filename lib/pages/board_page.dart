@@ -18,21 +18,31 @@ class BoardPage extends StatelessWidget {
       lazy: false,
       create: (context) => SocketProvider(userProvider.user),
       child: Scaffold(
-        body: SafeArea(
-          child: Consumer3<BoardProvider, UserProvider, SocketProvider>(builder:
-              (context, boardProvider, userProvider, socketProvider, child) {
-            return ListView.builder(
-                shrinkWrap: true,
-                controller: userProvider.scrollController,
-                itemCount: boardProvider.slots.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Stack(
-                    children: [
-                      SizedBox(
-                        height: 80,
-                        child: Padding(
-                          padding: const EdgeInsets.all(3.0),
+          body: SafeArea(
+            child: Consumer3<BoardProvider, UserProvider, SocketProvider>(
+                builder: (context, boardProvider, userProvider, socketProvider,
+                    child) {
+              return ListView.builder(
+                  shrinkWrap: true,
+                  controller: userProvider.scrollController,
+                  itemCount: boardProvider.slots.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Stack(
+                      children: [
+                        SizedBox(
+                          height: 80,
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
                             child: ListTile(
+                                subtitle: (boardProvider.slots[index].owner !=
+                                            null &&
+                                        boardProvider.slots[index].owner?.id !=
+                                            null)
+                                    ? Text(
+                                        ' bought by ${boardProvider.slots[index].owner?.id}',
+                                        style: const TextStyle(
+                                            color: Colors.white))
+                                    : const SizedBox(),
                                 onTap: () {
                                   List<User> offlineUsers =
                                       socketProvider.getOfflineUserData(index);
@@ -45,39 +55,39 @@ class BoardPage extends StatelessWidget {
                                               child: Column(
                                                   mainAxisSize:
                                                       MainAxisSize.min,
-                                                  children: [
-                                                    const Text(
-                                                      'Offline Users',
-                                                      style: TextStyle(
-                                                          fontWeight:
+                                                      children: [
+                                                        const Text(
+                                                          'Offline Users',
+                                                          style: TextStyle(
+                                                              fontWeight:
                                                               FontWeight.bold),
-                                                      textAlign:
+                                                          textAlign:
                                                           TextAlign.center,
-                                                    ),
-                                                    Column(
-                                                      mainAxisSize:
+                                                        ),
+                                                        Column(
+                                                          mainAxisSize:
                                                           MainAxisSize.min,
-                                                      children: offlineUsers
-                                                          .map(
-                                                              (e) => Text(e.id))
-                                                          .toList(),
-                                                    )
-                                                  ]),
-                                            ),
-                                          ));
-                                },
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                                tileColor: boardProvider.slots[index].color,
-                                title: Text(boardProvider.slots[index].name,
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 20)),
-                                trailing:
+                                                          children: offlineUsers
+                                                              .map(
+                                                                  (e) => Text(e.id))
+                                                              .toList(),
+                                                        )
+                                                      ]),
+                                                ),
+                                              ));
+                                    },
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12)),
+                                    tileColor: boardProvider.slots[index].color,
+                                    title: Text(boardProvider.slots[index].name,
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 20)),
+                                    trailing:
                                     socketProvider.getOfflineUsers(index) != 0
                                         ? Container(
-                                            height: 30,
-                                            width: 30,
-                                            decoration: BoxDecoration(
+                                      height: 30,
+                                      width: 30,
+                                      decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 color: Colors.indigo[200]),
                                             child: Center(
@@ -88,38 +98,38 @@ class BoardPage extends StatelessWidget {
                                           )
                                         : const SizedBox()),
                           ),
-                      ),
-                      index == userProvider.user.currentSlot
-                          ? Positioned(
-                              left: 120,
-                              top: 15,
-                              child: Container(
-                                height: 30,
-                                width: 30,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.lightGreen),
-                              ),
-                            )
-                          : const SizedBox()
-                    ],
-                  );
-                });
-          }),
-        ),
-        floatingActionButton:
-            Consumer<SocketProvider>(builder: (context, socketProvider, child) {
-          return FloatingActionButton(
-            onPressed: () {
-              userProvider.setCurrentSlot(diceProvider.rollDice());
-              socketProvider.updateUserCurrentSlot(userProvider.user);
-            },
-            child:
-                Consumer<DiceProvider>(builder: (context, diceProvider, child) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('dice', style: TextStyle(color: Colors.white)),
+                        ),
+                        index == userProvider.user.currentSlot
+                            ? Positioned(
+                                left: 120,
+                                top: 15,
+                                child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.lightGreen),
+                                ),
+                              )
+                            : const SizedBox()
+                      ],
+                    );
+                  });
+            }),
+          ),
+          floatingActionButton: Consumer<SocketProvider>(
+              builder: (context, socketProvider, child) {
+            return FloatingActionButton(
+              onPressed: () {
+                userProvider.setCurrentSlot(diceProvider.rollDice());
+                socketProvider.updateUserCurrentSlot(userProvider.user);
+              },
+              child: Consumer<DiceProvider>(
+                  builder: (context, diceProvider, child) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('dice', style: TextStyle(color: Colors.white)),
                     diceProvider.face != 0
                         ? Text('${diceProvider.face}',
                             style: const TextStyle(color: Colors.white))

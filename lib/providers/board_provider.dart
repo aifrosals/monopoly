@@ -42,7 +42,7 @@ class BoardProvider extends ChangeNotifier {
           //'${user.token}',
         },
       );
-      debugPrint(response.body);
+      debugPrint('BoardProvider getBoardSlots ${response.body}');
       var resData = json.decode(response.body) as List;
       _slots = resData.map((e) => Slot.fromJson(e)).toList();
       //  user.id = id;
@@ -50,6 +50,17 @@ class BoardProvider extends ChangeNotifier {
 
     } catch (error, st) {
       debugPrint('BoardProvider $error $st');
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  updateBoardSlots(dynamic data) {
+    try {
+      data as List;
+      _slots = data.map((e) => Slot.fromJson(e)).toList();
+    } catch (error, st) {
+      debugPrint('BoardProvider updateBoardSlots $error $st');
     } finally {
       notifyListeners();
     }

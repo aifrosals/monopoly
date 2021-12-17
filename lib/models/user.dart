@@ -20,8 +20,8 @@ class User {
       credits: json['credits'] ?? 0,
       dice: json['dice'] ?? 0,
       loops: json['loops'] ?? 0,
-      presence: json['presence'],
-      currentSlot: json['current_slot'],
+      presence: json['presence'] ?? 'none',
+      currentSlot: json['current_slot'] ?? 0,
     );
   }
 

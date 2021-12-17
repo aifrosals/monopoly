@@ -11,6 +11,8 @@ import 'package:provider/provider.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
+import 'board_provider.dart';
+
 class SocketProvider extends ChangeNotifier {
   io.Socket socket = io.io(ApiConstants.socketPoint, <String, dynamic>{
     'transports': ['websocket'],
@@ -30,7 +32,9 @@ class SocketProvider extends ChangeNotifier {
     socket.onConnect((data) => userConnected(user));
     // socket.emit('online', user.id);
     socket.on('checkUsers', (data) => updateSlotPresence(data));
+    socket.on('checkBoard', (data) => updateBoard(data));
     socket.on('buy_land', (data) => notifyBuyLand(user));
+    socket.on('update_current_user', (data) => updateCurrentUser(data));
     socket.onDisconnect((_) {
       debugPrint('disconnect');
     });
@@ -80,6 +84,7 @@ class SocketProvider extends ChangeNotifier {
                                   debugPrint(
                                       'notify buy land ${response.body}');
                                   if (response.statusCode == 200) {
+                                    //TODO: remove this repetition and use the function below or remove it
                                     User user = User.fromJson(
                                         json.decode(response.body));
                                     Provider.of<UserProvider>(
@@ -88,7 +93,7 @@ class SocketProvider extends ChangeNotifier {
                                         .updateUser(user);
                                     showDialog(
                                         context: context,
-                                        builder: (context) => Dialog(
+                                        builder: (context) => const Dialog(
                                               child: Text('Land is purchased'),
                                             ));
                                   } else {
@@ -113,6 +118,13 @@ class SocketProvider extends ChangeNotifier {
     } catch (error, st) {
       debugPrint('SocketProvider $error $st');
     }
+  }
+
+  updateBoard(dynamic data) {
+    debugPrint('updateBoard data received $data');
+    Provider.of<BoardProvider>(Values.navigatorKey.currentContext!,
+            listen: false)
+        .updateBoardSlots(data);
   }
 
   updateSlotPresence(dynamic data) {
@@ -150,6 +162,17 @@ class SocketProvider extends ChangeNotifier {
       }
     }
     return selectedSlotUsers;
+  }
+
+  updateCurrentUser(dynamic userData) {
+    try {
+      User user = User.fromJson(userData);
+      Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
+              listen: false)
+          .updateUser(user);
+    } catch (error, st) {
+      debugPrint('update current user $error $st');
+    }
   }
 
   disconnect() {
