@@ -120,10 +120,13 @@ class BoardPage extends StatelessWidget {
           floatingActionButton: Consumer<SocketProvider>(
               builder: (context, socketProvider, child) {
             return FloatingActionButton(
-              onPressed: () {
-                userProvider.setCurrentSlot(diceProvider.rollDice());
-                socketProvider.updateUserCurrentSlot(userProvider.user);
-              },
+              onPressed: socketProvider.activeMove
+                  ? () {
+                      userProvider.setCurrentSlot(diceProvider.rollDice());
+                      socketProvider.updateUserCurrentSlot(userProvider.user);
+                      debugPrint('user loop count ${userProvider.user.loops}');
+                    }
+                  : null,
               child: Consumer<DiceProvider>(
                   builder: (context, diceProvider, child) {
                 return Column(
@@ -158,31 +161,6 @@ class BoardPage extends StatelessWidget {
               )
             ]),
           )
-          // BottomNavigationBar(
-          //   items: const <BottomNavigationBarItem>[
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.home),
-          //       label: 'Home',
-          //       backgroundColor: Colors.red,
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.business),
-          //       label: 'Business',
-          //       backgroundColor: Colors.green,
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.school),
-          //       label: 'School',
-          //       backgroundColor: Colors.purple,
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.settings),
-          //       label: 'Settings',
-          //       backgroundColor: Colors.pink,
-          //     ),
-          //   ],
-          //
-          // ),
           ),
     );
   }

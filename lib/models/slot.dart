@@ -4,6 +4,7 @@ import 'package:monopoly/models/user.dart';
 
 class Slot {
   String name;
+  /// type indicates the current type of the slot
   String type;
   String initialType;
   User? owner;

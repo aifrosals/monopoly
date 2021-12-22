@@ -54,6 +54,7 @@ class UserProvider extends ChangeNotifier {
       } else {
         _user.currentSlot = slot;
       }
+      debugPrint('user currentSlot ${_user.currentSlot}');
       _scrollController.animateTo(60.0 * _user.currentSlot!,
           duration: const Duration(milliseconds: 1500), curve: Curves.easeOut);
     }
@@ -62,7 +63,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   updateUser(User user) {
-    debugPrint('update user gets called ${user.credits}');
+    debugPrint('update user gets called ${user.currentSlot}');
     _user = user;
     notifyListeners();
   }
