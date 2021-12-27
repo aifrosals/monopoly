@@ -35,6 +35,7 @@ class SocketProvider extends ChangeNotifier {
     socket.on('checkBoard', (data) => updateBoard(data));
     socket.on('buy_land', (data) => notifyBuyLand());
     socket.on('upgrade_slot', (data) => notifyUpgradeSlot(data));
+    socket.on('buy_owned_slot', (data) => notifyBuyOwnedSlot(data));
     socket.on('update_current_user', (data) => updateCurrentUser(data));
     socket.onDisconnect((_) {
       debugPrint('disconnect');
@@ -276,6 +277,21 @@ class SocketProvider extends ChangeNotifier {
         .updateBoardSlots(data);
   }
 
+  notifyBuyOwnedSlot(dynamic data) {
+    debugPrint('notifyBuyOwnedSlot $data');
+    showDialog(
+        context: Values.navigatorKey.currentContext!,
+        builder: (context) => Dialog(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [Text('Do you want to buy this slot from')],
+                ),
+              ),
+            ));
+  }
+
   updateSlotPresence(dynamic data) {
     try {
       debugPrint('User slot presence is updated $data');
@@ -338,6 +354,43 @@ class SocketProvider extends ChangeNotifier {
   // connectionChanged(dynamic hasConnection) {
   //  debugPrint('internet connection test $hasConnection');
   // }
+
+  int getSellingFactor(String type) {
+    switch (type) {
+      case 'land':
+        {
+          return 20;
+        }
+      case 'house':
+        {
+          return 15;
+        }
+      case 'shop':
+        {
+          return 10;
+        }
+      case 'condo':
+        {
+          return 8;
+        }
+      case 'business_center':
+        {
+          return 6;
+        }
+      case 'theme_park':
+        {
+          return 4;
+        }
+      case 'city':
+        {
+          return 3;
+        }
+      default:
+        {
+          return 1;
+        }
+    }
+  }
 
   @override
   void dispose() {
