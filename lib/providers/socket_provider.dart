@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:monopoly/api/api_constants.dart';
 import 'package:monopoly/config/values.dart';
 import 'package:monopoly/models/slot.dart';
+import 'package:monopoly/models/slot_names.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:monopoly/providers/user_provider.dart';
@@ -143,47 +144,37 @@ class SocketProvider extends ChangeNotifier {
       int price = 0;
       String name = '';
       Slot slot = Slot.fromJson(data);
-      String type = slot.type;
+      int level = slot.level ?? 100;
 
-      /// This switch case is based on the current slot type so if the
-      /// type of the slot is land it can be upgraded to a house with the
-      /// price of 100 credits and so on. Theme park upgrading price 3150 will
-      /// upgrade it into a city
-      switch (type) {
-        case 'land':
+      switch (level) {
+        case 0:
           {
             price = 100;
             name = 'House';
           }
           break;
-        case 'house':
+        case 1:
           {
             price = 200;
             name = 'Shop';
           }
           break;
-        case 'shop':
+        case 2:
           {
             price = 400;
             name = 'Condo';
           }
           break;
-        case 'condo':
+        case 3:
           {
             price = 800;
-            name = 'Business Center';
+            name = 'Business center or a Theme Park';
           }
           break;
-        case 'business_center':
+        case 4:
           {
             price = 1600;
-            name = 'Theme Park';
-          }
-          break;
-        case 'theme_park':
-          {
-            price = 3150;
-            name = 'City';
+            name = "city";
           }
           break;
         default:
@@ -270,15 +261,23 @@ class SocketProvider extends ChangeNotifier {
     }
   }
 
-  updateBoard(dynamic data) {
-    debugPrint('updateBoard data received $data');
-    Provider.of<BoardProvider>(Values.navigatorKey.currentContext!,
-            listen: false)
-        .updateBoardSlots(data);
-  }
-
   notifyBuyOwnedSlot(dynamic data) {
     debugPrint('notifyBuyOwnedSlot $data');
+
+    Slot slot = Slot.fromJson(data['slot']);
+    User owner = User.fromJson(data['owner']);
+    User user = Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
+            listen: false)
+        .user;
+
+    debugPrint('Slot type ${slot.type}');
+
+    int sellingFactor = getSellingFactor(slot.type);
+    int sellingPrice = 0;
+    if (slot.updatedPrice != null) {
+      sellingPrice = slot.updatedPrice! * sellingFactor;
+    }
+
     showDialog(
         context: Values.navigatorKey.currentContext!,
         builder: (context) => Dialog(
@@ -286,10 +285,53 @@ class SocketProvider extends ChangeNotifier {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [Text('Do you want to buy this slot from')],
+                  children: [
+                    Text(
+                        'Do you want to buy this ${slot.name} from ${owner.id} for $sellingPrice?'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                            onPressed: () async {
+                              Uri url = Uri.parse(
+                                  '${ApiConstants.domain}${ApiConstants.sendBuyRequest}');
+                              var body = {
+                                'userId': user.id,
+                                'slotIndex': user.currentSlot,
+                              };
+                              var response = await http.post(
+                                url,
+                                body: json.encode(body),
+                                //TODO: add token
+                                headers: {
+                                  'Content-Type': 'application/json'
+                                  // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
+                                  //'${user.token}',
+                                },
+                              );
+                              debugPrint('notify buy land ${response.body}');
+
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Yes')),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('No'))
+                      ],
+                    )
+                  ],
                 ),
               ),
             ));
+  }
+
+  updateBoard(dynamic data) {
+    debugPrint('updateBoard data received $data');
+    Provider.of<BoardProvider>(Values.navigatorKey.currentContext!,
+            listen: false)
+        .updateBoardSlots(data);
   }
 
   updateSlotPresence(dynamic data) {
@@ -306,6 +348,7 @@ class SocketProvider extends ChangeNotifier {
   }
 
   updateUserCurrentSlot(User user) {
+    debugPrint('userMove user ${user.toJson()}');
     _activeMove = false;
     socket.emit('userMove', user.toJson());
     notifyListeners();

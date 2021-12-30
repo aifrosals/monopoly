@@ -40,6 +40,7 @@ class BoardProvider extends ChangeNotifier {
     try {
       data as List;
       _slots = data.map((e) => Slot.fromJson(e)).toList();
+      debugPrint('slots data ${_slots[9]}');
     } catch (error, st) {
       debugPrint('BoardProvider updateBoardSlots $error $st');
     } finally {

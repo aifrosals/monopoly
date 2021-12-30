@@ -4,6 +4,7 @@ class User {
   int dice;
   int credits;
   int loops;
+  String? serverId;
   String presence;
 
   User(
@@ -11,6 +12,7 @@ class User {
       required this.credits,
       required this.dice,
       required this.loops,
+      this.serverId,
       required this.presence,
       this.currentSlot});
 
@@ -22,6 +24,7 @@ class User {
       loops: json['loops'] ?? 0,
       presence: json['presence'] ?? 'none',
       currentSlot: json['current_slot'] ?? 0,
+      serverId: json['_id'] ?? '',
     );
   }
 

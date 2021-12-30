@@ -4,13 +4,16 @@ import 'package:monopoly/models/user.dart';
 
 class Slot {
   String name;
+
   /// type indicates the current type of the slot
   String type;
   String initialType;
   User? owner;
   int? price;
   int? updatedPrice;
+  int? level;
   Color color;
+  Map<String, dynamic>? allStepCount;
 
   Slot(
       {required this.name,
@@ -18,7 +21,9 @@ class Slot {
       this.price,
       this.updatedPrice,
       this.owner,
+      this.level,
       required this.color,
+      this.allStepCount,
       required this.initialType});
 
   factory Slot.fromJson(Map<String, dynamic> json) {
@@ -40,6 +45,8 @@ class Slot {
         initialType: json['initial_type'],
         price: json['land_price'],
         owner: user,
-        updatedPrice: json['updated_price']);
+        level: json['level'],
+        updatedPrice: json['updated_price'],
+        allStepCount: json['all_step_count']);
   }
 }
