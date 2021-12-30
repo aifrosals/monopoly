@@ -102,46 +102,70 @@ class BoardPage extends StatelessWidget {
                               title: Text(boardProvider.slots[index].name,
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 20)),
-                              trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    boardProvider.slots[index].allStepCount !=
-                                                null &&
-                                            boardProvider
-                                                .slots[index].allStepCount!
-                                                .containsKey(
-                                                    userProvider.user.serverId)
-                                        ? Container(
-                                            height: 20,
-                                            decoration: const BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(12)),
-                                                color: Colors.indigo),
-                                            child: Center(
-                                                child: Text(
-                                                    'steps: ${boardProvider.slots[index].allStepCount![userProvider.user.serverId]}',
-                                                    style: const TextStyle(
-                                                        color: Colors.white))),
-                                          )
-                                        : const SizedBox(),
-                                    const SizedBox(
-                                      width: 2,
-                                    ),
-                                    socketProvider.getOfflineUsers(index) != 0
-                                        ? Container(
-                                            height: 30,
-                                            width: 30,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Colors.indigo[200]),
-                                            child: Center(
-                                                child: Text(
-                                                    '${socketProvider.getOfflineUsers(index)}',
-                                                    style: const TextStyle(
-                                                        color: Colors.white))),
-                                          )
-                                        : const SizedBox(),
-                                  ]),
+                              trailing: Column(
+                                children: [
+                                  boardProvider.slots[index].status != null &&
+                                          boardProvider.slots[index].status! ==
+                                              'for_sell'
+                                      ? const Icon(
+                                          Icons.star,
+                                          color: Colors.yellow,
+                                          size: 8,
+                                        )
+                                      : const SizedBox(),
+                                  Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        boardProvider.slots[index]
+                                                        .allStepCount !=
+                                                    null &&
+                                                boardProvider
+                                                    .slots[index].allStepCount!
+                                                    .containsKey(userProvider
+                                                        .user.serverId)
+                                            ? Container(
+                                                height: 20,
+                                                decoration: const BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                12)),
+                                                    color: Colors.indigo),
+                                                child: Center(
+                                                    child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0,
+                                                          right: 8.0),
+                                                  child: Text(
+                                                      'steps: ${boardProvider.slots[index].allStepCount![userProvider.user.serverId]}',
+                                                      style: const TextStyle(
+                                                          color: Colors.white)),
+                                                )),
+                                              )
+                                            : const SizedBox(),
+                                        const SizedBox(
+                                          width: 2,
+                                        ),
+                                        socketProvider.getOfflineUsers(index) !=
+                                                0
+                                            ? Container(
+                                                height: 30,
+                                                width: 30,
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.indigo[200]),
+                                                child: Center(
+                                                    child: Text(
+                                                        '${socketProvider.getOfflineUsers(index)}',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.white))),
+                                              )
+                                            : const SizedBox(),
+                                      ]),
+                                ],
+                              ),
                             ),
                           ),
                         ),

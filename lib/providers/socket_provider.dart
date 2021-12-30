@@ -188,25 +188,25 @@ class SocketProvider extends ChangeNotifier {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('Upgrade'),
-                    Text(
-                      'Do you want to upgrade this place into a $name for $price credits?',
-                      textAlign: TextAlign.center,
-                    ),
+                    const Text('Upgrade or Sell'),
+                    // Text(
+                    //   'Upgrade this place into a $name for $price credits?',
+                    //   textAlign: TextAlign.center,
+                    // ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
+                      child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             TextButton(
-                                onPressed: () async {
-                                  debugPrint(
-                                      'upgradeSlot userslot ${user.currentSlot}');
-                                  Uri url = Uri.parse(
-                                      '${ApiConstants.domain}${ApiConstants.upgradeSlot}');
-                                  var body = {
-                                    'userId': user.id,
-                                    'slotIndex': user.currentSlot,
+                              onPressed: () async {
+                                debugPrint(
+                                    'upgradeSlot userslot ${user.currentSlot}');
+                                Uri url = Uri.parse(
+                                    '${ApiConstants.domain}${ApiConstants.upgradeSlot}');
+                                var body = {
+                                  'userId': user.id,
+                                  'slotIndex': user.currentSlot,
                                   };
                                   debugPrint('$url');
                                   var response = await http.post(
@@ -235,22 +235,81 @@ class SocketProvider extends ChangeNotifier {
                                               child: Text(
                                                 'Place upgraded successfully',
                                                 textAlign: TextAlign.center,
-                                              ),
-                                            ));
-                                  } else {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => Dialog(
-                                              child: Text(response.body),
-                                            ));
-                                  }
-                                },
-                                child: const Text('yes')),
+                                            ),
+                                          ));
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => Dialog(
+                                            child: Text(response.body),
+                                          ));
+                                }
+                              },
+                              child: Text(
+                                'Upgrade this place into a $name for $price credits',
+                                textAlign: TextAlign.center,
+                              ),
+                              style:
+                                  TextButton.styleFrom(primary: Colors.green),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                debugPrint(
+                                    'upgradeSlot userslot ${user.currentSlot}');
+                                Uri url = Uri.parse(
+                                    '${ApiConstants.domain}${ApiConstants.upgradeSlot}');
+                                var body = {
+                                  'userId': user.id,
+                                  'slotIndex': user.currentSlot,
+                                };
+                                debugPrint('$url');
+                                var response = await http.post(
+                                  url,
+                                  body: json.encode(body),
+                                  //TODO: add token
+                                  headers: {
+                                    'Content-Type': 'application/json'
+                                    // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
+                                    //'${user.token}',
+                                  },
+                                );
+                                debugPrint(
+                                    'notifyUpgradeSlot sell Urgently ${response.body}');
+                                if (response.statusCode == 200) {
+                                  //TODO: remove this repetition and use the function below or remove it
+                                  User user =
+                                      User.fromJson(json.decode(response.body));
+                                  Provider.of<UserProvider>(
+                                          Values.navigatorKey.currentContext!,
+                                          listen: false)
+                                      .updateUser(user);
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => const Dialog(
+                                            child: Text(
+                                              'Place upgraded successfully',
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ));
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => Dialog(
+                                            child: Text(response.body),
+                                          ));
+                                }
+                              },
+                              child: const Text(
+                                'Sell Urgently',
+                                textAlign: TextAlign.center,
+                              ),
+                              style: TextButton.styleFrom(primary: Colors.blue),
+                            ),
                             TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Text('No')),
+                                child: const Text('Do Nothing')),
                           ]),
                     )
                   ],
@@ -272,7 +331,7 @@ class SocketProvider extends ChangeNotifier {
 
     debugPrint('Slot type ${slot.type}');
 
-    int sellingFactor = getSellingFactor(slot.type);
+    int sellingFactor = getSellingFactor(slot.level ?? 100);
     int sellingPrice = 0;
     if (slot.updatedPrice != null) {
       sellingPrice = slot.updatedPrice! * sellingFactor;
@@ -294,7 +353,7 @@ class SocketProvider extends ChangeNotifier {
                         TextButton(
                             onPressed: () async {
                               Uri url = Uri.parse(
-                                  '${ApiConstants.domain}${ApiConstants.sendBuyRequest}');
+                                  '${ApiConstants.domain}${ApiConstants.buyProperty}');
                               var body = {
                                 'userId': user.id,
                                 'slotIndex': user.currentSlot,
@@ -398,35 +457,31 @@ class SocketProvider extends ChangeNotifier {
   //  debugPrint('internet connection test $hasConnection');
   // }
 
-  int getSellingFactor(String type) {
-    switch (type) {
-      case 'land':
+  int getSellingFactor(int level) {
+    switch (level) {
+      case 0:
         {
           return 20;
         }
-      case 'house':
+      case 1:
         {
           return 15;
         }
-      case 'shop':
+      case 2:
         {
           return 10;
         }
-      case 'condo':
+      case 3:
         {
           return 8;
         }
-      case 'business_center':
+      case 4:
         {
           return 6;
         }
-      case 'theme_park':
+      case 5:
         {
           return 4;
-        }
-      case 'city':
-        {
-          return 3;
         }
       default:
         {

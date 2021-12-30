@@ -12,6 +12,7 @@ class Slot {
   int? price;
   int? updatedPrice;
   int? level;
+  String? status;
   Color color;
   Map<String, dynamic>? allStepCount;
 
@@ -21,6 +22,7 @@ class Slot {
       this.price,
       this.updatedPrice,
       this.owner,
+      this.status,
       this.level,
       required this.color,
       this.allStepCount,
@@ -46,6 +48,7 @@ class Slot {
         price: json['land_price'],
         owner: user,
         level: json['level'],
+        status: json['status'] ?? '',
         updatedPrice: json['updated_price'],
         allStepCount: json['all_step_count']);
   }

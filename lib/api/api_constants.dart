@@ -10,5 +10,6 @@ class ApiConstants {
 
   static const String buyLand = 'buyLand';
   static const String upgradeSlot = 'upgradeSlot';
-  static const String sendBuyRequest = 'sendBuyRequest';
+  static const String buyProperty = 'buyProperty';
+  static const String urgentSell = 'urgentSell';
 }
