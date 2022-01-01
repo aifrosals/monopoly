@@ -58,6 +58,13 @@ class BoardPage extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: ListTile(
+                              leading: Text(
+                                '${index + 1}',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500),
+                              ),
                               subtitle: (boardProvider.slots[index].owner !=
                                           null &&
                                       boardProvider.slots[index].owner?.id !=
@@ -69,32 +76,32 @@ class BoardPage extends StatelessWidget {
                                   : const SizedBox(),
                               onTap: () {
                                 List<User> offlineUsers =
-                                    socketProvider.getOfflineUserData(index);
+                                socketProvider.getOfflineUserData(index);
                                 showDialog(
                                     context: context,
                                     builder: (context) => Dialog(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  const Text(
-                                                    'Offline Users',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: offlineUsers
-                                                        .map((e) => Text(e.id))
-                                                        .toList(),
-                                                  )
-                                                ]),
-                                          ),
-                                        ));
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Text(
+                                                'Offline Users',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                    FontWeight.bold),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              Column(
+                                                mainAxisSize:
+                                                MainAxisSize.min,
+                                                children: offlineUsers
+                                                    .map((e) => Text(e.id))
+                                                    .toList(),
+                                              )
+                                            ]),
+                                      ),
+                                    ));
                               },
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
@@ -103,6 +110,7 @@ class BoardPage extends StatelessWidget {
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 20)),
                               trailing: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   boardProvider.slots[index].status != null &&
                                           boardProvider.slots[index].status! ==
@@ -110,58 +118,58 @@ class BoardPage extends StatelessWidget {
                                       ? const Icon(
                                           Icons.star,
                                           color: Colors.yellow,
-                                          size: 8,
+                                          size: 15,
                                         )
                                       : const SizedBox(),
                                   Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         boardProvider.slots[index]
-                                                        .allStepCount !=
-                                                    null &&
-                                                boardProvider
-                                                    .slots[index].allStepCount!
-                                                    .containsKey(userProvider
-                                                        .user.serverId)
+                                            .allStepCount !=
+                                            null &&
+                                            boardProvider
+                                                .slots[index].allStepCount!
+                                                .containsKey(userProvider
+                                                .user.serverId)
                                             ? Container(
-                                                height: 20,
-                                                decoration: const BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                12)),
-                                                    color: Colors.indigo),
-                                                child: Center(
-                                                    child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 8.0,
-                                                          right: 8.0),
-                                                  child: Text(
-                                                      'steps: ${boardProvider.slots[index].allStepCount![userProvider.user.serverId]}',
-                                                      style: const TextStyle(
-                                                          color: Colors.white)),
-                                                )),
-                                              )
+                                          height: 20,
+                                          decoration: const BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.all(
+                                                  Radius.circular(
+                                                      12)),
+                                              color: Colors.indigo),
+                                          child: Center(
+                                              child: Padding(
+                                                padding:
+                                                const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8.0),
+                                                child: Text(
+                                                    'steps: ${boardProvider.slots[index].allStepCount![userProvider.user.serverId]}',
+                                                    style: const TextStyle(
+                                                        color: Colors.white)),
+                                              )),
+                                        )
                                             : const SizedBox(),
                                         const SizedBox(
                                           width: 2,
                                         ),
                                         socketProvider.getOfflineUsers(index) !=
-                                                0
+                                            0
                                             ? Container(
-                                                height: 30,
-                                                width: 30,
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.indigo[200]),
-                                                child: Center(
-                                                    child: Text(
-                                                        '${socketProvider.getOfflineUsers(index)}',
-                                                        style: const TextStyle(
-                                                            color:
-                                                                Colors.white))),
-                                              )
+                                          height: 30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.indigo[200]),
+                                          child: Center(
+                                              child: Text(
+                                                  '${socketProvider.getOfflineUsers(index)}',
+                                                  style: const TextStyle(
+                                                      color:
+                                                      Colors.white))),
+                                        )
                                             : const SizedBox(),
                                       ]),
                                 ],
@@ -174,8 +182,8 @@ class BoardPage extends StatelessWidget {
                                 left: 120,
                                 top: 15,
                                 child: Container(
-                                  height: 30,
-                                  width: 30,
+                                  height: 25,
+                                  width: 25,
                                   decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.lightGreen),

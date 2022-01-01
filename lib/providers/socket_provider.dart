@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:monopoly/api/api_constants.dart';
 import 'package:monopoly/config/values.dart';
 import 'package:monopoly/models/slot.dart';
-import 'package:monopoly/models/slot_names.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:monopoly/providers/user_provider.dart';
@@ -38,6 +37,7 @@ class SocketProvider extends ChangeNotifier {
     socket.on('upgrade_slot', (data) => notifyUpgradeSlot(data));
     socket.on('buy_owned_slot', (data) => notifyBuyOwnedSlot(data));
     socket.on('update_current_user', (data) => updateCurrentUser(data));
+    socket.on('buy_owned_slot_half', (data) => notifyBuyOwnedSlotHalf(data));
     socket.onDisconnect((_) {
       debugPrint('disconnect');
     });
@@ -254,10 +254,9 @@ class SocketProvider extends ChangeNotifier {
                             ),
                             TextButton(
                               onPressed: () async {
-                                debugPrint(
-                                    'upgradeSlot userslot ${user.currentSlot}');
+                                debugPrint('sell Urgent ${user.currentSlot}');
                                 Uri url = Uri.parse(
-                                    '${ApiConstants.domain}${ApiConstants.upgradeSlot}');
+                                    '${ApiConstants.domain}${ApiConstants.urgentSell}');
                                 var body = {
                                   'userId': user.id,
                                   'slotIndex': user.currentSlot,
@@ -276,18 +275,11 @@ class SocketProvider extends ChangeNotifier {
                                 debugPrint(
                                     'notifyUpgradeSlot sell Urgently ${response.body}');
                                 if (response.statusCode == 200) {
-                                  //TODO: remove this repetition and use the function below or remove it
-                                  User user =
-                                      User.fromJson(json.decode(response.body));
-                                  Provider.of<UserProvider>(
-                                          Values.navigatorKey.currentContext!,
-                                          listen: false)
-                                      .updateUser(user);
                                   showDialog(
                                       context: context,
-                                      builder: (context) => const Dialog(
+                                      builder: (context) => Dialog(
                                             child: Text(
-                                              'Place upgraded successfully',
+                                              response.body,
                                               textAlign: TextAlign.center,
                                             ),
                                           ));
@@ -346,7 +338,9 @@ class SocketProvider extends ChangeNotifier {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                        'Do you want to buy this ${slot.name} from ${owner.id} for $sellingPrice?'),
+                      'Do you want to buy this Property from ${owner.id} for $sellingPrice?',
+                      textAlign: TextAlign.center,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -371,6 +365,126 @@ class SocketProvider extends ChangeNotifier {
                               debugPrint('notify buy land ${response.body}');
 
                               Navigator.pop(context);
+                              if (response.statusCode == 200) {
+                                //TODO: remove this repetition and use the function below or remove it
+                                User user =
+                                    User.fromJson(json.decode(response.body));
+                                Provider.of<UserProvider>(
+                                        Values.navigatorKey.currentContext!,
+                                        listen: false)
+                                    .updateUser(user);
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => const Dialog(
+                                          child: Text(
+                                            'Property Purchased Successfully',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ));
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => Dialog(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(response.body),
+                                          ),
+                                        ));
+                              }
+                            },
+                            child: const Text('Yes')),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('No'))
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ));
+  }
+
+  notifyBuyOwnedSlotHalf(dynamic data) {
+    debugPrint('notifyBuyOwnedSlot $data');
+
+    Slot slot = Slot.fromJson(data['slot']);
+    User owner = User.fromJson(data['owner']);
+    User user = Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
+            listen: false)
+        .user;
+
+    debugPrint('Slot type ${slot.type}');
+
+    int sellingFactor = getSellingFactor(slot.level ?? 100);
+    int sellingPrice = 0;
+    if (slot.updatedPrice != null) {
+      sellingPrice = (slot.updatedPrice! * sellingFactor) ~/ 2;
+    }
+
+    showDialog(
+        context: Values.navigatorKey.currentContext!,
+        builder: (context) => Dialog(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Do you want to buy this Property from ${owner.id} for $sellingPrice credits (half)?',
+                      textAlign: TextAlign.center,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                            onPressed: () async {
+                              Uri url = Uri.parse(
+                                  '${ApiConstants.domain}${ApiConstants.buyPropertyHalf}');
+                              var body = {
+                                'userId': user.id,
+                                'slotIndex': user.currentSlot,
+                              };
+                              var response = await http.post(
+                                url,
+                                body: json.encode(body),
+                                //TODO: add token
+                                headers: {
+                                  'Content-Type': 'application/json'
+                                  // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
+                                  //'${user.token}',
+                                },
+                              );
+                              debugPrint('notify buy land ${response.body}');
+
+                              Navigator.pop(context);
+                              if (response.statusCode == 200) {
+                                //TODO: remove this repetition and use the function below or remove it
+                                User user =
+                                    User.fromJson(json.decode(response.body));
+                                Provider.of<UserProvider>(
+                                        Values.navigatorKey.currentContext!,
+                                        listen: false)
+                                    .updateUser(user);
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => const Dialog(
+                                          child: Text(
+                                            'Property Purchased Successfully',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ));
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => Dialog(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(response.body),
+                                          ),
+                                        ));
+                              }
                             },
                             child: const Text('Yes')),
                         TextButton(
