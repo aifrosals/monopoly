@@ -6,6 +6,7 @@ import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:monopoly/providers/user_provider.dart';
+import 'package:monopoly/widgets/helping_dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -48,12 +49,17 @@ class SocketProvider extends ChangeNotifier {
     debugPrint('Connected');
   }
 
+  //TODO: Do fancy animation instead of loading dialog
+
   notifyBuyLand() {
-    //TODO: smooth the flow of dialog with prevention of closing
     try {
       User user = Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
               listen: false)
           .user;
+      if (user.credits < 50) {
+        HelpingDialog.showNotEnoughCredDialog();
+        return;
+      }
       debugPrint('buy land is triggered');
       debugPrint('buyLand user current slot ${user.currentSlot}');
       showDialog(
@@ -71,6 +77,8 @@ class SocketProvider extends ChangeNotifier {
                           children: [
                             TextButton(
                                 onPressed: () async {
+                                  Navigator.pop(context);
+                                  HelpingDialog.showLoadingDialog();
                                   debugPrint(
                                       'buyLand user current slot ${user.currentSlot}');
                                   Uri url = Uri.parse(
@@ -90,6 +98,8 @@ class SocketProvider extends ChangeNotifier {
                                       //'${user.token}',
                                     },
                                   );
+                                  Navigator.pop(
+                                      Values.navigatorKey.currentContext!);
                                   debugPrint(
                                       'notify buy land ${response.body}');
                                   if (response.statusCode == 200) {
@@ -97,23 +107,14 @@ class SocketProvider extends ChangeNotifier {
                                     User user = User.fromJson(
                                         json.decode(response.body));
                                     Provider.of<UserProvider>(
-                                        Values.navigatorKey.currentContext!,
-                                        listen: false)
+                                            Values.navigatorKey.currentContext!,
+                                            listen: false)
                                         .updateUser(user);
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => const Dialog(
-                                          child: Text(
-                                                'Land is purchased',
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ));
+                                    HelpingDialog.showServerResponseDialog(
+                                        'Land is purchased');
                                   } else {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => Dialog(
-                                          child: Text(response.body),
-                                        ));
+                                    HelpingDialog.showServerResponseDialog(
+                                        response.body);
                                   }
                                 },
                                 child: const Text('yes')),
@@ -133,7 +134,6 @@ class SocketProvider extends ChangeNotifier {
   }
 
   notifyUpgradeSlot(dynamic data) {
-    //TODO: smooth the flow of dialog with prevention of closing
     debugPrint('notifyUpgradeSlot $data');
 
     try {
@@ -182,6 +182,10 @@ class SocketProvider extends ChangeNotifier {
           break;
       }
 
+      if (user.credits < price) {
+        HelpingDialog.showNotEnoughCredUpgradeDialog();
+        return;
+      }
       showDialog(
           context: Values.navigatorKey.currentContext!,
           builder: (context) => Dialog(
@@ -189,10 +193,6 @@ class SocketProvider extends ChangeNotifier {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text('Upgrade or Sell'),
-                    // Text(
-                    //   'Upgrade this place into a $name for $price credits?',
-                    //   textAlign: TextAlign.center,
-                    // ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -200,6 +200,8 @@ class SocketProvider extends ChangeNotifier {
                           children: [
                             TextButton(
                               onPressed: () async {
+                                Navigator.pop(context);
+                                HelpingDialog.showLoadingDialog();
                                 debugPrint(
                                     'upgradeSlot userslot ${user.currentSlot}');
                                 Uri url = Uri.parse(
@@ -207,42 +209,35 @@ class SocketProvider extends ChangeNotifier {
                                 var body = {
                                   'userId': user.id,
                                   'slotIndex': user.currentSlot,
-                                  };
-                                  debugPrint('$url');
-                                  var response = await http.post(
-                                    url,
-                                    body: json.encode(body),
-                                    //TODO: add token
-                                    headers: {
-                                      'Content-Type': 'application/json'
-                                      // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-                                      //'${user.token}',
-                                    },
-                                  );
-                                  debugPrint(
-                                      'notifyUpgradeSlot ${response.body}');
-                                  if (response.statusCode == 200) {
-                                    //TODO: remove this repetition and use the function below or remove it
-                                    User user = User.fromJson(
-                                        json.decode(response.body));
-                                    Provider.of<UserProvider>(
-                                            Values.navigatorKey.currentContext!,
-                                            listen: false)
-                                        .updateUser(user);
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => const Dialog(
-                                              child: Text(
-                                                'Place upgraded successfully',
-                                                textAlign: TextAlign.center,
-                                            ),
-                                          ));
+                                };
+                                debugPrint('$url');
+                                var response = await http.post(
+                                  url,
+                                  body: json.encode(body),
+                                  //TODO: add token
+                                  headers: {
+                                    'Content-Type': 'application/json'
+                                    // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
+                                    //'${user.token}',
+                                  },
+                                );
+                                Navigator.pop(
+                                    Values.navigatorKey.currentContext!);
+                                debugPrint(
+                                    'notifyUpgradeSlot ${response.body}');
+                                if (response.statusCode == 200) {
+                                  //TODO: remove this repetition and use the function below or remove it
+                                  User user =
+                                      User.fromJson(json.decode(response.body));
+                                  Provider.of<UserProvider>(
+                                          Values.navigatorKey.currentContext!,
+                                          listen: false)
+                                      .updateUser(user);
+                                  HelpingDialog.showServerResponseDialog(
+                                      'Place Upgraded Successfully');
                                 } else {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => Dialog(
-                                            child: Text(response.body),
-                                          ));
+                                  HelpingDialog.showServerResponseDialog(
+                                      response.body);
                                 }
                               },
                               child: Text(
@@ -254,6 +249,8 @@ class SocketProvider extends ChangeNotifier {
                             ),
                             TextButton(
                               onPressed: () async {
+                                Navigator.pop(context);
+                                HelpingDialog.showLoadingDialog();
                                 debugPrint('sell Urgent ${user.currentSlot}');
                                 Uri url = Uri.parse(
                                     '${ApiConstants.domain}${ApiConstants.urgentSell}');
@@ -274,21 +271,14 @@ class SocketProvider extends ChangeNotifier {
                                 );
                                 debugPrint(
                                     'notifyUpgradeSlot sell Urgently ${response.body}');
+                                Navigator.pop(
+                                    Values.navigatorKey.currentContext!);
                                 if (response.statusCode == 200) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => Dialog(
-                                            child: Text(
-                                              response.body,
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ));
+                                  HelpingDialog.showServerResponseDialog(
+                                      response.body);
                                 } else {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => Dialog(
-                                            child: Text(response.body),
-                                          ));
+                                  HelpingDialog.showServerResponseDialog(
+                                      response.body);
                                 }
                               },
                               child: const Text(
@@ -329,6 +319,10 @@ class SocketProvider extends ChangeNotifier {
       sellingPrice = slot.updatedPrice! * sellingFactor;
     }
 
+    if (user.credits < sellingPrice) {
+      HelpingDialog.showNotEnoughCredDialog();
+      return;
+    }
     showDialog(
         context: Values.navigatorKey.currentContext!,
         builder: (context) => Dialog(
@@ -346,6 +340,8 @@ class SocketProvider extends ChangeNotifier {
                       children: [
                         TextButton(
                             onPressed: () async {
+                              Navigator.pop(context);
+                              HelpingDialog.showLoadingDialog();
                               Uri url = Uri.parse(
                                   '${ApiConstants.domain}${ApiConstants.buyProperty}');
                               var body = {
@@ -364,7 +360,8 @@ class SocketProvider extends ChangeNotifier {
                               );
                               debugPrint('notify buy land ${response.body}');
 
-                              Navigator.pop(context);
+                              Navigator.pop(
+                                  Values.navigatorKey.currentContext!);
                               if (response.statusCode == 200) {
                                 //TODO: remove this repetition and use the function below or remove it
                                 User user =
@@ -373,23 +370,11 @@ class SocketProvider extends ChangeNotifier {
                                         Values.navigatorKey.currentContext!,
                                         listen: false)
                                     .updateUser(user);
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => const Dialog(
-                                          child: Text(
-                                            'Property Purchased Successfully',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ));
+                                HelpingDialog.showServerResponseDialog(
+                                    'Property Purchased Successfully');
                               } else {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => Dialog(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(response.body),
-                                          ),
-                                        ));
+                                HelpingDialog.showServerResponseDialog(
+                                    response.body);
                               }
                             },
                             child: const Text('Yes')),
@@ -423,6 +408,11 @@ class SocketProvider extends ChangeNotifier {
       sellingPrice = (slot.updatedPrice! * sellingFactor) ~/ 2;
     }
 
+    if (user.credits < sellingPrice) {
+      HelpingDialog.showNotEnoughCredDialog();
+      return;
+    }
+
     showDialog(
         context: Values.navigatorKey.currentContext!,
         builder: (context) => Dialog(
@@ -440,6 +430,8 @@ class SocketProvider extends ChangeNotifier {
                       children: [
                         TextButton(
                             onPressed: () async {
+                              Navigator.pop(context);
+                              HelpingDialog.showLoadingDialog();
                               Uri url = Uri.parse(
                                   '${ApiConstants.domain}${ApiConstants.buyPropertyHalf}');
                               var body = {
@@ -458,7 +450,9 @@ class SocketProvider extends ChangeNotifier {
                               );
                               debugPrint('notify buy land ${response.body}');
 
-                              Navigator.pop(context);
+                              Navigator.pop(
+                                  Values.navigatorKey.currentContext!);
+
                               if (response.statusCode == 200) {
                                 //TODO: remove this repetition and use the function below or remove it
                                 User user =
@@ -467,23 +461,11 @@ class SocketProvider extends ChangeNotifier {
                                         Values.navigatorKey.currentContext!,
                                         listen: false)
                                     .updateUser(user);
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => const Dialog(
-                                          child: Text(
-                                            'Property Purchased Successfully',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ));
+                                HelpingDialog.showServerResponseDialog(
+                                    'Property Purchased Successfully');
                               } else {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => Dialog(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(response.body),
-                                          ),
-                                        ));
+                                HelpingDialog.showServerResponseDialog(
+                                    response.body);
                               }
                             },
                             child: const Text('Yes')),
