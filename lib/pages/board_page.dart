@@ -112,25 +112,25 @@ class BoardPage extends StatelessWidget {
                               trailing: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  boardProvider.slots[index].status != null &&
-                                          boardProvider.slots[index].status! ==
-                                              'for_sell'
-                                      ? const Icon(
-                                          Icons.star,
-                                          color: Colors.yellow,
-                                          size: 15,
-                                        )
-                                      : const SizedBox(),
+                                  // boardProvider.slots[index].status != null &&
+                                  //         boardProvider.slots[index].status! ==
+                                  //             'for_sell'
+                                  //     ? const Icon(
+                                  //         Icons.star,
+                                  //         color: Colors.yellow,
+                                  //         size: 15,
+                                  //       )
+                                  //     : const SizedBox(),
                                   Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         boardProvider.slots[index]
-                                            .allStepCount !=
-                                            null &&
-                                            boardProvider
-                                                .slots[index].allStepCount!
-                                                .containsKey(userProvider
-                                                .user.serverId)
+                                                        .allStepCount !=
+                                                    null &&
+                                                boardProvider
+                                                    .slots[index].allStepCount!
+                                                    .containsKey(userProvider
+                                                        .user.serverId)
                                             ? Container(
                                           height: 20,
                                           decoration: const BoxDecoration(
