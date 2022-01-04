@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:monopoly/api/api_constants.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:http/http.dart' as http;
+import 'package:monopoly/models/user.dart';
 
 class BoardProvider extends ChangeNotifier {
   List<Slot> _slots = [];
@@ -46,6 +48,32 @@ class BoardProvider extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  //TODO: Either remove or use with delay animations
+  Future<User> checkSlotEffect(User user) async {
+    if (user.currentSlot != null) {
+      Slot slot = _slots[user.currentSlot!];
+      switch (slot.type) {
+        case 'black_hole':
+          {
+            user = await blackHoleEffect(user);
+          }
+          break;
+      }
+    }
+    return user;
+  }
+
+  Future<User> blackHoleEffect(User user) async {
+    await Future.delayed(const Duration(seconds: 1));
+
+    /// randomly push to previous slot
+    Random random = Random();
+    int limit = user.currentSlot! - 1;
+    int randomPreviousSlot = random.nextInt(limit);
+    user.currentSlot = randomPreviousSlot;
+    return user;
   }
 
   List<Slot> get slots => _slots;

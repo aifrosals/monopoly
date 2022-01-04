@@ -62,6 +62,17 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setCurrentSlotServer(User user) {
+    if (_user.currentSlot != null) {
+      _user.currentSlot = user.currentSlot;
+      debugPrint('user currentSlot ${_user.currentSlot}');
+      _scrollController.animateTo(60.0 * _user.currentSlot!,
+          duration: const Duration(milliseconds: 1500), curve: Curves.easeOut);
+    }
+
+    notifyListeners();
+  }
+
   updateUser(User user) {
     debugPrint('update user gets called ${user.currentSlot}');
     _user = user;

@@ -39,6 +39,7 @@ class SocketProvider extends ChangeNotifier {
     socket.on('buy_owned_slot', (data) => notifyBuyOwnedSlot(data));
     socket.on('update_current_user', (data) => updateCurrentUser(data));
     socket.on('buy_owned_slot_half', (data) => notifyBuyOwnedSlotHalf(data));
+    socket.on('black_hole', (data) => blackHoleEffect(data));
     socket.onDisconnect((_) {
       debugPrint('disconnect');
     });
@@ -507,6 +508,21 @@ class SocketProvider extends ChangeNotifier {
     _activeMove = false;
     socket.emit('userMove', user.toJson());
     notifyListeners();
+  }
+
+  blackHoleEffect(dynamic slot) {
+    try {
+      debugPrint('blackHoleEffect reached $slot');
+      Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
+              listen: false)
+          .setCurrentSlotServer(slot);
+      updateUserCurrentSlot(Provider.of<UserProvider>(
+              Values.navigatorKey.currentContext!,
+              listen: false)
+          .user);
+    } catch (error, st) {
+      debugPrint('SocketProvider blackHoleEffect $error $st');
+    }
   }
 
   getOfflineUsers(int slot) {
