@@ -73,6 +73,12 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setScroll() {
+    print('scrolled');
+    _scrollController.animateTo(60.0 * _user.currentSlot!,
+        duration: const Duration(milliseconds: 1500), curve: Curves.easeOut);
+  }
+
   updateUser(User user) {
     debugPrint('update user gets called ${user.currentSlot}');
     _user = user;

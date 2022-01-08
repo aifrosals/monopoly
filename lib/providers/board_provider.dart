@@ -8,6 +8,22 @@ import 'package:monopoly/models/user.dart';
 
 class BoardProvider extends ChangeNotifier {
   List<Slot> _slots = [];
+  double _characterWidth = 30;
+  double _characterHight = 30;
+
+  double _characterTop = 15;
+
+  animate() async {
+    await Future.delayed(Duration(milliseconds: 50));
+    _characterTop = 17;
+    _characterWidth = 50;
+    _characterHight = 50;
+    notifyListeners();
+    await Future.delayed(Duration(milliseconds: 50));
+    _characterWidth = 30;
+    _characterHight = 30;
+    _characterTop = 13;
+  }
 
   getBoardSlots() async {
     try {
@@ -60,6 +76,10 @@ class BoardProvider extends ChangeNotifier {
             user = await blackHoleEffect(user);
           }
           break;
+        case 'worm_hole':
+          {
+            user = await wormHoleEffect(user);
+          }
       }
     }
     return user;
@@ -76,5 +96,37 @@ class BoardProvider extends ChangeNotifier {
     return user;
   }
 
+  Future<User> wormHoleEffect(User user) async {
+    await Future.delayed(const Duration(seconds: 1));
+    Random random = Random();
+    int max = _slots.length;
+    int min = user.currentSlot! + 1;
+
+    int randomNextSlot = min + random.nextInt(max - min);
+    user.currentSlot = randomNextSlot;
+    return user;
+  }
+
+  List<Icon> getRewardStars(int? count) {
+    List<Icon> stars = [];
+    if (count != null) {
+      for (int i = 0; i < count; i++) {
+        stars.add(const Icon(
+          Icons.star,
+          size: 7,
+          color: Colors.yellow,
+        ));
+      }
+    }
+    return stars;
+  }
+
   List<Slot> get slots => _slots;
+
+  double get characterHight => _characterHight;
+
+  double get characterWidth => _characterWidth;
+
+  double get characterTop => _characterTop;
 }
+

@@ -5,6 +5,7 @@ import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
+import 'package:monopoly/widgets/slot_graphic.dart';
 import 'package:provider/provider.dart';
 
 class BoardPage extends StatelessWidget {
@@ -15,6 +16,9 @@ class BoardPage extends StatelessWidget {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final diceProvider = Provider.of<DiceProvider>(context, listen: false);
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
+
+    WidgetsBinding.instance
+        ?.addPostFrameCallback((_) => userProvider.setScroll());
 
     return ChangeNotifierProvider<SocketProvider>(
       lazy: false,
@@ -29,17 +33,18 @@ class BoardPage extends StatelessWidget {
                   onTap: () {
                     showDialog(
                         context: context,
-                        builder: (context) => Dialog(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('Request to buy your property')
-                              ],
-                            ),
-                          ),
-                        ));
+                        builder: (context) =>
+                            Dialog(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('Request to buy your property')
+                                  ],
+                                ),
+                              ),
+                            ));
                   },
                   child: const Icon(Icons.notifications))
             ],
@@ -59,45 +64,56 @@ class BoardPage extends StatelessWidget {
                               height: 80,
                               child: Padding(
                                 padding: const EdgeInsets.all(3.0),
-                            child: Container(
-                              decoration: boardProvider.slots[index].type ==
-                                      'black_hole'
-                                  ? const BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(12)),
-                                      image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage(
-                                              'assets/images/blackhole-bg.jpg')))
-                                  : const BoxDecoration(),
-                              child: ListTile(
-                                dense: true,
-                                leading: Text(
-                                  '${index + 1}',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                subtitle: (boardProvider.slots[index].owner !=
+                                child: Container(
+                                  decoration: SlotGraphic.getBackgroundImage(
+                                      boardProvider.slots[index].type),
+                                  child: ListTile(
+                                    dense: true,
+                                    leading: Text(
+                                      '${index + 1}',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      children: [
+                                        boardProvider.slots[index].status !=
                                             null &&
-                                        boardProvider.slots[index].owner?.id !=
-                                            null)
-                                    ? Text(
-                                        ' bought by ${boardProvider.slots[index].owner?.id}',
-                                        style: const TextStyle(
-                                            color: Colors.white))
-                                    : const SizedBox(),
-                                onTap: () {
-                                  List<User> offlineUsers =
+                                            boardProvider
+                                                .slots[index].status! ==
+                                                'for_sell'
+                                            ? const Text('(For Sell)',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ))
+                                            : const SizedBox(),
+                                        (boardProvider.slots[index].owner !=
+                                            null &&
+                                            boardProvider
+                                                .slots[index].owner?.id !=
+                                                null)
+                                            ? Text(
+                                            ' bought by ${boardProvider
+                                                .slots[index].owner?.id}',
+                                            style: const TextStyle(
+                                                color: Colors.white))
+                                            : const SizedBox(),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      List<User> offlineUsers =
                                       socketProvider.getOfflineUserData(index);
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => Dialog(
-                                            child: Padding(
-                                              padding:
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                              Dialog(
+                                                child: Padding(
+                                                  padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: Column(
+                                                  child: Column(
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: [
@@ -125,33 +141,26 @@ class BoardPage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(12)),
                                 tileColor: boardProvider.slots[index].color,
                                 title: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('${boardProvider.slots[index].name} ',
-                                        style: const TextStyle(
-                                            color: Colors.white, fontSize: 20)),
-                                    boardProvider.slots[index].status != null &&
-                                            boardProvider
-                                                    .slots[index].status! ==
-                                                'for_sell'
-                                        ? const Text('(For Sell)',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 7))
+                                    Flexible(
+
+                                      child: Text(
+                                          '${boardProvider.slots[index].name} ',
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20)),
+                                    ),
+                                    boardProvider.slots[index].type == 'chest'
+                                        ?
+                                    Image.asset('assets/images/chest-pro.png',
+                                      height: 100, width: 100,)
                                         : const SizedBox(),
                                   ],
                                 ),
                                 trailing: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    // boardProvider.slots[index].status != null &&
-                                    //         boardProvider.slots[index].status! ==
-                                    //             'for_sell'
-                                    //     ? const Icon(
-                                    //         Icons.star,
-                                    //         color: Colors.yellow,
-                                    //         size: 15,
-                                    //       )
-                                    //     : const SizedBox(),
                                     Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -173,17 +182,33 @@ class BoardPage extends StatelessWidget {
                                                                           12)),
                                                           color: Colors.indigo),
                                                   child: Center(
-                                                      child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8.0,
-                                                            right: 8.0),
-                                                    child: Text(
-                                                        'steps: ${boardProvider.slots[index].allStepCount![userProvider.user.serverId]}',
-                                                        style: const TextStyle(
-                                                            color:
-                                                                Colors.white)),
-                                                  )),
+                                                      child: boardProvider
+                                                                  .slots[index]
+                                                                  .type ==
+                                                              'reward'
+                                                          ? Row(
+                                                              children: boardProvider
+                                                                  .getRewardStars(boardProvider
+                                                                          .slots[
+                                                                              index]
+                                                                          .allStepCount![
+                                                                      userProvider
+                                                                          .user
+                                                                          .serverId]),
+                                                            )
+                                                          : Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 8.0,
+                                                                      right:
+                                                                          8.0),
+                                                              child: Text(
+                                                                  'steps: ${boardProvider.slots[index].allStepCount![userProvider.user.serverId]}',
+                                                                  style: const TextStyle(
+                                                                      color: Colors
+                                                                          .white)),
+                                                            )),
                                                 )
                                               : const SizedBox(),
                                           const SizedBox(
@@ -214,54 +239,55 @@ class BoardPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                            ),
-                            index == userProvider.user.currentSlot
-                                ? Positioned(
-                              left: 120,
-                              top: 15,
-                              child: Container(
-                                height: 25,
-                                width: 25,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.lightGreen),
-                              ),
-                            )
-                                : const SizedBox()
-                          ],
-                        );
-                      });
-                }),
+                        ),
+                        index == userProvider.user.currentSlot
+                            ? Positioned(
+                                left: 120,
+                                top: 15,
+                                child: Container(
+                                  height: 25,
+                                  width: 25,
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.lightGreen),
+                                ),
+                              )
+                            : const SizedBox()
+                      ],
+                    );
+                  });
+            }),
           ),
           floatingActionButton: Consumer<SocketProvider>(
               builder: (context, socketProvider, child) {
-                return socketProvider.activeMove
-                    ? FloatingActionButton(
-                  onPressed: () async {
+            return socketProvider.activeMove
+                ? FloatingActionButton(
+                    onPressed: () async {
                       userProvider.setCurrentSlot(diceProvider.rollDice());
                       userProvider.setCurrentSlotServer(await boardProvider
                           .checkSlotEffect(userProvider.user));
+                      //  boardProvider.animate();
                       socketProvider.updateUserCurrentSlot(userProvider.user);
                       debugPrint('user loop count ${userProvider.user.loops}');
                     },
-                  child: Consumer<DiceProvider>(
-                      builder: (context, diceProvider, child) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('dice',
-                                style: TextStyle(color: Colors.white)),
-                            diceProvider.face != 0
-                                ? Text('${diceProvider.face}',
-                                style: const TextStyle(color: Colors.white))
-                                : const SizedBox()
-                          ],
-                        );
-                      }),
-                  backgroundColor: Colors.pinkAccent,
-                )
-                    : const SizedBox();
-              }),
+                    child: Consumer<DiceProvider>(
+                        builder: (context, diceProvider, child) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('dice',
+                              style: TextStyle(color: Colors.white)),
+                          diceProvider.face != 0
+                              ? Text('${diceProvider.face}',
+                                  style: const TextStyle(color: Colors.white))
+                              : const SizedBox()
+                        ],
+                      );
+                    }),
+                    backgroundColor: Colors.pinkAccent,
+                  )
+                : const SizedBox();
+          }),
           bottomNavigationBar: Container(
             height: 20,
             color: Colors.purple,

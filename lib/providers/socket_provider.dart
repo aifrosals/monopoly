@@ -39,7 +39,7 @@ class SocketProvider extends ChangeNotifier {
     socket.on('buy_owned_slot', (data) => notifyBuyOwnedSlot(data));
     socket.on('update_current_user', (data) => updateCurrentUser(data));
     socket.on('buy_owned_slot_half', (data) => notifyBuyOwnedSlotHalf(data));
-    socket.on('black_hole', (data) => blackHoleEffect(data));
+    socket.on('chest', (data) => notifyCommunityChest(data));
     socket.onDisconnect((_) {
       debugPrint('disconnect');
     });
@@ -481,6 +481,10 @@ class SocketProvider extends ChangeNotifier {
                 ),
               ),
             ));
+  }
+
+  notifyCommunityChest(dynamic data) {
+    HelpingDialog.showServerResponseDialog(data.toString());
   }
 
   updateBoard(dynamic data) {
