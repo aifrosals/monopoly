@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget {
         leading: const Icon(Icons.menu),
         title: const Text('Monopoly'),
         elevation: 0,
-        actions: const [Icon(Icons.notifications)],
+      //  actions: const [Icon(Icons.notifications)],
       ),
       body: Center(
         child: Column(

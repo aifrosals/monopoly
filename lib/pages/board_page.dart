@@ -39,14 +39,12 @@ class BoardPage extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text('Request to buy your property')
-                                  ],
+                                  children: const [Text('Transaction history')],
                                 ),
                               ),
                             ));
                   },
-                  child: const Icon(Icons.notifications))
+                  child: const Icon(Icons.assignment))
             ],
           ),
           body: SafeArea(
