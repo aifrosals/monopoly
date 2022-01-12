@@ -38,6 +38,7 @@ dependencies:
   http: ^0.13.4
   socket_io_client: ^1.0.2
   connectivity: ^3.0.6
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

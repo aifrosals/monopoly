@@ -4,8 +4,10 @@ import 'package:monopoly/models/user.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
+import 'package:monopoly/providers/transaction_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/widgets/slot_graphic.dart';
+import 'package:monopoly/widgets/transaction_dialog.dart';
 import 'package:provider/provider.dart';
 
 class BoardPage extends StatelessWidget {
@@ -33,16 +35,7 @@ class BoardPage extends StatelessWidget {
                   onTap: () {
                     showDialog(
                         context: context,
-                        builder: (context) =>
-                            Dialog(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const [Text('Transaction history')],
-                                ),
-                              ),
-                            ));
+                        builder: (context) => const TransactionDialog());
                   },
                   child: const Icon(Icons.assignment))
             ],

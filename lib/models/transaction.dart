@@ -42,6 +42,6 @@ class Transaction {
         seller: json['seller'] ?? '',
         buyerName: json['buyer_name'],
         sellerName: json['seller_name'],
-        date: '');
+        date: json['createdAt']);
   }
 }

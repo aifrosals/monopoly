@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monopoly/pages/login_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
+import 'package:monopoly/providers/transaction_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +22,7 @@ void main() {
     ),
     ChangeNotifierProvider<DiceProvider>(
       create: (context) => DiceProvider(),
-    )
+    ),
   ], child: const MyApp()));
 }
 
