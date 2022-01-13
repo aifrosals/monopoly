@@ -1,6 +1,6 @@
 # monopoly
 
-A board game
+A board game This is a prototype application that will be turned into a high-end board game
 
 ## Getting Started
 

@@ -55,4 +55,59 @@ class Slot {
         updatedPrice: json['updated_price'],
         allStepCount: json['all_step_count']);
   }
+
+  int getRent() {
+    if (updatedPrice != null) {
+      int rent = (updatedPrice! * 10 / 100).ceil();
+      return rent;
+    } else {
+      return 0;
+    }
+  }
+
+  int getHalfSellingPrice() {
+    return (getSellingPrice() / 2).ceil();
+  }
+
+  int getSellingPrice() {
+    if (updatedPrice != null && level != null) {
+      int sellingPrice = updatedPrice! * getSellingFactor(level!);
+      return sellingPrice;
+    } else {
+      return 0;
+    }
+  }
+
+  int getSellingFactor(int level) {
+    switch (level) {
+      case 0:
+        {
+          return 20;
+        }
+      case 1:
+        {
+          return 15;
+        }
+      case 2:
+        {
+          return 10;
+        }
+      case 3:
+        {
+          return 8;
+        }
+      case 4:
+        {
+          return 6;
+        }
+      case 5:
+        {
+          return 4;
+        }
+      default:
+        {
+          return 1;
+        }
+    }
+  }
 }

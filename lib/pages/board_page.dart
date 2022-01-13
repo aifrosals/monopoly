@@ -6,6 +6,7 @@ import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
 import 'package:monopoly/providers/transaction_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
+import 'package:monopoly/widgets/offline_user_info_dialog.dart';
 import 'package:monopoly/widgets/slot_graphic.dart';
 import 'package:monopoly/widgets/transaction_dialog.dart';
 import 'package:provider/provider.dart';
@@ -95,9 +96,7 @@ class BoardPage extends StatelessWidget {
                                       ],
                                     ),
                                     onTap: () {
-                                      List<User> offlineUsers =
-                                      socketProvider.getOfflineUserData(index);
-                                      showDialog(
+                                  showDialog(
                                           context: context,
                                           builder: (context) =>
                                               Dialog(
@@ -105,28 +104,18 @@ class BoardPage extends StatelessWidget {
                                                   padding:
                                                   const EdgeInsets.all(8.0),
                                                   child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    const Text(
-                                                      'Offline Users',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                    Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: offlineUsers
-                                                          .map(
-                                                              (e) => Text(e.id))
-                                                          .toList(),
-                                                    )
-                                                  ]),
+                                                  mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Text(
+                                                  'Offline Users',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
                                             ),
-                                          ));
+                                          )));
                                 },
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12)),
@@ -208,20 +197,35 @@ class BoardPage extends StatelessWidget {
                                           socketProvider
                                                       .getOfflineUsers(index) !=
                                                   0
-                                              ? Container(
-                                                  height: 30,
-                                                  width: 30,
-                                                  decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color:
-                                                          Colors.indigo[200]),
-                                                  child: Center(
-                                                      child: Text(
-                                                          '${socketProvider.getOfflineUsers(index)}',
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .white))),
+                                              ? InkWell(
+                                                  onTap: () {
+                                                    List<User> offlineUsers =
+                                                        socketProvider
+                                                            .getOfflineUserData(
+                                                                index);
+                                                    debugPrint(
+                                                        'offline users boardPage ${offlineUsers.first.id}');
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) =>
+                                                            OfflineUserInfoDialog(
+                                                                users:
+                                                                    offlineUsers));
+                                                  },
+                                                  child: Container(
+                                                    height: 30,
+                                                    width: 30,
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color:
+                                                            Colors.indigo[200]),
+                                                    child: Center(
+                                                        child: Text(
+                                                            '${socketProvider.getOfflineUsers(index)}',
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .white))),
+                                                  ),
                                                 )
                                               : const SizedBox(),
                                         ]),
