@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/models/user.dart';
+import 'package:monopoly/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class SlotInformationDialog extends StatelessWidget {
   final Slot slot;
@@ -9,20 +11,29 @@ class SlotInformationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(
-            'Slot Information', style: TextStyle(fontWeight: FontWeight.bold),),
-          Text('Name: ${slot.name}')
-        ],
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    return Dialog(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Slot Information',
+              style: TextStyle(fontWeight: FontWeight.bold),),
+            const SizedBox(height: 20,),
+            Text('Name: ${slot.name}'),
+            const SizedBox(height: 2,),
+            slotInfo(slot, userProvider.user)
+          ],
+        ),
       ),
     );
   }
 
 
   Widget slotInfo(Slot slot, User user) {
-    switch (slot.type) {
+    switch (slot.initialType) {
       case 'land':
         {
           return Column(
@@ -48,7 +59,36 @@ class SlotInformationDialog extends StatelessWidget {
           return const Text(
               'This is the end point of the slot. On your next dice roll you will be going from the Start again');
         }
-      case ''
+      case 'chest':
+        {
+          return const Text('Community chest contains random credits rewards');
+        }
+      case 'chance':
+        {
+          return const Text('Text to be added');
+        }
+      case 'black_hole':
+        {
+          return const Text('A black hole can make you go any step back');
+        }
+      case 'challenge':
+        {
+          return const Text('Text to be added');
+        }
+      case 'treasure_hunt':
+        {
+          return const Text('Text to be added');
+        }
+      case 'worm_hole':
+        {
+          return const Text(
+              'A wormhole will take you any step further on the board');
+        }
+      case 'reward':
+        {
+          return const Text(
+              'Step on it to get a star, when you will have 5 stars, you will earn 50 credits');
+        }
       default:
         return const SizedBox();
     }

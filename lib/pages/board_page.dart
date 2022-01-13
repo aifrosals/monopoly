@@ -8,6 +8,7 @@ import 'package:monopoly/providers/transaction_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/widgets/offline_user_info_dialog.dart';
 import 'package:monopoly/widgets/slot_graphic.dart';
+import 'package:monopoly/widgets/slot_information_dialog.dart';
 import 'package:monopoly/widgets/transaction_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -96,27 +97,13 @@ class BoardPage extends StatelessWidget {
                                       ],
                                     ),
                                     onTap: () {
-                                  showDialog(
+                                      showDialog(
                                           context: context,
                                           builder: (context) =>
-                                              Dialog(
-                                                child: Padding(
-                                                  padding:
-                                                  const EdgeInsets.all(8.0),
-                                                  child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                const Text(
-                                                  'Offline Users',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ],
-                                            ),
-                                          )));
-                                },
+                                              SlotInformationDialog(
+                                                  slot: boardProvider
+                                                      .slots[index]));
+                                    },
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12)),
                                 tileColor: boardProvider.slots[index].color,

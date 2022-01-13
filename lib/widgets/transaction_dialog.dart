@@ -23,31 +23,37 @@ class TransactionDialog extends StatelessWidget {
                     'Transactions',
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
                   ),
-                  Consumer<TransactionProvider>(
-                      builder: (context, transactionProvider, child) {
-                    if (transactionProvider.loadTransaction) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (transactionProvider.errorMessage != '') {
-                      return Center(
-                          child: Text(
-                        transactionProvider.errorMessage,
-                        textAlign: TextAlign.center,
-                      ));
-                    } else if (transactionProvider.transactions.isNotEmpty) {
-                      return ListView.builder(
-                          itemCount: transactionProvider.transactions.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return TransactionTile(
-                              index: index,
-                              transaction:
-                                  transactionProvider.transactions[index],
-                            );
-                          });
-                    } else {
-                      return const Center(
-                          child: Text('No transactions to show'));
-                    }
-                  }),
+                  const SizedBox(height: 2,),
+                  Flexible(
+                    child: Consumer<TransactionProvider>(
+                        builder: (context, transactionProvider, child) {
+                          if (transactionProvider.loadTransaction) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (transactionProvider.errorMessage != '') {
+                            return Center(
+                                child: Text(
+                                  transactionProvider.errorMessage,
+                                  textAlign: TextAlign.center,
+                                ));
+                          } else
+                          if (transactionProvider.transactions.isNotEmpty) {
+                            return ListView.builder(
+                                itemCount: transactionProvider.transactions
+                                    .length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return TransactionTile(
+                                    index: index,
+                                    transaction:
+                                    transactionProvider.transactions[index],
+                                  );
+                                });
+                          } else {
+                            return const Center(
+                                child: Text('No transactions to show'));
+                          }
+                        }),
+                  ),
                 ],
               ),
             ),

@@ -61,7 +61,7 @@ class TransactionTile extends StatelessWidget {
                 'Land bought',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text('Land bought on index ${transaction.slot.index}'),
+              Text('Land bought on slot number ${transaction.slot.index}'),
               Text('Credits: ${transaction.amount}'),
             ],
           );
@@ -74,7 +74,8 @@ class TransactionTile extends StatelessWidget {
               Text('${transaction.slot.name} bought',
                   style: const TextStyle(fontWeight: FontWeight.bold)),
               Text(
-                  '${transaction.slot.name} bought from ${transaction.sellerName} on index ${transaction.slot.index}'),
+                  '${transaction.slot.name} bought from ${transaction
+                      .sellerName} on slot number ${transaction.slot.index}'),
               Text('Credits: ${transaction.amount}'),
             ],
           );
@@ -87,7 +88,7 @@ class TransactionTile extends StatelessWidget {
               Text('${transaction.slot.name} bought',
                   style: const TextStyle(fontWeight: FontWeight.bold)),
               Text(
-                  '${transaction.slot.name} bought from ${transaction.sellerName} on index ${transaction.slot.index}'),
+                  '${transaction.slot.name} bought from ${transaction.sellerName} on slot number ${transaction.slot.index}'),
               Text('Credits: ${transaction.amount}'),
             ],
           );
@@ -101,7 +102,7 @@ class TransactionTile extends StatelessWidget {
               const Text('Property Upgraded',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               Text(
-                  'Property upgraded to ${transaction.slot.type} on index ${transaction.slot.index}'),
+                  'Property upgraded to ${transaction.slot.type} on slot number ${transaction.slot.index}'),
               Text('Credits: ${transaction.amount}'),
             ],
           );
@@ -118,8 +119,8 @@ class TransactionTile extends StatelessWidget {
                         : 'Rent Received',
                     style: const TextStyle(fontWeight: FontWeight.bold)),
                 Text(transaction.sellerName != user.id
-                    ? '${transaction.amount} credits rent paid to ${transaction.sellerName} for ${transaction.slot.type} on index ${transaction.slot.index}'
-                    : '${transaction.amount} credits rent received from ${transaction.buyerName} from ${transaction.slot.type} on index ${transaction.slot.index}'),
+                    ? '${transaction.amount} credits rent paid to ${transaction.sellerName} for ${transaction.slot.type} on slot number ${transaction.slot.index}'
+                    : '${transaction.amount} credits rent received from ${transaction.buyerName} from ${transaction.slot.type} on slot number ${transaction.slot.index}'),
                 Text('Credits: ${transaction.amount}')
               ]);
         }
