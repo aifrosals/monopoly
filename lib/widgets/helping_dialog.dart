@@ -39,12 +39,14 @@ class HelpingDialog {
                 child: Column(
                   children: [
                     Align(
-                        alignment: Alignment.topRight,
-                        child: InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(Icons.cancel_outlined))),
+                      alignment: Alignment.topRight,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.cancel_outlined),
+                      ),
+                    ),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(

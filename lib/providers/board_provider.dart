@@ -13,6 +13,9 @@ class BoardProvider extends ChangeNotifier {
 
   double _characterTop = 15;
 
+  double _showMessageOpacity = 0;
+  String _message = '';
+
   animate() async {
     await Future.delayed(Duration(milliseconds: 50));
     _characterTop = 17;
@@ -107,6 +110,20 @@ class BoardProvider extends ChangeNotifier {
     return user;
   }
 
+  Future<void> showMessage(dynamic data) async {
+    _showMessageOpacity = 1;
+    _message = 'you have paid $data rent';
+    notifyListeners();
+    await Future.delayed(Duration(milliseconds: 3000));
+    _showMessageOpacity = 0;
+    notifyListeners();
+  }
+
+  hideMessage() {
+    _showMessageOpacity = 0;
+    notifyListeners();
+  }
+
   List<Icon> getRewardStars(int? count) {
     List<Icon> stars = [];
     if (count != null) {
@@ -128,5 +145,9 @@ class BoardProvider extends ChangeNotifier {
   double get characterWidth => _characterWidth;
 
   double get characterTop => _characterTop;
+
+  double get showMessageOpacity => _showMessageOpacity;
+
+  String get message => _message;
 }
 

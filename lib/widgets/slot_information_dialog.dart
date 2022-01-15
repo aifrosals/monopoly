@@ -21,9 +21,13 @@ class SlotInformationDialog extends StatelessWidget {
             const Text(
               'Slot Information',
               style: TextStyle(fontWeight: FontWeight.bold),),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             Text('Name: ${slot.name}'),
-            const SizedBox(height: 2,),
+            const SizedBox(
+              height: 2,
+            ),
             slotInfo(slot, userProvider.user)
           ],
         ),
@@ -31,7 +35,8 @@ class SlotInformationDialog extends StatelessWidget {
     );
   }
 
-
+  /// Show information of the slot related to the type
+  /// and buying status
   Widget slotInfo(Slot slot, User user) {
     switch (slot.initialType) {
       case 'land':
@@ -39,10 +44,10 @@ class SlotInformationDialog extends StatelessWidget {
           return Column(
             children: [
               getPropertyStatusInfo(slot, user),
-              slot.status == 'for_sell' ?
-              Column(
-                children: [
-                  const Text('For Urgent Sell'),
+              slot.status == 'for_sell'
+                  ? Column(
+                      children: [
+                        const Text('For Urgent Sell'),
                   Text('Selling Price: ${slot.getHalfSellingPrice()}'),
                 ],
               ) :

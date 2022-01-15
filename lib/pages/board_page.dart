@@ -6,6 +6,7 @@ import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
 import 'package:monopoly/providers/transaction_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
+import 'package:monopoly/widgets/message.dart';
 import 'package:monopoly/widgets/offline_user_info_dialog.dart';
 import 'package:monopoly/widgets/slot_graphic.dart';
 import 'package:monopoly/widgets/slot_information_dialog.dart';
@@ -43,9 +44,11 @@ class BoardPage extends StatelessWidget {
             ],
           ),
           body: SafeArea(
-            child: Consumer3<BoardProvider, UserProvider, SocketProvider>(
-                builder: (context, boardProvider, userProvider, socketProvider,
-                    child) {
+            child: Stack(
+              children: [
+                Consumer3<BoardProvider, UserProvider, SocketProvider>(builder:
+                    (context, boardProvider, userProvider, socketProvider,
+                        child) {
                   return ListView.builder(
                       shrinkWrap: true,
                       controller: userProvider.scrollController,
@@ -70,29 +73,28 @@ class BoardPage extends StatelessWidget {
                                           fontWeight: FontWeight.w500),
                                     ),
                                     subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         boardProvider.slots[index].status !=
-                                            null &&
-                                            boardProvider
-                                                .slots[index].status! ==
-                                                'for_sell'
+                                                    null &&
+                                                boardProvider
+                                                        .slots[index].status! ==
+                                                    'for_sell'
                                             ? const Text('(For Sell)',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ))
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ))
                                             : const SizedBox(),
                                         (boardProvider.slots[index].owner !=
-                                            null &&
-                                            boardProvider
-                                                .slots[index].owner?.id !=
-                                                null)
+                                                    null &&
+                                                boardProvider.slots[index].owner
+                                                        ?.id !=
+                                                    null)
                                             ? Text(
-                                            ' bought by ${boardProvider
-                                                .slots[index].owner?.id}',
-                                            style: const TextStyle(
-                                                color: Colors.white))
+                                                ' bought by ${boardProvider.slots[index].owner?.id}',
+                                                style: const TextStyle(
+                                                    color: Colors.white))
                                             : const SizedBox(),
                                       ],
                                     ),
@@ -104,141 +106,188 @@ class BoardPage extends StatelessWidget {
                                                   slot: boardProvider
                                                       .slots[index]));
                                     },
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                                tileColor: boardProvider.slots[index].color,
-                                title: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Flexible(
-
-                                      child: Text(
-                                          '${boardProvider.slots[index].name} ',
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    tileColor: boardProvider.slots[index].color,
+                                    title: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                              '${boardProvider.slots[index].name} ',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20)),
+                                        ),
+                                        boardProvider.slots[index].type ==
+                                                'chest'
+                                            ? Image.asset(
+                                                'assets/images/chest-pro.png',
+                                                height: 100,
+                                                width: 100,
+                                              )
+                                            : const SizedBox(),
+                                      ],
                                     ),
-                                    boardProvider.slots[index].type == 'chest'
-                                        ?
-                                    Image.asset('assets/images/chest-pro.png',
-                                      height: 100, width: 100,)
-                                        : const SizedBox(),
-                                  ],
-                                ),
-                                trailing: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          boardProvider.slots[index]
-                                                          .allStepCount !=
-                                                      null &&
-                                                  boardProvider.slots[index]
-                                                      .allStepCount!
-                                                      .containsKey(userProvider
-                                                          .user.serverId)
-                                              ? Container(
-                                                  height: 20,
-                                                  decoration:
-                                                      const BoxDecoration(
+                                    trailing: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              boardProvider.slots[index]
+                                                              .allStepCount !=
+                                                          null &&
+                                                      boardProvider.slots[index]
+                                                          .allStepCount!
+                                                          .containsKey(
+                                                              userProvider.user
+                                                                  .serverId)
+                                                  ? Container(
+                                                      height: 20,
+                                                      decoration: const BoxDecoration(
                                                           borderRadius:
                                                               BorderRadius.all(
                                                                   Radius
                                                                       .circular(
                                                                           12)),
                                                           color: Colors.indigo),
-                                                  child: Center(
-                                                      child: boardProvider
-                                                                  .slots[index]
-                                                                  .type ==
-                                                              'reward'
-                                                          ? Row(
-                                                              children: boardProvider
-                                                                  .getRewardStars(boardProvider
+                                                      child: Center(
+                                                          child: boardProvider
+                                                                      .slots[
+                                                                          index]
+                                                                      .type ==
+                                                                  'reward'
+                                                              ? Row(
+                                                                  children: boardProvider.getRewardStars(boardProvider
                                                                           .slots[
                                                                               index]
                                                                           .allStepCount![
                                                                       userProvider
                                                                           .user
                                                                           .serverId]),
-                                                            )
-                                                          : Padding(
-                                                              padding:
-                                                                  const EdgeInsets
+                                                                )
+                                                              : Padding(
+                                                                  padding: const EdgeInsets
                                                                           .only(
                                                                       left: 8.0,
                                                                       right:
                                                                           8.0),
-                                                              child: Text(
-                                                                  'steps: ${boardProvider.slots[index].allStepCount![userProvider.user.serverId]}',
-                                                                  style: const TextStyle(
-                                                                      color: Colors
-                                                                          .white)),
-                                                            )),
-                                                )
-                                              : const SizedBox(),
-                                          const SizedBox(
-                                            width: 2,
-                                          ),
-                                          socketProvider
-                                                      .getOfflineUsers(index) !=
-                                                  0
-                                              ? InkWell(
-                                                  onTap: () {
-                                                    List<User> offlineUsers =
-                                                        socketProvider
-                                                            .getOfflineUserData(
-                                                                index);
-                                                    debugPrint(
-                                                        'offline users boardPage ${offlineUsers.first.id}');
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (context) =>
-                                                            OfflineUserInfoDialog(
-                                                                users:
-                                                                    offlineUsers));
-                                                  },
-                                                  child: Container(
-                                                    height: 30,
-                                                    width: 30,
-                                                    decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color:
-                                                            Colors.indigo[200]),
-                                                    child: Center(
-                                                        child: Text(
-                                                            '${socketProvider.getOfflineUsers(index)}',
-                                                            style: const TextStyle(
+                                                                  child: Text(
+                                                                      'steps: ${boardProvider.slots[index].allStepCount![userProvider.user.serverId]}',
+                                                                      style: const TextStyle(
+                                                                          color:
+                                                                              Colors.white)),
+                                                                )),
+                                                    )
+                                                  : const SizedBox(),
+                                              const SizedBox(
+                                                width: 2,
+                                              ),
+                                              socketProvider.getOfflineUsers(
+                                                          index) !=
+                                                      0
+                                                  ? InkWell(
+                                                      onTap: () {
+                                                        List<User>
+                                                            offlineUsers =
+                                                            socketProvider
+                                                                .getOfflineUserData(
+                                                                    index);
+                                                        debugPrint(
+                                                            'offline users boardPage ${offlineUsers.first.id}');
+                                                        showDialog(
+                                                            context: context,
+                                                            builder: (context) =>
+                                                                OfflineUserInfoDialog(
+                                                                    users:
+                                                                        offlineUsers));
+                                                      },
+                                                      child: Container(
+                                                        height: 30,
+                                                        width: 30,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
                                                                 color: Colors
-                                                                    .white))),
-                                                  ),
-                                                )
-                                              : const SizedBox(),
-                                        ]),
-                                  ],
+                                                                        .indigo[
+                                                                    200]),
+                                                        child: Center(
+                                                            child: Text(
+                                                                '${socketProvider.getOfflineUsers(index)}',
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .white))),
+                                                      ),
+                                                    )
+                                                  : const SizedBox(),
+                                            ]),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                        index == userProvider.user.currentSlot
-                            ? Positioned(
-                                left: 120,
-                                top: 15,
-                                child: Container(
-                                  height: 25,
-                                  width: 25,
-                                  decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.lightGreen),
+                            index == userProvider.user.currentSlot
+                                ? Positioned(
+                                    left: 120,
+                                    top: 15,
+                                    child: Container(
+                                      height: 25,
+                                      width: 25,
+                                      decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.lightGreen),
+                                    ),
+                                  )
+                                : const SizedBox()
+                          ],
+                        );
+                      });
+                }),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Consumer<BoardProvider>(
+                          builder: (context, boardProvider, child) {
+                        return AnimatedOpacity(
+                          opacity: boardProvider.showMessageOpacity,
+                          duration: Duration(milliseconds: 1500),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.8)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(boardProvider.message),
+                                    InkWell(
+                                      onTap: () {
+                                        boardProvider.hideMessage();
+                                      },
+                                      child: const Icon(Icons.cancel_outlined),
+                                    ),
+                                  ],
                                 ),
-                              )
-                            : const SizedBox()
-                      ],
-                    );
-                  });
-            }),
+                              )),
+                        );
+                      }),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
           floatingActionButton: Consumer<SocketProvider>(
               builder: (context, socketProvider, child) {
