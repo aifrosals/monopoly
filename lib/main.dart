@@ -37,6 +37,9 @@ class MyApp extends StatelessWidget {
       scaffoldMessengerKey: Values.snackBarKey,
       title: 'Flutter Demo',
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.grey[200],
+        ),
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the

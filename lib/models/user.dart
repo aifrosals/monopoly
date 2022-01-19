@@ -1,7 +1,7 @@
 class User {
   String id;
   int? currentSlot;
-  int dice;
+  int? dice;
   int credits;
   int loops;
   String? serverId;

@@ -7,6 +7,7 @@ import 'package:monopoly/config/values.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:monopoly/pages/learn_more_page.dart';
 import 'package:monopoly/providers/timer_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/widgets/helping_dialog.dart';
@@ -43,6 +44,8 @@ class SocketProvider extends ChangeNotifier {
     socket.on('update_current_user', (data) => updateCurrentUser(data));
     socket.on('buy_owned_slot_half', (data) => notifyBuyOwnedSlotHalf(data));
     socket.on('chest', (data) => notifyCommunityChest(data));
+    socket.on('reward', (data) => notifyReward(data));
+    socket.on('reward_star', (data) => notifyRewardStar(data));
     socket.on('show_rent_message', (data) => showRentMessage(data));
     socket.onDisconnect((_) {
       debugPrint('disconnect');
@@ -139,7 +142,16 @@ class SocketProvider extends ChangeNotifier {
                                   },
                                   child: const Text('No')),
                             ]),
-                      )
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const LearnMorePage()));
+                          },
+                          child: const Text('Learn More')),
                     ],
                   ),
                 ),
@@ -319,6 +331,15 @@ class SocketProvider extends ChangeNotifier {
                                     Navigator.pop(context);
                                   },
                                   child: const Text('Do Nothing')),
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LearnMorePage()));
+                                  },
+                                  child: const Text('Learn More')),
                             ]),
                       )
                     ],
@@ -421,7 +442,16 @@ class SocketProvider extends ChangeNotifier {
                               },
                               child: const Text('No'))
                         ],
-                      )
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const LearnMorePage()));
+                          },
+                          child: const Text('Learn More')),
                     ],
                   ),
                 ),
@@ -522,7 +552,16 @@ class SocketProvider extends ChangeNotifier {
                               },
                               child: const Text('No'))
                         ],
-                      )
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const LearnMorePage()));
+                          },
+                          child: const Text('Learn More')),
                     ],
                   ),
                 ),
@@ -534,10 +573,19 @@ class SocketProvider extends ChangeNotifier {
     HelpingDialog.showServerResponseDialog(data.toString());
   }
 
+  notifyReward(dynamic data) {
+    HelpingDialog.showServerResponseDialog(data.toString());
+  }
+
+  notifyRewardStar(dynamic data) {
+    HelpingDialog.showServerResponseDialog(
+        'You have gained a star. Get 5 stars and receive RM reward.');
+  }
+
   updateBoard(dynamic data) {
     debugPrint('updateBoard data received $data');
     Provider.of<BoardProvider>(Values.navigatorKey.currentContext!,
-        listen: false)
+            listen: false)
         .updateBoardSlots(data);
   }
 

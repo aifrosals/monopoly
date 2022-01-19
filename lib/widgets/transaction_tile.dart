@@ -68,30 +68,55 @@ class TransactionTile extends StatelessWidget {
         }
       case 'seller':
         {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('${transaction.slot.name} bought',
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              Text(
-                  '${transaction.slot.name} bought from ${transaction
-                      .sellerName} on slot number ${transaction.slot.index}'),
-              Text('Credits: ${transaction.amount}'),
-            ],
-          );
+          if (transaction.seller == user.serverId) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${transaction.slot.name} Sold',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                    '${transaction.slot.name} sold to ${transaction.buyerName} on slot number ${transaction.slot.index}'),
+                Text('Credits: ${transaction.amount}'),
+              ],
+            );
+          } else {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${transaction.slot.name} bought',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                    '${transaction.slot.name} bought from ${transaction.sellerName} on slot number ${transaction.slot.index}'),
+                Text('Credits: ${transaction.amount}'),
+              ],
+            );
+          }
         }
       case 'half':
         {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('${transaction.slot.name} bought',
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              Text(
-                  '${transaction.slot.name} bought from ${transaction.sellerName} on slot number ${transaction.slot.index}'),
-              Text('Credits: ${transaction.amount}'),
-            ],
-          );
+          if (transaction.seller == user.serverId) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${transaction.slot.name} bought',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                    '${transaction.slot.name} bought from ${transaction.sellerName} on slot number ${transaction.slot.index}'),
+                Text('Credits: ${transaction.amount}'),
+              ],
+            );
+          } else {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${transaction.slot.name} bought',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                    '${transaction.slot.name} bought from ${transaction.sellerName} on slot number ${transaction.slot.index}'),
+                Text('Credits: ${transaction.amount}'),
+              ],
+            );
+          }
         }
       case 'upgrade':
         {
@@ -123,6 +148,36 @@ class TransactionTile extends StatelessWidget {
                     : '${transaction.amount} credits rent received from ${transaction.buyerName} from ${transaction.slot.type} on slot number ${transaction.slot.index}'),
                 Text('Credits: ${transaction.amount}')
               ]);
+        }
+      case 'chest':
+        {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Received Community Chest',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(
+                  'Received ${transaction.amount} credits from community chest on number ${transaction.slot.index}'),
+            ],
+          );
+        }
+      case 'reward':
+        {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Received Reward',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(
+                  'Received ${transaction.amount} RM credits on number ${transaction.slot.index}'),
+            ],
+          );
         }
       default:
         return const SizedBox();

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/models/user.dart';
+import 'package:monopoly/pages/learn_more_page.dart';
+import 'package:monopoly/pages/transaction_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -32,15 +34,29 @@ class BoardPage extends StatelessWidget {
           appBar: AppBar(
             title: Text('Monopoly'),
             elevation: 0.0,
-            backgroundColor: Colors.grey[200],
             actions: [
               InkWell(
                   onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => const TransactionDialog());
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LearnMorePage()));
                   },
-                  child: const Icon(Icons.assignment))
+                  child: const Icon(Icons.info_outlined)),
+              const SizedBox(
+                width: 10,
+              ),
+              InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TransactionPage()));
+                  },
+                  child: const Icon(Icons.assignment)),
+              const SizedBox(
+                width: 5,
+              ),
             ],
           ),
           body: SafeArea(
@@ -57,7 +73,7 @@ class BoardPage extends StatelessWidget {
                         return Stack(
                           children: [
                             SizedBox(
-                              height: 80,
+                              height: 90,
                               child: Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: Container(

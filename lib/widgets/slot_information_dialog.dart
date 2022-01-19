@@ -48,9 +48,10 @@ class SlotInformationDialog extends StatelessWidget {
                   ? Column(
                       children: [
                         const Text('For Urgent Sell'),
-                  Text('Selling Price: ${slot.getHalfSellingPrice()}'),
-                ],
-              ) :
+                        Text('Selling Price: ${slot.getHalfSellingPrice()}'),
+                      ],
+                    )
+                  : Text('Upgraded Price: ${slot.updatedPrice}'),
               Text('Selling Price: ${slot.getSellingPrice()}')
             ],
           );
@@ -105,8 +106,8 @@ class SlotInformationDialog extends StatelessWidget {
         const Text(
           'Owned by you', style: TextStyle(fontWeight: FontWeight.bold),),
         Text('Rent: ${slot.getRent()}'),
-
-      ],);
+        Text('')
+        ],);
     }
     else if (slot.owner != null && slot.owner!.serverId != user.serverId) {
       return Column(children: [

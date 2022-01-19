@@ -6,6 +6,7 @@ class Transaction {
   String buyerName;
   String? seller;
   String? sellerName;
+  String actor;
   int amount;
   String type;
   Slot slot;
@@ -19,6 +20,7 @@ class Transaction {
       required this.slot,
       required this.amount,
       required this.buyer,
+      required this.actor,
       this.seller});
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,7 @@ class Transaction {
         seller: json['seller'] ?? '',
         buyerName: json['buyer_name'],
         sellerName: json['seller_name'],
+        actor: json['actor'],
         date: json['createdAt']);
   }
 }
