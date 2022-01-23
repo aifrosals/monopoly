@@ -33,7 +33,7 @@ class _BoardPageState extends State<BoardPage> {
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
 
     WidgetsBinding.instance
-        ?.addPostFrameCallback((_) => userProvider.setScroll());
+        ?.addPostFrameCallback((_) => boardProvider.setScroll());
 
     return ChangeNotifierProvider<SocketProvider>(
       lazy: false,
@@ -62,8 +62,6 @@ class _BoardPageState extends State<BoardPage> {
                     Offset position = box.localToGlobal(Offset.zero);
                     debugPrint(
                         'position ${position.direction} ${position.dx} ${position.dy} ${position.distance}');
-                    boardProvider.setCharacterPosition(position.dy);
-
                     debugPrint(
                         'position ${position.direction} ${position.dx} ${position.dy} ${position.distance}');
                   },
@@ -105,6 +103,7 @@ class _BoardPageState extends State<BoardPage> {
                           socketProvider, child) {
                     return ListView.builder(
                         shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         controller: userProvider.scrollController,
                         itemCount: boardProvider.slots.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -292,11 +291,10 @@ class _BoardPageState extends State<BoardPage> {
                                   ),
                                 ),
                               ),
-                              index == userProvider.user.currentSlot
-                                  ? AnimatedPositioned(
-                                      key: key,
-                                      duration:
-                                          const Duration(milliseconds: 2000),
+                              (index == boardProvider.characterIndex &&
+                                      boardProvider.isCharacterStatic)
+                                  ? Positioned(
+                                      key: boardProvider.staticCharacterKey,
                                       left: 120,
                                       top: 15,
                                       child: Container(
@@ -314,18 +312,20 @@ class _BoardPageState extends State<BoardPage> {
                   }),
                   Consumer<BoardProvider>(
                       builder: (context, boardProvider, child) {
-                    return AnimatedPositioned(
-                      key: boardProvider.characterKey,
-                      duration: const Duration(milliseconds: 2000),
-                      top: boardProvider.characterTop,
-                      left: 120,
-                      child: Container(
-                        height: 25,
-                        width: 25,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.blue),
-                      ),
-                    );
+                        return boardProvider.isCharacterStatic == false
+                        ? AnimatedPositioned(
+                            key: boardProvider.characterKey,
+                            duration: const Duration(milliseconds: 2000),
+                            top: boardProvider.characterTop,
+                            left: 120,
+                            child: Container(
+                              height: 25,
+                              width: 25,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.blue),
+                            ),
+                          )
+                        : SizedBox();
                   }),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -375,7 +375,7 @@ class _BoardPageState extends State<BoardPage> {
                 ? FloatingActionButton(
                     onPressed: () async {
                       int number = diceProvider.rollDice();
-
+                      boardProvider.setCharacterIndex(number);
                       boardProvider.animateA(number);
                       // boardProvider.animate();
                       //userProvider.setCurrentSlot(diceProvider.rollDice());

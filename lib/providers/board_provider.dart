@@ -14,7 +14,9 @@ class BoardProvider extends ChangeNotifier {
 
   final _characterKey = GlobalKey();
 
-  bool _staticCharacter = true;
+  final _staticCharacterKey = GlobalKey();
+
+  bool _isCharacterStatic = true;
 
   List<Slot> _slots = [];
   double _characterWidth = 30;
@@ -49,17 +51,41 @@ class BoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setCharacterIndex(int number) {
+    _characterIndex = number;
+    notifyListeners();
+  }
+
+  setScroll() {
+    if (_staticCharacterKey.currentContext != null) {
+      setCharacterPosition();
+      Scrollable.ensureVisible(_staticCharacterKey.currentContext!,
+          duration: Duration(milliseconds: 1000), curve: Curves.easeOut);
+      debugPrint('Scroll offset ${_scrollController.position.pixels}');
+    }
+  }
+
+  setScrollRevers() {
+    if (_staticCharacterKey.currentContext != null) {
+      Scrollable.ensureVisible(_staticCharacterKey.currentContext!,
+          duration: Duration(milliseconds: 1000), curve: Curves.easeOut);
+      debugPrint('Scroll offset ${_scrollController.position.pixels}');
+      setCharacterPosition();
+    }
+  }
+
   animateA(
     int number,
   ) async {
-    _staticCharacter = false;
+    _isCharacterStatic = false;
+    notifyListeners();
+    await Future.delayed(Duration(seconds: 2));
 
+    await Future.delayed(Duration(seconds: 1));
     _characterTop = _characterTop + (90 * number);
     notifyListeners();
 
-    //detect if widget
-    await Future.delayed(Duration(milliseconds: 200));
-
+    await Future.delayed(Duration(milliseconds: 2000));
     if (_slots.last.endKey != null && _characterKey.currentContext != null) {
       RenderBox box2 =
           _slots.last.endKey!.currentContext?.findRenderObject() as RenderBox;
@@ -84,13 +110,20 @@ class BoardProvider extends ChangeNotifier {
             curve: Curves.easeOut);
       }
     }
-    _staticCharacter = true;
+
+    _isCharacterStatic = true;
     notifyListeners();
+
+    setScrollRevers();
   }
 
-  setCharacterPosition(double top) async {
-    await Future.delayed(Duration(milliseconds: 200));
-    _characterTop = top - 100;
+  setCharacterPosition() {
+    RenderBox box2 =
+        _staticCharacterKey.currentContext?.findRenderObject() as RenderBox;
+    Offset position2 = box2.localToGlobal(Offset.zero);
+    debugPrint(
+        'static position ${position2.direction} ${position2.dx} ${position2.dy} ${position2.distance}');
+    _characterTop = position2.dy - 100;
     debugPrint('Charcet top ${characterTop}');
     notifyListeners();
   }
@@ -222,5 +255,9 @@ class BoardProvider extends ChangeNotifier {
   ScrollController get scrollController => _scrollController;
 
   GlobalKey get characterKey => _characterKey;
+
+  GlobalKey get staticCharacterKey => _staticCharacterKey;
+
+  bool get isCharacterStatic => _isCharacterStatic;
 }
 
