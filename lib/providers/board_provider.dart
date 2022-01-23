@@ -2,14 +2,25 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:monopoly/api/api_constants.dart';
+import 'package:monopoly/config/values.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:http/http.dart' as http;
 import 'package:monopoly/models/user.dart';
+import 'package:monopoly/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class BoardProvider extends ChangeNotifier {
+  final _scrollController = ScrollController();
+
+  final _characterKey = GlobalKey();
+
+  bool _staticCharacter = true;
+
   List<Slot> _slots = [];
   double _characterWidth = 30;
   double _characterHight = 30;
+
+  int _characterIndex = 0;
 
   double _characterTop = 15;
 
@@ -17,15 +28,71 @@ class BoardProvider extends ChangeNotifier {
   String _message = '';
 
   animate() async {
-    await Future.delayed(Duration(milliseconds: 50));
-    _characterTop = 17;
-    _characterWidth = 50;
-    _characterHight = 50;
+    // await Future.delayed(Duration(milliseconds: 50));
+    // _characterTop = 17;
+    // _characterWidth = 50;
+    // _characterHight = 50;
+    // notifyListeners();
+    // await Future.delayed(Duration(milliseconds: 50));
+    // _characterWidth = 30;
+    // _characterHight = 30;
+    // _characterTop = 13;
+    //  await Future.delayed(Duration(milliseconds: 2000));
+    _characterTop = 90;
     notifyListeners();
-    await Future.delayed(Duration(milliseconds: 50));
-    _characterWidth = 30;
-    _characterHight = 30;
-    _characterTop = 13;
+    await Future.delayed(Duration(milliseconds: 2000));
+    _characterIndex = 1;
+    _characterTop = -10;
+    notifyListeners();
+    await Future.delayed(Duration(milliseconds: 2000));
+    _characterTop = 15;
+    notifyListeners();
+  }
+
+  animateA(
+    int number,
+  ) async {
+    _staticCharacter = false;
+
+    _characterTop = _characterTop + (90 * number);
+    notifyListeners();
+
+    //detect if widget
+    await Future.delayed(Duration(milliseconds: 200));
+
+    if (_slots.last.endKey != null && _characterKey.currentContext != null) {
+      RenderBox box2 =
+          _slots.last.endKey!.currentContext?.findRenderObject() as RenderBox;
+      Offset position2 = box2.localToGlobal(Offset.zero);
+      debugPrint(
+          'end position ${position2.direction} ${position2.dx} ${position2.dy} ${position2.distance}');
+      debugPrint('character top ${_characterTop}');
+
+      RenderBox box =
+          _characterKey.currentContext!.findRenderObject() as RenderBox;
+      Offset position = box.localToGlobal(Offset.zero);
+      debugPrint('char position ${position.dy}');
+
+      if (position >= position2) {
+        _characterTop = 15;
+        _scrollController.animateTo(0,
+            duration: Duration(seconds: 1), curve: Curves.easeOut);
+      }
+      if (_characterKey.currentContext != null) {
+        Scrollable.ensureVisible(_characterKey.currentContext!,
+            duration: const Duration(milliseconds: 1500),
+            curve: Curves.easeOut);
+      }
+    }
+    _staticCharacter = true;
+    notifyListeners();
+  }
+
+  setCharacterPosition(double top) async {
+    await Future.delayed(Duration(milliseconds: 200));
+    _characterTop = top - 100;
+    debugPrint('Charcet top ${characterTop}');
+    notifyListeners();
   }
 
   getBoardSlots() async {
@@ -149,5 +216,11 @@ class BoardProvider extends ChangeNotifier {
   double get showMessageOpacity => _showMessageOpacity;
 
   String get message => _message;
+
+  int get characterIndex => _characterIndex;
+
+  ScrollController get scrollController => _scrollController;
+
+  GlobalKey get characterKey => _characterKey;
 }
 

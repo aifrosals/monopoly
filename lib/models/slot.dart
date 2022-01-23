@@ -4,6 +4,7 @@ import 'package:monopoly/models/user.dart';
 
 class Slot {
   String name;
+  GlobalKey? endKey;
 
   /// type indicates the current type of the slot
   String type;
@@ -21,6 +22,7 @@ class Slot {
       {required this.name,
       required this.type,
       required this.index,
+      this.endKey,
       this.price,
       this.updatedPrice,
       this.owner,
@@ -43,17 +45,19 @@ class Slot {
       debugPrint('parsing owner error $error $st');
     }
     return Slot(
-        name: json['name'],
-        type: json['current_type'],
-        color: json['color'].toString().toColor(),
-        initialType: json['initial_type'],
-        price: json['land_price'],
-        owner: user,
-        index: json['index'],
-        level: json['level'],
-        status: json['status'] ?? '',
-        updatedPrice: json['updated_price'],
-        allStepCount: json['all_step_count']);
+      name: json['name'],
+      type: json['current_type'],
+      color: json['color'].toString().toColor(),
+      initialType: json['initial_type'],
+      price: json['land_price'],
+      owner: user,
+      index: json['index'],
+      level: json['level'],
+      status: json['status'] ?? '',
+      updatedPrice: json['updated_price'],
+      allStepCount: json['all_step_count'],
+      endKey: json['initial_type'] == 'end' ? GlobalKey() : null,
+    );
   }
 
   int getRent() {
