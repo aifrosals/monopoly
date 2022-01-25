@@ -32,6 +32,7 @@ class _BoardPageState extends State<BoardPage> {
     final diceProvider = Provider.of<DiceProvider>(context, listen: false);
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
 
+    //TODO look for this function in setState
     WidgetsBinding.instance
         ?.addPostFrameCallback((_) => boardProvider.setScroll());
 
@@ -40,35 +41,9 @@ class _BoardPageState extends State<BoardPage> {
       create: (context) => SocketProvider(userProvider.user),
       child: Scaffold(
           appBar: AppBar(
-            title: Text('Monopoly'),
+            title: const Text('Monopoly'),
             elevation: 0.0,
             actions: [
-              InkWell(
-                onTap: () {
-                  debugPrint(
-                      'height of screen ${MediaQuery.of(context).size.height}');
-                  RenderBox box2 = boardProvider.characterKey.currentContext
-                      ?.findRenderObject() as RenderBox;
-                  Offset position2 = box2.localToGlobal(Offset.zero);
-                  debugPrint(
-                      'position ${position2.direction} ${position2.dx} ${position2.dy} ${position2.distance}');
-                },
-                child: Icon(Icons.list),
-              ),
-              InkWell(
-                  onTap: () {
-                    RenderBox box =
-                        key.currentContext?.findRenderObject() as RenderBox;
-                    Offset position = box.localToGlobal(Offset.zero);
-                    debugPrint(
-                        'position ${position.direction} ${position.dx} ${position.dy} ${position.distance}');
-                    debugPrint(
-                        'position ${position.direction} ${position.dx} ${position.dy} ${position.distance}');
-                  },
-                  child: const Icon(Icons.star)),
-              const SizedBox(
-                width: 10,
-              ),
               InkWell(
                   onTap: () {
                     Navigator.push(
@@ -104,7 +79,7 @@ class _BoardPageState extends State<BoardPage> {
                     return ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        controller: userProvider.scrollController,
+                        // controller: userProvider.scrollController,
                         itemCount: boardProvider.slots.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Stack(
@@ -291,7 +266,8 @@ class _BoardPageState extends State<BoardPage> {
                                   ),
                                 ),
                               ),
-                              (index == boardProvider.characterIndex &&
+                              // (index == boardProvider.characterIndex &&
+                              (index == userProvider.user.currentSlot &&
                                       boardProvider.isCharacterStatic)
                                   ? Positioned(
                                       key: boardProvider.staticCharacterKey,
@@ -314,8 +290,8 @@ class _BoardPageState extends State<BoardPage> {
                       builder: (context, boardProvider, child) {
                         return boardProvider.isCharacterStatic == false
                         ? AnimatedPositioned(
-                            key: boardProvider.characterKey,
-                            duration: const Duration(milliseconds: 2000),
+                          key: boardProvider.characterKey,
+                            duration: const Duration(milliseconds: 1000),
                             top: boardProvider.characterTop,
                             left: 120,
                             child: Container(
@@ -325,12 +301,12 @@ class _BoardPageState extends State<BoardPage> {
                                   shape: BoxShape.circle, color: Colors.blue),
                             ),
                           )
-                        : SizedBox();
+                        : const SizedBox();
                   }),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Align(
@@ -339,7 +315,7 @@ class _BoardPageState extends State<BoardPage> {
                             builder: (context, boardProvider, child) {
                           return AnimatedOpacity(
                             opacity: boardProvider.showMessageOpacity,
-                            duration: Duration(milliseconds: 1500),
+                            duration: const Duration(milliseconds: 1500),
                             child: Container(
                                 decoration: BoxDecoration(
                                     color: Colors.white.withOpacity(0.8)),
@@ -374,9 +350,15 @@ class _BoardPageState extends State<BoardPage> {
             return socketProvider.activeMove
                 ? FloatingActionButton(
                     onPressed: () async {
-                      int number = diceProvider.rollDice();
-                      boardProvider.setCharacterIndex(number);
-                      boardProvider.animateA(number);
+                      socketProvider.disableMove();
+                      int diceFace = diceProvider.rollDice();
+                      await boardProvider.animateA(diceFace);
+                      userProvider.setCurrentSlot(diceFace);
+                      userProvider.setCurrentSlotServer(await boardProvider
+                          .checkSlotEffect(userProvider.user));
+                      socketProvider.updateUserCurrentSlot(userProvider.user);
+                      // socketProvider.enableMove();
+
                       // boardProvider.animate();
                       //userProvider.setCurrentSlot(diceProvider.rollDice());
                       // userProvider.setCurrentSlotServer(await boardProvider
@@ -405,7 +387,22 @@ class _BoardPageState extends State<BoardPage> {
                     }),
                     backgroundColor: Colors.pinkAccent,
                   )
-                : const SizedBox();
+                : FloatingActionButton(
+                    child: Consumer<DiceProvider>(
+                        builder: (context, diceProvider, child) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          diceProvider.face != 0
+                              ? Text('${diceProvider.face}',
+                                  style: const TextStyle(color: Colors.white))
+                              : const SizedBox()
+                        ],
+                      );
+                    }),
+                    backgroundColor: Colors.pinkAccent,
+                    onPressed: () {},
+                  );
           }),
           bottomNavigationBar: Container(
             height: 20,

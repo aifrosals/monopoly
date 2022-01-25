@@ -609,15 +609,24 @@ class SocketProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  disableMove() {
+    _activeMove = false;
+    notifyListeners();
+  }
+
+  enableMove() {
+    _activeMove = true;
+  }
+
   blackHoleEffect(dynamic slot) {
     try {
       debugPrint('blackHoleEffect reached $slot');
       Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
-          listen: false)
+              listen: false)
           .setCurrentSlotServer(slot);
       updateUserCurrentSlot(Provider.of<UserProvider>(
-          Values.navigatorKey.currentContext!,
-          listen: false)
+              Values.navigatorKey.currentContext!,
+              listen: false)
           .user);
     } catch (error, st) {
       debugPrint('SocketProvider blackHoleEffect $error $st');

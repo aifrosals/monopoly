@@ -55,8 +55,8 @@ class UserProvider extends ChangeNotifier {
         _user.currentSlot = slot;
       }
       debugPrint('user currentSlot ${_user.currentSlot}');
-      _scrollController.animateTo(60.0 * _user.currentSlot!,
-          duration: const Duration(milliseconds: 1500), curve: Curves.easeOut);
+      // _scrollController.animateTo(60.0 * _user.currentSlot!,
+      //     duration: const Duration(milliseconds: 1500), curve: Curves.easeOut);
     }
 
     notifyListeners();
@@ -66,8 +66,8 @@ class UserProvider extends ChangeNotifier {
     if (_user.currentSlot != null) {
       _user.currentSlot = user.currentSlot;
       debugPrint('user currentSlot ${_user.currentSlot}');
-      _scrollController.animateTo(60.0 * _user.currentSlot!,
-          duration: const Duration(milliseconds: 1500), curve: Curves.easeOut);
+      // _scrollController.animateTo(60.0 * _user.currentSlot!,
+      //     duration: const Duration(milliseconds: 1500), curve: Curves.easeOut);
     }
 
     notifyListeners();
