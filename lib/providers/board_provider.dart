@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/api/api_constants.dart';
+import 'package:monopoly/config/screen_config.dart';
 import 'package:monopoly/config/values.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:http/http.dart' as http;
@@ -68,12 +70,12 @@ class BoardProvider extends ChangeNotifier {
 
   setScroll() {
     if (_staticCharacterKey.currentContext != null) {
-      setCharacterPositionAtBinding();
       Scrollable.ensureVisible(_staticCharacterKey.currentContext!,
           duration: const Duration(milliseconds: 1000),
           curve: Curves.easeOut,
           alignment: 0.2);
       debugPrint('Scroll offset ${_scrollController.position.pixels}');
+      setCharacterPositionAtBinding(_scrollController.position.pixels);
     }
   }
 
@@ -181,15 +183,28 @@ class BoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setCharacterPositionAtBinding() {
+  setCharacterPositionAtBinding(double scrollOffset) {
     RenderBox box2 =
         _staticCharacterKey.currentContext?.findRenderObject() as RenderBox;
     Offset position2 = box2.localToGlobal(Offset.zero);
     debugPrint(
         'static position ${position2.direction} ${position2.dx} ${position2.dy} ${position2.distance}');
-    _characterTop = position2.dy - 94.05;
+    double topPadding =
+        ScreenConfig.paddingTop != 0.0 ? 56 + ScreenConfig.paddingTop : 85;
+    if (scrollOffset != 0.0) {
+      _characterTop = position2.dy + scrollOffset - topPadding;
+    } else {
+      _characterTop = position2.dy - topPadding;
+    }
     debugPrint('character top $characterTop');
     notifyListeners();
+  }
+
+  getBlockHeight() {
+    debugPrint('height of screen ${ScreenConfig.blockHeight}');
+    debugPrint('dpi of screen ${ScreenConfig.dpi}');
+    debugPrint('appbar height of the screen ${ScreenConfig.appBarHeight}');
+    debugPrint('top padding ${ScreenConfig.paddingTop}');
   }
 
   setCharacterPositionAtEffect() {
@@ -311,7 +326,7 @@ class BoardProvider extends ChangeNotifier {
     _showMessageOpacity = 1;
     _message = 'you have paid $data rent';
     notifyListeners();
-    await Future.delayed(Duration(milliseconds: 3000));
+    await Future.delayed(const Duration(milliseconds: 3000));
     _showMessageOpacity = 0;
     notifyListeners();
   }

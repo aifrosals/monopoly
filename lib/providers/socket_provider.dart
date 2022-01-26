@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/api/api_constants.dart';
@@ -673,6 +674,10 @@ class SocketProvider extends ChangeNotifier {
       Provider.of<BoardProvider>(Values.navigatorKey.currentContext!,
               listen: false)
           .showMessage(data);
+
+      final player = AudioCache();
+
+      player.play('sounds/rent_paid.wav');
     } catch (error, st) {
       debugPrint('SocketProvider showRentMessage error $error $st');
     }
