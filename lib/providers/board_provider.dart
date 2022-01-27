@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/api/api_constants.dart';
@@ -101,26 +102,10 @@ class BoardProvider extends ChangeNotifier {
           duration: const Duration(seconds: 1),
           curve: Curves.easeOut,
           alignment: 0.2);
-      //
-      //  _scrollController.position.ensureVisible(_staticCharacterKey.currentContext!.findRenderObject()!,
-      //     duration: Duration(milliseconds: 1000), curve: Curves.easeOut, alignment: 1);
-
-      //  setCharacterPositionAtEffect();
-
     }
 
     _isCharacterStatic = true;
     notifyListeners();
-  }
-
-  setScrollRevers() {
-    debugPrint('scroll reverse is being called');
-    if (_staticCharacterKey.currentContext != null) {
-      Scrollable.ensureVisible(_staticCharacterKey.currentContext!,
-          duration: const Duration(milliseconds: 1000), curve: Curves.easeOut);
-      debugPrint('Scroll offset ${_scrollController.position.pixels}');
-      setCharacterPosition();
-    }
   }
 
   animateA(
@@ -128,13 +113,16 @@ class BoardProvider extends ChangeNotifier {
   ) async {
     _isCharacterStatic = false;
     notifyListeners();
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 500));
     for (int i = 0; i < number; i++) {
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(milliseconds: 500));
       _characterTop = _characterTop + 90;
       notifyListeners();
+      final player = AudioCache();
 
-      await Future.delayed(const Duration(milliseconds: 1000));
+      player.play('sounds/movement_2.mp3');
+
+      await Future.delayed(const Duration(milliseconds: 500));
       if (_slots.last.endKey != null && _characterKey.currentContext != null) {
         RenderBox box2 =
             _slots.last.endKey!.currentContext?.findRenderObject() as RenderBox;
@@ -152,11 +140,12 @@ class BoardProvider extends ChangeNotifier {
           _characterTop = 15;
           notifyListeners();
           _scrollController.animateTo(0,
-              duration: const Duration(seconds: 1), curve: Curves.easeOut);
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeOut);
         }
         if (_characterKey.currentContext != null) {
           Scrollable.ensureVisible(_characterKey.currentContext!,
-              duration: const Duration(milliseconds: 1000),
+              duration: const Duration(milliseconds: 500),
               alignment: 0.2,
               curve: Curves.easeOut);
         }
@@ -166,21 +155,7 @@ class BoardProvider extends ChangeNotifier {
     _isCharacterStatic = true;
     notifyListeners();
 
-    // setScrollRevers();
-  }
 
-  setCharacterPosition() {
-    if (_staticCharacterKey.currentContext != null) {
-      debugPrint('key is not null at set');
-    }
-    RenderBox box2 =
-        _staticCharacterKey.currentContext?.findRenderObject() as RenderBox;
-    Offset position2 = box2.localToGlobal(Offset.zero);
-    debugPrint(
-        'setCharacterPosition static position ${position2.direction} ${position2.dx} ${position2.dy} ${position2.distance}');
-    _characterTop = position2.dy - 100;
-    debugPrint('setCharacterPosition character top $characterTop');
-    notifyListeners();
   }
 
   setCharacterPositionAtBinding(double scrollOffset) {
@@ -205,17 +180,6 @@ class BoardProvider extends ChangeNotifier {
     debugPrint('dpi of screen ${ScreenConfig.dpi}');
     debugPrint('appbar height of the screen ${ScreenConfig.appBarHeight}');
     debugPrint('top padding ${ScreenConfig.paddingTop}');
-  }
-
-  setCharacterPositionAtEffect() {
-    RenderBox box2 =
-        _staticCharacterKey.currentContext?.findRenderObject() as RenderBox;
-    Offset position2 = box2.localToGlobal(Offset.zero);
-    debugPrint(
-        'static position ${position2.direction} ${position2.dx} ${position2.dy} ${position2.distance}');
-    _characterTop = position2.dy;
-    debugPrint('Charcet top ${characterTop}');
-    notifyListeners();
   }
 
   getBoardSlots() async {

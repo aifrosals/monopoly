@@ -5,6 +5,7 @@ import 'package:monopoly/config/screen_config.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:monopoly/pages/learn_more_page.dart';
 import 'package:monopoly/pages/transaction_page.dart';
+import 'package:monopoly/pages/user_menu_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -300,8 +301,8 @@ class _BoardPageState extends State<BoardPage> {
                           builder: (context, boardProvider, child) {
                         return boardProvider.isCharacterStatic == false
                             ? AnimatedPositioned(
-                                key: boardProvider.characterKey,
-                                duration: const Duration(milliseconds: 900),
+                          key: boardProvider.characterKey,
+                                duration: const Duration(milliseconds: 500),
                                 top: boardProvider.characterTop,
                                 left: 120,
                                 child: Container(
@@ -418,19 +419,43 @@ class _BoardPageState extends State<BoardPage> {
                 );
               }),
           bottomNavigationBar: Container(
-            height: 20,
+            height: 40,
             color: Colors.purple,
             child:
-            Consumer<UserProvider>(builder: (context, userProvider, child) {
+                Consumer<UserProvider>(builder: (context, userProvider, child) {
               return Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const SizedBox(),
-                    Text('Name: ${userProvider.user.id}',
-                        style:
-                        const TextStyle(color: Colors.white, fontSize: 12)),
+                    SizedBox(
+                      height: 30,
+                      child: TextButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.white.withOpacity(0.3)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              //  side: const BorderSide(color: Colors.red)
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const UserMenuPage()));
+                        },
+                        child: Text(userProvider.user.id,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
                     const SizedBox(),
                     Text(
                       'Credits: ${userProvider.user.credits}',
