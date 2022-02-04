@@ -40,6 +40,7 @@ dependencies:
   connectivity: ^3.0.6
   intl: ^0.17.0
   audioplayers: ^0.20.1
+  flutter_cube: ^0.1.1
 
 
 
@@ -69,6 +70,7 @@ flutter:
   assets:
     - assets/images/
     - assets/sounds/
+    - assets/objects/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

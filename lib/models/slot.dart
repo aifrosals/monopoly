@@ -38,6 +38,7 @@ class Slot {
       if (json['owner'] == null) {
         debugPrint('owner is null');
       } else {
+        /// Only username/id is passed in the slot to make response less heavy
         debugPrint('owner is not null ${json['owner']['id']}');
         user = User.fromJson(json['owner']);
       }

@@ -603,10 +603,11 @@ class SocketProvider extends ChangeNotifier {
     }
   }
 
-  updateUserCurrentSlot(User user) {
+  updateUserCurrentSlot(User user, int diceFace) {
     debugPrint('userMove user ${user.toJson()}');
     _activeMove = false;
-    socket.emit('userMove', user.toJson());
+    var userData = {'user': user.toJson(), 'diceFace': diceFace};
+    socket.emit('userMove', userData);
     notifyListeners();
   }
 
@@ -619,20 +620,20 @@ class SocketProvider extends ChangeNotifier {
     _activeMove = true;
   }
 
-  blackHoleEffect(dynamic slot) {
-    try {
-      debugPrint('blackHoleEffect reached $slot');
-      Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
-              listen: false)
-          .setCurrentSlotServer(slot);
-      updateUserCurrentSlot(Provider.of<UserProvider>(
-              Values.navigatorKey.currentContext!,
-              listen: false)
-          .user);
-    } catch (error, st) {
-      debugPrint('SocketProvider blackHoleEffect $error $st');
-    }
-  }
+  // blackHoleEffect(dynamic slot) {
+  //   try {
+  //     debugPrint('blackHoleEffect reached $slot');
+  //     Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
+  //             listen: false)
+  //         .setCurrentSlotServer(slot);
+  //     updateUserCurrentSlot(Provider.of<UserProvider>(
+  //             Values.navigatorKey.currentContext!,
+  //             listen: false)
+  //         .user);
+  //   } catch (error, st) {
+  //     debugPrint('SocketProvider blackHoleEffect $error $st');
+  //   }
+  // }
 
   getOfflineUsers(int slot) {
     int currentSlotUsers = 0;

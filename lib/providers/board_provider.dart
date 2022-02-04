@@ -34,27 +34,6 @@ class BoardProvider extends ChangeNotifier {
   double _showMessageOpacity = 0;
   String _message = '';
 
-  animate() async {
-    // await Future.delayed(Duration(milliseconds: 50));
-    // _characterTop = 17;
-    // _characterWidth = 50;
-    // _characterHight = 50;
-    // notifyListeners();
-    // await Future.delayed(Duration(milliseconds: 50));
-    // _characterWidth = 30;
-    // _characterHight = 30;
-    // _characterTop = 13;
-    //  await Future.delayed(Duration(milliseconds: 2000));
-    // _characterTop = 90;
-    // notifyListeners();
-    // await Future.delayed(Duration(milliseconds: 2000));
-    // _characterIndex = 1;
-    // _characterTop = -10;
-    // notifyListeners();
-    // await Future.delayed(Duration(milliseconds: 2000));
-    // _characterTop = 15;
-    // notifyListeners();
-  }
 
   /* Method for testing
   setCharacterIndex(int number) {
@@ -114,15 +93,14 @@ class BoardProvider extends ChangeNotifier {
     _isCharacterStatic = false;
     notifyListeners();
     await Future.delayed(const Duration(milliseconds: 500));
+
     for (int i = 0; i < number; i++) {
       await Future.delayed(const Duration(milliseconds: 500));
       _characterTop = _characterTop + 90;
       notifyListeners();
       final player = AudioCache();
-
-      player.play('sounds/movement_2.mp3');
-
       await Future.delayed(const Duration(milliseconds: 500));
+
       if (_slots.last.endKey != null && _characterKey.currentContext != null) {
         RenderBox box2 =
             _slots.last.endKey!.currentContext?.findRenderObject() as RenderBox;
@@ -150,6 +128,10 @@ class BoardProvider extends ChangeNotifier {
               curve: Curves.easeOut);
         }
       }
+      player.play('sounds/movement_2.mp3');
+      Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
+              listen: false)
+          .incrementCredits();
     }
 
     _isCharacterStatic = true;

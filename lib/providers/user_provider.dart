@@ -15,6 +15,8 @@ class UserProvider extends ChangeNotifier {
       dice: 0,
       credits: 0,
       id: '',
+      shield: Shield(active: false),
+      bonus: Bonus(active: false, moves: 0),
       currentSlot: 0);
 
   login(String id) async {
@@ -78,6 +80,15 @@ class UserProvider extends ChangeNotifier {
     _scrollController.animateTo(60.0 * _user.currentSlot!,
         duration: const Duration(milliseconds: 1500), curve: Curves.easeOut);
     debugPrint('Current position pixel ${_scrollController.position.pixels}');
+  }
+
+  incrementCredits() {
+    if (_user.bonus.active) {
+      _user.credits = _user.credits + 2;
+    } else {
+      _user.credits++;
+    }
+    notifyListeners();
   }
 
   setAnimationScroll(double size) {
