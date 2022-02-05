@@ -48,6 +48,7 @@ class SocketProvider extends ChangeNotifier {
     socket.on('reward', (data) => notifyReward(data));
     socket.on('reward_star', (data) => notifyRewardStar(data));
     socket.on('show_rent_message', (data) => showRentMessage(data));
+    socket.on('chance', (data) => notifyChance(data));
     socket.onDisconnect((_) {
       debugPrint('disconnect');
     });
@@ -58,7 +59,6 @@ class SocketProvider extends ChangeNotifier {
     debugPrint('Connected');
   }
 
-  //TODO: Do fancy animation instead of loading dialog
 
   notifyBuyLand() {
     try {
@@ -609,6 +609,36 @@ class SocketProvider extends ChangeNotifier {
     var userData = {'user': user.toJson(), 'diceFace': diceFace};
     socket.emit('userMove', userData);
     notifyListeners();
+  }
+
+  updateUserCurrentSlotNotDice(User user) {
+    debugPrint('userMove user ${user.toJson()}');
+    _activeMove = false;
+    var userData = {'user': user.toJson()};
+    socket.emit('userMove', userData);
+    notifyListeners();
+  }
+
+  notifyChance(dynamic data) async {
+    debugPrint('notifyChance data $data');
+    try {
+      User user = User.fromJson(data['ur']);
+      var result = data['response'];
+      //updateCurrentUser(data['ur']);
+      if (result['effect'] == 'challenge') {
+        _activeMove = false;
+        notifyListeners();
+        User user2 = await Provider.of<BoardProvider>(
+                Values.navigatorKey.currentContext!,
+                listen: false)
+            .chanceChallengeEffect(user);
+        updateUserCurrentSlotNotDice(user2);
+      } else {
+        HelpingDialog.showServerResponseDialog(result['message']);
+      }
+    } catch (error, st) {
+      debugPrint('notifyChance error $error $st');
+    }
   }
 
   disableMove() {

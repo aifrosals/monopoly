@@ -268,6 +268,18 @@ class BoardProvider extends ChangeNotifier {
     return user;
   }
 
+  Future<User> chanceChallengeEffect(User user) async {
+    Slot challengeSlot =
+        _slots.firstWhere((element) => element.type == 'challenge');
+    user.currentSlot = challengeSlot.index;
+    Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
+            listen: false)
+        .updateUser(user);
+    await Future.delayed(const Duration(milliseconds: 500));
+    setScroll();
+    return user;
+  }
+
   Future<void> showMessage(dynamic data) async {
     _showMessageOpacity = 1;
     _message = 'you have paid $data rent';

@@ -9,7 +9,7 @@ class DiceProvider extends ChangeNotifier {
   rollDice() {
     Random random = Random();
     _face = random.nextInt(6) + 1;
-  //   _face = 2;
+    _face = 1;
     debugPrint('face of the dice: $_face');
     notifyListeners();
     return _face;

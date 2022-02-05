@@ -76,7 +76,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   setScroll() {
-    print('scrolled');
+    debugPrint('scrolled');
     _scrollController.animateTo(60.0 * _user.currentSlot!,
         duration: const Duration(milliseconds: 1500), curve: Curves.easeOut);
     debugPrint('Current position pixel ${_scrollController.position.pixels}');
