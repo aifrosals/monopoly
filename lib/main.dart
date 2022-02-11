@@ -1,11 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monopoly/pages/dice_page.dart';
 import 'package:monopoly/pages/login_page.dart';
+import 'package:monopoly/providers/admin_provider.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/transaction_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
+import 'package:monopoly/web/admin/admin_app.dart';
 import 'package:provider/provider.dart';
 
 import 'config/values.dart';
@@ -15,17 +18,25 @@ void main() {
 //  ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
 //  connectionStatus.initialize();
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider<BoardProvider>(
-      create: (context) => BoardProvider(),
-    ),
-    ChangeNotifierProvider<UserProvider>(
-      create: (context) => UserProvider(),
-    ),
-    ChangeNotifierProvider<DiceProvider>(
-      create: (context) => DiceProvider(),
-    ),
-  ], child: const MyApp()));
+  if (kIsWeb) {
+    runApp(MultiProvider(providers: [
+      ChangeNotifierProvider<AdminProvider>(
+        create: (context) => AdminProvider(),
+      )
+    ], child: const AdminApp()));
+  } else {
+    runApp(MultiProvider(providers: [
+      ChangeNotifierProvider<BoardProvider>(
+        create: (context) => BoardProvider(),
+      ),
+      ChangeNotifierProvider<UserProvider>(
+        create: (context) => UserProvider(),
+      ),
+      ChangeNotifierProvider<DiceProvider>(
+        create: (context) => DiceProvider(),
+      ),
+    ], child: const MyApp()));
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -41,7 +52,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: Values.navigatorKey,
       scaffoldMessengerKey: Values.snackBarKey,
-      title: 'Flutter Demo',
+      title: 'Monopoly',
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.grey[200],
