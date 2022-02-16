@@ -8,8 +8,9 @@ class User {
   int loops;
   Bonus bonus;
   Shield shield;
-  String? serverId;
+  String serverId;
   String presence;
+  int challengeProgress;
 
   User(
       {required this.id,
@@ -17,7 +18,8 @@ class User {
       required this.dice,
       required this.loops,
       required this.bonus,
-      this.serverId,
+      required this.challengeProgress,
+      required this.serverId,
       required this.shield,
       required this.presence,
       this.currentSlot});
@@ -44,7 +46,8 @@ class User {
         loops: json['loops'] ?? 0,
         presence: json['presence'] ?? 'none',
         currentSlot: json['current_slot'] ?? 0,
-        serverId: json['_id'] ?? '',
+        challengeProgress: json['challenge_progress'],
+        serverId: json['_id'],
         bonus: bonus,
         shield: shield);
   }
@@ -54,9 +57,11 @@ class User {
       'id': id,
       'credits': credits,
       'loops': loops,
+      'serverId': serverId,
       'presence': presence,
       'current_slot': currentSlot,
       'dice': dice,
+      'challenge_progress': challengeProgress,
       'bonus': bonus.toJson()
     };
   }

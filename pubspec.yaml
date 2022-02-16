@@ -41,6 +41,7 @@ dependencies:
   intl: ^0.17.0
   audioplayers: ^0.20.1
   flutter_cube: ^0.1.1
+  shared_preferences: ^2.0.13
 
 
 

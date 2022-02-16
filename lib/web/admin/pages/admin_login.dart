@@ -87,6 +87,16 @@ class _AdminLoginState extends State<AdminLogin> {
                           return null;
                         }
                       },
+                      onFieldSubmitted: (value) async {
+                        if (_formKey.currentState != null &&
+                            _formKey.currentState!.validate()) {
+                          bool res = await adminProvider.login(
+                              _emailController.text, _passwordController.text);
+                          if (res) {
+                            Navigator.of(context).pushNamed('/dashboard');
+                          }
+                        }
+                      },
                     ),
                   ),
                   const SizedBox(

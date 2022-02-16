@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:monopoly/pages/dice_page.dart';
 import 'package:monopoly/pages/login_page.dart';
 import 'package:monopoly/providers/admin_provider.dart';
+import 'package:monopoly/providers/admin_questions_provider.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/transaction_provider.dart';
@@ -14,15 +15,18 @@ import 'package:provider/provider.dart';
 import 'config/values.dart';
 import 'services/connection_status_singleton.dart';
 
-void main() {
+void main() async {
 //  ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
 //  connectionStatus.initialize();
 
   if (kIsWeb) {
+    WidgetsFlutterBinding.ensureInitialized();
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider<AdminProvider>(
         create: (context) => AdminProvider(),
-      )
+      ),
+      ChangeNotifierProvider<AdminQuestionProvider>(
+          create: (context) => AdminQuestionProvider())
     ], child: const AdminApp()));
   } else {
     runApp(MultiProvider(providers: [

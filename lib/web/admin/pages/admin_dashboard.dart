@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monopoly/web/admin/pages/challenge/challenge_menu.dart';
 
 class AdminDashboard extends StatefulWidget {
   static const String route = '/dashboard';
@@ -10,6 +11,8 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+  int _index = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,21 +23,41 @@ class _AdminDashboardState extends State<AdminDashboard> {
         children: [
           Expanded(
             flex: 3,
-            child: Container(
+            child: Material(
               color: Colors.grey[300],
               child: Column(
                 children: [
                   ListTile(
-                      title: const Text('Challenge'),
-                      tileColor: Colors.white,
-                      onTap: () {}),
+                      title: Text('Challenge',
+                          style: TextStyle(
+                              color:
+                                  _index == 1 ? Colors.white : Colors.black)),
+                      tileColor: _index == 1 ? Colors.black : Colors.white,
+                      onTap: () {
+                        setState(() {
+                          _index = 1;
+                        });
+                      }),
                 ],
               ),
             ),
           ),
-          Expanded(flex: 9, child: Text('menu'))
+          Expanded(flex: 9, child: getMainWidgets())
         ],
       ),
     );
+  }
+
+  getMainWidgets() {
+    switch (_index) {
+      case 0:
+        {
+          return const Text('Home');
+        }
+      case 1:
+        {
+          return const ChallengeMenu();
+        }
+    }
   }
 }

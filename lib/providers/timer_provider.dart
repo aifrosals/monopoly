@@ -5,12 +5,12 @@ class TimerProvider extends ChangeNotifier {
   int _time = 0;
   Timer? _timer;
 
-  TimerProvider() {
-    startTimer();
+  TimerProvider(int time) {
+    startTimer(time);
   }
 
-  startTimer() {
-    _time = 90;
+  startTimer(int time) {
+    _time = time;
     const oneSecond = Duration(seconds: 1);
     _timer = Timer.periodic(oneSecond, (timer) {
       if (_time == 0) {

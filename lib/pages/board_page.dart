@@ -155,25 +155,68 @@ class _BoardPageState extends State<BoardPage> {
                                                   BorderRadius.circular(12)),
                                           tileColor:
                                               boardProvider.slots[index].color,
-                                          title: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                          title: Column(
+                                            mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              Flexible(
-                                                child: Text(
-                                                    '${boardProvider.slots[index].name} ',
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20)),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Flexible(
+                                                    child: Text(
+                                                        '${boardProvider.slots[index].name} ',
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 20)),
+                                                  ),
+                                                  boardProvider.slots[index]
+                                                              .type ==
+                                                          'chest'
+                                                      ? Image.asset(
+                                                          'assets/images/chest-pro.png',
+                                                          width: 100,
+                                                        )
+                                                      : const SizedBox(),
+                                                ],
                                               ),
-                                              boardProvider.slots[index].type ==
-                                                      'chest'
-                                                  ? Image.asset(
-                                                      'assets/images/chest-pro.png',
-                                                      height: 100,
-                                                      width: 100,
+                                              boardProvider.slots[index]
+                                                          .initialType ==
+                                                      'challenge'
+                                                  ? Row(
+                                                      children: [
+                                                        const CircleAvatar(
+                                                          backgroundImage:
+                                                              AssetImage(
+                                                                  'assets/images/challenge.jpg'),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Expanded(
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        25),
+                                                            child: Container(
+                                                              height: 20,
+                                                              color:
+                                                                  Colors.white,
+                                                              child:
+                                                                  LinearProgressIndicator(
+                                                                value: userProvider
+                                                                        .user
+                                                                        .challengeProgress /
+                                                                    10,
+                                                                color: Colors
+                                                                    .green,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
                                                     )
-                                                  : const SizedBox(),
+                                                  : const SizedBox()
                                             ],
                                           ),
                                           trailing: Column(

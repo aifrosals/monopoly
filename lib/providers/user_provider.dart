@@ -15,6 +15,8 @@ class UserProvider extends ChangeNotifier {
       dice: 0,
       credits: 0,
       id: '',
+      serverId: '',
+      challengeProgress: 0,
       shield: Shield(active: false),
       bonus: Bonus(active: false, moves: 0),
       currentSlot: 0);
@@ -34,7 +36,7 @@ class UserProvider extends ChangeNotifier {
           //'${user.token}',
         },
       );
-      debugPrint(response.body);
+      debugPrint('user data ${response.body}');
       var resData = json.decode(response.body);
       //  user.id = id;
       //   user.currentSlot = resData['current_slot'];

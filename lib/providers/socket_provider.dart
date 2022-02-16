@@ -12,6 +12,7 @@ import 'package:monopoly/pages/learn_more_page.dart';
 import 'package:monopoly/providers/timer_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/widgets/helping_dialog.dart';
+import 'package:monopoly/widgets/user_challenge_dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -49,6 +50,7 @@ class SocketProvider extends ChangeNotifier {
     socket.on('reward_star', (data) => notifyRewardStar(data));
     socket.on('show_rent_message', (data) => showRentMessage(data));
     socket.on('chance', (data) => notifyChance(data));
+    socket.on('challenge', (data) => notifyChallenge(data, user));
     socket.onDisconnect((_) {
       debugPrint('disconnect');
     });
@@ -74,7 +76,7 @@ class SocketProvider extends ChangeNotifier {
       showDialog(
           context: Values.navigatorKey.currentContext!,
           builder: (context) => ChangeNotifierProvider(
-                create: (context) => TimerProvider(),
+            create: (context) => TimerProvider(90),
                 child: Dialog(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -219,7 +221,7 @@ class SocketProvider extends ChangeNotifier {
       showDialog(
           context: Values.navigatorKey.currentContext!,
           builder: (context) => ChangeNotifierProvider(
-                create: (context) => TimerProvider(),
+            create: (context) => TimerProvider(90),
                 child: Dialog(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -376,7 +378,7 @@ class SocketProvider extends ChangeNotifier {
     showDialog(
         context: Values.navigatorKey.currentContext!,
         builder: (context) => ChangeNotifierProvider(
-              create: (context) => TimerProvider(),
+          create: (context) => TimerProvider(90),
               child: Dialog(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -485,7 +487,7 @@ class SocketProvider extends ChangeNotifier {
     showDialog(
         context: Values.navigatorKey.currentContext!,
         builder: (context) => ChangeNotifierProvider(
-              create: (context) => TimerProvider(),
+          create: (context) => TimerProvider(90),
               child: Dialog(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -581,6 +583,16 @@ class SocketProvider extends ChangeNotifier {
   notifyRewardStar(dynamic data) {
     HelpingDialog.showServerResponseDialog(
         'You have gained a star. Get 5 stars and receive RM reward.');
+  }
+
+  notifyChallenge(dynamic data, User user) {
+    try {
+      showDialog(
+          context: Values.navigatorKey.currentContext!,
+          builder: (context) => UserChallengeDialog(user: user));
+    } catch (error, st) {
+      debugPrint('notifyChallenge error $error $st');
+    }
   }
 
   updateBoard(dynamic data) {
