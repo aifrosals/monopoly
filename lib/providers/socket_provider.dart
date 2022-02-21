@@ -51,6 +51,7 @@ class SocketProvider extends ChangeNotifier {
     socket.on('show_rent_message', (data) => showRentMessage(data));
     socket.on('chance', (data) => notifyChance(data));
     socket.on('challenge', (data) => notifyChallenge(data, user));
+    socket.on('end', (data) => notifyBundleReward(data));
     socket.onDisconnect((_) {
       debugPrint('disconnect');
     });
@@ -595,6 +596,11 @@ class SocketProvider extends ChangeNotifier {
     }
   }
 
+  notifyBundleReward(dynamic data) {
+    HelpingDialog.showServerResponseDialog(
+        'Congratulations! You have gained 150 credits, 1 item and 5 RM cash');
+  }
+
   updateBoard(dynamic data) {
     debugPrint('updateBoard data received $data');
     Provider.of<BoardProvider>(Values.navigatorKey.currentContext!,
@@ -621,6 +627,12 @@ class SocketProvider extends ChangeNotifier {
     var userData = {'user': user.toJson(), 'diceFace': diceFace};
     socket.emit('userMove', userData);
     notifyListeners();
+  }
+
+  moveBack(User user) {
+    debugPrint('users prev step ${user.currentSlot}');
+    var userData = user.toJson();
+    socket.emit('moveBack', userData);
   }
 
   updateUserCurrentSlotNotDice(User user) {

@@ -19,6 +19,7 @@ class UserProvider extends ChangeNotifier {
       challengeProgress: 0,
       shield: Shield(active: false),
       bonus: Bonus(active: false, moves: 0),
+      items: Item(kick: 0, step: 0),
       currentSlot: 0);
 
   login(String id) async {
@@ -63,6 +64,20 @@ class UserProvider extends ChangeNotifier {
       //     duration: const Duration(milliseconds: 1500), curve: Curves.easeOut);
     }
 
+    notifyListeners();
+  }
+
+  /// This is function for testing purposes
+  /// to go back to the previous slot
+  setPreviousSlot() {
+    if (_user.currentSlot != null) {
+      if (_user.currentSlot == 0) {
+        _user.currentSlot = 16;
+      } else {
+        _user.currentSlot = _user.currentSlot! - 1;
+      }
+      debugPrint('user current slot ${_user.currentSlot}');
+    }
     notifyListeners();
   }
 

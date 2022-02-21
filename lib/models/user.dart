@@ -11,6 +11,7 @@ class User {
   String serverId;
   String presence;
   int challengeProgress;
+  Item items;
 
   User(
       {required this.id,
@@ -22,11 +23,14 @@ class User {
       required this.serverId,
       required this.shield,
       required this.presence,
+      required this.items,
       this.currentSlot});
 
   factory User.fromJson(Map<String, dynamic> json) {
     Bonus bonus = Bonus(active: false, moves: 0);
     Shield shield = Shield(active: false);
+    Item items = Item(kick: 0, step: 0);
+
     try {
       bonus = Bonus.fromJson(json['bonus']);
     } catch (error, st) {
@@ -39,6 +43,12 @@ class User {
       debugPrint('user shield parsing error $error');
     }
 
+    try {
+      items = Item.fromJson(json['items']);
+    } catch (error, st) {
+      debugPrint('user items parsing error $error');
+    }
+
     return User(
         id: json['id'],
         credits: json['credits'] ?? 0,
@@ -46,10 +56,15 @@ class User {
         loops: json['loops'] ?? 0,
         presence: json['presence'] ?? 'none',
         currentSlot: json['current_slot'] ?? 0,
-        challengeProgress: json['challenge_progress'],
+        challengeProgress: json['challenge_progress'] ?? 0,
         serverId: json['_id'],
         bonus: bonus,
+        items: items,
         shield: shield);
+  }
+
+  int getItemCount() {
+    return items.step + items.kick;
   }
 
   Map<String, dynamic> toJson() {
@@ -94,5 +109,20 @@ class Shield {
 
   Map<String, dynamic> toJson() {
     return {'date': date, 'active': active};
+  }
+}
+
+class Item {
+  int kick;
+  int step;
+
+  Item({required this.kick, required this.step});
+
+  factory Item.fromJson(Map<String, dynamic> json) {
+    return Item(kick: json['kick'] ?? 0, step: json['step'] ?? 0);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'kick': kick, 'step': step};
   }
 }

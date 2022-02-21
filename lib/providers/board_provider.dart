@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/api/api_constants.dart';
 import 'package:monopoly/config/screen_config.dart';
@@ -20,10 +18,14 @@ class BoardProvider extends ChangeNotifier {
 
   final _staticCharacterKey = GlobalKey();
 
+  final double _kSlotHeight = 102.0;
+
   bool _isCharacterStatic = true;
 
   List<Slot> _slots = [];
+
   double _characterWidth = 30;
+
   double _characterHight = 30;
 
 // value for test purpose
@@ -32,6 +34,7 @@ class BoardProvider extends ChangeNotifier {
   double _characterTop = 15;
 
   double _showMessageOpacity = 0;
+
   String _message = '';
 
 
@@ -63,13 +66,13 @@ class BoardProvider extends ChangeNotifier {
     switch (effect) {
       case 'black_hole':
         {
-          _characterTop = _characterTop - (90 * number);
+          _characterTop = _characterTop - (_kSlotHeight * number);
           notifyListeners();
         }
         break;
       case 'worm_hole':
         {
-          _characterTop = _characterTop + (90 * number);
+          _characterTop = _characterTop + (_kSlotHeight * number);
           notifyListeners();
         }
         break;
@@ -96,7 +99,7 @@ class BoardProvider extends ChangeNotifier {
 
     for (int i = 0; i < number; i++) {
       await Future.delayed(const Duration(milliseconds: 500));
-      _characterTop = _characterTop + 90;
+      _characterTop = _characterTop + _kSlotHeight;
       notifyListeners();
       final player = AudioCache();
       await Future.delayed(const Duration(milliseconds: 500));
@@ -310,7 +313,7 @@ class BoardProvider extends ChangeNotifier {
 
   List<Slot> get slots => _slots;
 
-  double get characterHight => _characterHight;
+  double get characterHeight => _characterHight;
 
   double get characterWidth => _characterWidth;
 
@@ -320,8 +323,6 @@ class BoardProvider extends ChangeNotifier {
 
   String get message => _message;
 
-  // int get characterIndex => _characterIndex;
-
   ScrollController get scrollController => _scrollController;
 
   GlobalKey get characterKey => _characterKey;
@@ -329,5 +330,7 @@ class BoardProvider extends ChangeNotifier {
   GlobalKey get staticCharacterKey => _staticCharacterKey;
 
   bool get isCharacterStatic => _isCharacterStatic;
+
+  double get kSlotHeight => _kSlotHeight;
 }
 

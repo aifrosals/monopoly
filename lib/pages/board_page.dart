@@ -44,15 +44,6 @@ class _BoardPageState extends State<BoardPage> {
             title: const Text('Monopoly'),
             elevation: 0.0,
             actions: [
-              // InkWell(
-              //     onTap: () {
-              //       final player = AudioCache();
-              //
-              //       // call this method when desired
-              //       player.play('sounds/rent_paid.wav');
-              //
-              //     },
-              //     child: const Icon(Icons.star)),
               InkWell(
                   onTap: () {
                     Navigator.push(
@@ -90,13 +81,12 @@ class _BoardPageState extends State<BoardPage> {
                         return ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            // controller: userProvider.scrollController,
                             itemCount: boardProvider.slots.length,
                             itemBuilder: (BuildContext context, int index) {
                               return Stack(
                                 children: [
                                   SizedBox(
-                                    height: 90,
+                                    height: boardProvider.kSlotHeight,
                                     child: Padding(
                                       padding: const EdgeInsets.all(3.0),
                                       child: Container(
@@ -400,18 +390,150 @@ class _BoardPageState extends State<BoardPage> {
               ],
             ),
           ),
-          floatingActionButton: SizedBox(
-            height: 70,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Consumer<SocketProvider>(
-                      builder: (context, socketProvider, child) {
-                    return socketProvider.activeMove
-                        ? FloatingActionButton(
-                            onPressed: () async {
+          floatingActionButton: userProvider.user.id == 'user3'
+              ? SizedBox(
+                  height: 70,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Consumer<SocketProvider>(
+                            builder: (context, socketProvider, child) {
+                          return socketProvider.activeMove
+                              ? FloatingActionButton(
+                                  heroTag: 'u3',
+                                  onPressed: () async {
+                                    socketProvider.disableMove();
+
+                                    userProvider.setPreviousSlot();
+                                    await Future.delayed(
+                                        Duration(milliseconds: 100));
+                                    await boardProvider.setScroll();
+                                    socketProvider.moveBack(userProvider.user);
+                                  },
+                                  child: Consumer<DiceProvider>(
+                                      builder: (context, diceProvider, child) {
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Text('Back',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                        diceProvider.face != 0
+                                            ? Text('${diceProvider.face}',
+                                                style: const TextStyle(
+                                                    color: Colors.white))
+                                            : const SizedBox()
+                                      ],
+                                    );
+                                  }),
+                                  backgroundColor: Colors.pinkAccent,
+                                )
+                              : FloatingActionButton(
+                                  heroTag: 'u3f',
+                                  child: Consumer<DiceProvider>(
+                                      builder: (context, diceProvider, child) {
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        diceProvider.face != 0
+                                            ? Text('${diceProvider.face}',
+                                                style: const TextStyle(
+                                                    color: Colors.white))
+                                            : const SizedBox()
+                                      ],
+                                    );
+                                  }),
+                                  backgroundColor: Colors.pinkAccent,
+                                  onPressed: () {},
+                                );
+                        }),
+                        Consumer<SocketProvider>(
+                            builder: (context, socketProvider, child) {
+                          return socketProvider.activeMove
+                              ? FloatingActionButton(
+                                  onPressed: () async {
+                                    socketProvider.disableMove();
+                                    int diceFace = diceProvider.getOne();
+                                    await boardProvider.animateA(diceFace);
+                                    userProvider.setCurrentSlot(diceFace);
+                                    userProvider.setCurrentSlotServer(
+                                        await boardProvider.checkSlotEffect(
+                                            userProvider.user));
+                                    socketProvider.updateUserCurrentSlot(
+                                        userProvider.user, diceFace);
+                                    // socketProvider.enableMove();
+
+                                    // boardProvider.animate();
+                                    //userProvider.setCurrentSlot(diceProvider.rollDice());
+                                    // userProvider.setCurrentSlotServer(await boardProvider
+                                    //     .checkSlotEffect(userProvider.user));
+                                    // RenderBox box = key.currentContext?.findRenderObject() as RenderBox;
+                                    // Offset position = box.localToGlobal(Offset.zero);
+                                    // debugPrint('position ${position.direction} ${position.dx} ${position.dy}');
+                                    //  boardProvider.animate();
+                                    //   socketProvider.updateUserCurrentSlot(userProvider.user);
+
+                                    debugPrint(
+                                        'user loop count ${userProvider.user.loops}');
+                                  },
+                                  child: Consumer<DiceProvider>(
+                                      builder: (context, diceProvider, child) {
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Text('dice',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                        diceProvider.face != 0
+                                            ? Text('${diceProvider.face}',
+                                                style: const TextStyle(
+                                                    color: Colors.white))
+                                            : const SizedBox()
+                                      ],
+                                    );
+                                  }),
+                                  backgroundColor: Colors.pinkAccent,
+                                )
+                              : FloatingActionButton(
+                                  child: Consumer<DiceProvider>(
+                                      builder: (context, diceProvider, child) {
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        diceProvider.face != 0
+                                            ? Text('${diceProvider.face}',
+                                                style: const TextStyle(
+                                                    color: Colors.white))
+                                            : const SizedBox()
+                                      ],
+                                    );
+                                  }),
+                                  backgroundColor: Colors.pinkAccent,
+                                  onPressed: () {},
+                                );
+                        }),
+                      ],
+                    ),
+                  ),
+                )
+              : SizedBox(
+                  height: 70,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Consumer<SocketProvider>(
+                            builder: (context, socketProvider, child) {
+                          return socketProvider.activeMove
+                              ? FloatingActionButton(
+                                  onPressed: () async {
                               socketProvider.disableMove();
                               int diceFace = diceProvider.rollDice();
                               await boardProvider.animateA(diceFace);
@@ -486,6 +608,29 @@ class _BoardPageState extends State<BoardPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const SizedBox(),
+                    SizedBox(
+                      height: 30,
+                      child: TextButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.white.withOpacity(0.3)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              //  side: const BorderSide(color: Colors.red)
+                            ),
+                          ),
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                            'Items(${userProvider.user.getItemCount()})',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -548,7 +693,6 @@ class _BoardPageState extends State<BoardPage> {
                             : const SizedBox()
                       ],
                     ),
-                    const SizedBox(),
                     Consumer<BoardProvider>(
                         builder: (context, boardProvider, child) {
                       return Text(
