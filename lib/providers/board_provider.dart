@@ -9,6 +9,7 @@ import 'package:monopoly/models/slot.dart';
 import 'package:http/http.dart' as http;
 import 'package:monopoly/models/user.dart';
 import 'package:monopoly/providers/user_provider.dart';
+import 'package:monopoly/widgets/helping_dialog.dart';
 import 'package:provider/provider.dart';
 
 class BoardProvider extends ChangeNotifier {
@@ -21,6 +22,10 @@ class BoardProvider extends ChangeNotifier {
   final double _kSlotHeight = 102.0;
 
   bool _isCharacterStatic = true;
+
+  bool _isItemListVisible = false;
+
+  bool _isItemEffectActive = false;
 
   List<Slot> _slots = [];
 
@@ -160,13 +165,6 @@ class BoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getBlockHeight() {
-    debugPrint('height of screen ${ScreenConfig.blockHeight}');
-    debugPrint('dpi of screen ${ScreenConfig.dpi}');
-    debugPrint('appbar height of the screen ${ScreenConfig.appBarHeight}');
-    debugPrint('top padding ${ScreenConfig.paddingTop}');
-  }
-
   getBoardSlots() async {
     try {
       debugPrint('called');
@@ -292,8 +290,50 @@ class BoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> kickUser(User user) async {
+    try {
+      _isItemEffectActive = true;
+      notifyListeners();
+
+      Uri url = Uri.parse('${ApiConstants.domain}${ApiConstants.kickUser}');
+      var body = {
+        'id': user.serverId,
+      };
+      debugPrint('$url');
+      var response = await http.post(
+        url,
+        body: json.encode(body),
+        //TODO: add token
+        headers: {
+          'Content-Type': 'application/json'
+          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
+          //'${user.token}',
+        },
+      );
+      // if(response.statusCode == 200 ) {
+      HelpingDialog.showServerResponseDialog(response.body);
+      // }
+    } catch (error, st) {
+      debugPrint('kick user error $error $st');
+      HelpingDialog.showServerResponseDialog('Unknown error');
+    } finally {
+      _isItemEffectActive = false;
+      notifyListeners();
+    }
+  }
+
   hideMessage() {
     _showMessageOpacity = 0;
+    notifyListeners();
+  }
+
+  showItemList() {
+    _isItemListVisible = true;
+    notifyListeners();
+  }
+
+  hideItemList() {
+    _isItemListVisible = false;
     notifyListeners();
   }
 
@@ -330,6 +370,10 @@ class BoardProvider extends ChangeNotifier {
   GlobalKey get staticCharacterKey => _staticCharacterKey;
 
   bool get isCharacterStatic => _isCharacterStatic;
+
+  bool get isItemListVisible => _isItemListVisible;
+
+  bool get isItemEffectAcitve => _isItemEffectActive;
 
   double get kSlotHeight => _kSlotHeight;
 }

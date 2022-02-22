@@ -31,7 +31,6 @@ class _BoardPageState extends State<BoardPage> {
     final diceProvider = Provider.of<DiceProvider>(context, listen: false);
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
 
-    boardProvider.getBlockHeight();
 
     WidgetsBinding.instance
         ?.addPostFrameCallback((_) => boardProvider.setScroll());
@@ -387,6 +386,147 @@ class _BoardPageState extends State<BoardPage> {
                     )
                   ],
                 ),
+                Consumer2<UserProvider, BoardProvider>(
+                    builder: (context, userProvider, boardProvider, child) {
+                  return boardProvider.isItemListVisible
+                      ? Positioned(
+                          bottom: 5,
+                          left: 40,
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Container(
+                                  height: 120,
+                                  width: 150,
+                                  color: Colors.purple.withOpacity(0.7),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: FittedBox(
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                'Step(${userProvider.user.items.step})',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                                textAlign: TextAlign.end,
+                                              ),
+                                              boardProvider.isItemEffectAcitve
+                                                  ? ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        primary: Colors.amber,
+                                                      ),
+                                                      onPressed: () {},
+                                                      child: Text(
+                                                        'Use',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                      ),
+                                                    )
+                                                  : ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        primary: Colors.amber,
+                                                      ),
+                                                      onPressed: () {},
+                                                      child: Text(
+                                                        'Use',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                      ),
+                                                    )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const Divider(
+                                        color: Colors.white,
+                                      ),
+                                      Expanded(
+                                        child: FittedBox(
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                'Kick(${userProvider.user.items.kick})',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                                textAlign: TextAlign.end,
+                                              ),
+                                              boardProvider.isItemEffectAcitve
+                                                  ? ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        primary: Colors.amber,
+                                                      ),
+                                                      onPressed: () {},
+                                                      child: Text(
+                                                        'Use',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                      ),
+                                                    )
+                                                  : ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        primary: Colors.amber,
+                                                      ),
+                                                      onPressed: () {
+                                                        boardProvider.kickUser(
+                                                            userProvider.user);
+                                                      },
+                                                      child: Text(
+                                                        'Use',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                      ),
+                                                    )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                  onTap: () {
+                                    boardProvider.hideItemList();
+                                  },
+                                  child: const Icon(
+                                    Icons.cancel,
+                                    color: Colors.white,
+                                  )),
+                              boardProvider.isItemEffectAcitve
+                                  ? Positioned(
+                                      right: 0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      ))
+                                  : const SizedBox()
+                            ],
+                          ),
+                        )
+                      : const SizedBox();
+                })
               ],
             ),
           ),
@@ -622,7 +762,9 @@ class _BoardPageState extends State<BoardPage> {
                             ),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          boardProvider.showItemList();
+                        },
                         child: Text(
                             'Items(${userProvider.user.getItemCount()})',
                             style: const TextStyle(
