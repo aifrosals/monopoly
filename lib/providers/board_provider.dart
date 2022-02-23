@@ -310,12 +310,73 @@ class BoardProvider extends ChangeNotifier {
           //'${user.token}',
         },
       );
-      // if(response.statusCode == 200 ) {
-      HelpingDialog.showServerResponseDialog(response.body);
-      // }
+      if (response.statusCode == 200) {
+        HelpingDialog.showServerResponseDialog("A user is kicked");
+        var data = json.decode(response.body);
+        User user = User.fromJson(data);
+        Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
+                listen: false)
+            .updateUser(user);
+      } else if (response.statusCode == 400 ||
+          response.statusCode == 401 ||
+          response.statusCode == 402 ||
+          response.statusCode == 403 ||
+          response.statusCode == 405) {
+        HelpingDialog.showServerResponseDialog(response.body);
+      } else {
+        HelpingDialog.showServerResponseDialog('Server Error');
+      }
     } catch (error, st) {
       debugPrint('kick user error $error $st');
       HelpingDialog.showServerResponseDialog('Unknown error');
+    } finally {
+      _isItemEffectActive = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> useStep(User user) async {
+    try {
+      _isItemEffectActive = true;
+      notifyListeners();
+
+      Uri url = Uri.parse('${ApiConstants.domain}${ApiConstants.useStep}');
+      var body = {
+        'id': user.serverId,
+      };
+      debugPrint('$url');
+      var response = await http.post(
+        url,
+        body: json.encode(body),
+        //TODO: add token
+        headers: {
+          'Content-Type': 'application/json'
+          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
+          //'${user.token}',
+        },
+      );
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        User user = User.fromJson(data);
+        Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
+                listen: false)
+            .updateUser(user);
+        return true;
+      } else if (response.statusCode == 400 ||
+          response.statusCode == 401 ||
+          response.statusCode == 402 ||
+          response.statusCode == 403 ||
+          response.statusCode == 405) {
+        HelpingDialog.showServerResponseDialog(response.body);
+        return false;
+      } else {
+        HelpingDialog.showServerResponseDialog('Server Error');
+        return false;
+      }
+    } catch (error, st) {
+      debugPrint('kick user error $error $st');
+      HelpingDialog.showServerResponseDialog('Unknown error');
+      return false;
     } finally {
       _isItemEffectActive = false;
       notifyListeners();

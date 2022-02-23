@@ -386,8 +386,9 @@ class _BoardPageState extends State<BoardPage> {
                     )
                   ],
                 ),
-                Consumer2<UserProvider, BoardProvider>(
-                    builder: (context, userProvider, boardProvider, child) {
+                Consumer3<UserProvider, BoardProvider, SocketProvider>(builder:
+                    (context, userProvider, boardProvider, socketProvider,
+                        child) {
                   return boardProvider.isItemListVisible
                       ? Positioned(
                           bottom: 5,
@@ -408,7 +409,7 @@ class _BoardPageState extends State<BoardPage> {
                                             children: [
                                               Text(
                                                 'Step(${userProvider.user.items.step})',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.white),
                                                 textAlign: TextAlign.end,
                                               ),
@@ -419,7 +420,7 @@ class _BoardPageState extends State<BoardPage> {
                                                         primary: Colors.amber,
                                                       ),
                                                       onPressed: () {},
-                                                      child: Text(
+                                                child: const Text(
                                                         'Use',
                                                         style: TextStyle(
                                                             color:
@@ -429,12 +430,39 @@ class _BoardPageState extends State<BoardPage> {
                                                       ),
                                                     )
                                                   : ElevatedButton(
-                                                      style: ElevatedButton
+                                                style: ElevatedButton
                                                           .styleFrom(
                                                         primary: Colors.amber,
                                                       ),
-                                                      onPressed: () {},
-                                                      child: Text(
+                                                      onPressed: () async {
+                                                        bool res =
+                                                            await boardProvider
+                                                                .useStep(
+                                                                    userProvider
+                                                                        .user);
+                                                        if (res) {
+                                                          int diceFace =
+                                                              diceProvider
+                                                                  .getOne();
+                                                          await boardProvider
+                                                              .animateA(
+                                                                  diceFace);
+                                                          userProvider
+                                                              .setCurrentSlot(
+                                                                  diceFace);
+                                                          userProvider.setCurrentSlotServer(
+                                                              await boardProvider
+                                                                  .checkSlotEffect(
+                                                                      userProvider
+                                                                          .user));
+                                                          socketProvider
+                                                              .updateUserCurrentSlot(
+                                                                  userProvider
+                                                                      .user,
+                                                                  diceFace);
+                                                        }
+                                                      },
+                                                      child: const Text(
                                                         'Use',
                                                         style: TextStyle(
                                                             color:
@@ -456,18 +484,18 @@ class _BoardPageState extends State<BoardPage> {
                                             children: [
                                               Text(
                                                 'Kick(${userProvider.user.items.kick})',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.white),
                                                 textAlign: TextAlign.end,
                                               ),
                                               boardProvider.isItemEffectAcitve
                                                   ? ElevatedButton(
-                                                      style: ElevatedButton
+                                                style: ElevatedButton
                                                           .styleFrom(
                                                         primary: Colors.amber,
                                                       ),
                                                       onPressed: () {},
-                                                      child: Text(
+                                                      child: const Text(
                                                         'Use',
                                                         style: TextStyle(
                                                             color:
@@ -485,7 +513,7 @@ class _BoardPageState extends State<BoardPage> {
                                                         boardProvider.kickUser(
                                                             userProvider.user);
                                                       },
-                                                      child: Text(
+                                                child: const Text(
                                                         'Use',
                                                         style: TextStyle(
                                                             color:
@@ -510,11 +538,11 @@ class _BoardPageState extends State<BoardPage> {
                                     Icons.cancel,
                                     color: Colors.white,
                                   )),
-                              boardProvider.isItemEffectAcitve
-                                  ? Positioned(
+                            boardProvider.isItemEffectAcitve
+                                  ? const Positioned(
                                       right: 0,
                                       child: Padding(
-                                        padding: const EdgeInsets.all(4.0),
+                                        padding: EdgeInsets.all(4.0),
                                         child: SizedBox(
                                           height: 20,
                                           width: 20,
@@ -548,7 +576,7 @@ class _BoardPageState extends State<BoardPage> {
 
                                     userProvider.setPreviousSlot();
                                     await Future.delayed(
-                                        Duration(milliseconds: 100));
+                                        const Duration(milliseconds: 100));
                                     await boardProvider.setScroll();
                                     socketProvider.moveBack(userProvider.user);
                                   },
