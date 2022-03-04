@@ -19,6 +19,14 @@ class SlotGraphic {
                   fit: BoxFit.cover,
                   image: AssetImage('assets/images/wormhole.jpg')));
         }
+      case 'treasure_hunt':
+        {
+          return const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage('assets/images/tresurehunt-bg.webp')));
+        }
       default:
         {
           return const BoxDecoration();

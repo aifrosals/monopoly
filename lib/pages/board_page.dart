@@ -267,6 +267,8 @@ class _BoardPageState extends State<BoardPage> {
                                                             0
                                                         ? InkWell(
                                                             onTap: () {
+                                                              debugPrint(
+                                                                  'pressed');
                                                               List<User>
                                                                   offlineUsers =
                                                                   socketProvider
@@ -280,7 +282,7 @@ class _BoardPageState extends State<BoardPage> {
                                                                   builder: (context) =>
                                                                       OfflineUserInfoDialog(
                                                                           users:
-                                                                              offlineUsers));
+                                                                          offlineUsers));
                                                             },
                                                             child: Container(
                                                               height: 30,
@@ -348,12 +350,13 @@ class _BoardPageState extends State<BoardPage> {
                     ],
                   ),
                 ),
+                const SizedBox(),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     //TODO: Add according to the top padding
-                    const SizedBox(
-                      height: 20,
+                    SizedBox(
+                      height: ScreenConfig.paddingTop + 10,
                     ),
                     Align(
                       alignment: Alignment.center,

@@ -11,11 +11,10 @@ import 'package:monopoly/pages/learn_more_page.dart';
 import 'package:monopoly/providers/timer_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/widgets/helping_dialog.dart';
+import 'package:monopoly/widgets/treasure_hunt_dialog.dart';
 import 'package:monopoly/widgets/user_challenge_dialog.dart';
 import 'package:provider/provider.dart';
-
 import 'package:socket_io_client/socket_io_client.dart' as io;
-
 import 'board_provider.dart';
 
 class SocketProvider extends ChangeNotifier {
@@ -50,6 +49,7 @@ class SocketProvider extends ChangeNotifier {
     socket.on('show_rent_message', (data) => showRentMessage(data));
     socket.on('chance', (data) => notifyChance(data));
     socket.on('challenge', (data) => notifyChallenge(data, user));
+    socket.on('treasure_hunt', (data) => notifyTreasureHunt(data, user));
     socket.on('end', (data) => notifyBundleReward(data));
     socket.onDisconnect((_) {
       debugPrint('disconnect');
@@ -592,6 +592,16 @@ class SocketProvider extends ChangeNotifier {
           builder: (context) => UserChallengeDialog(user: user));
     } catch (error, st) {
       debugPrint('notifyChallenge error $error $st');
+    }
+  }
+
+  notifyTreasureHunt(dynamic data, User user) {
+    try {
+      showDialog(
+          context: Values.navigatorKey.currentContext!,
+          builder: (context) => TreasureHuntDialog(user: user));
+    } catch (error, st) {
+      debugPrint('notifyTreasureHunt error $error $st');
     }
   }
 
