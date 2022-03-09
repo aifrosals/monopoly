@@ -67,6 +67,20 @@ class User {
     return items.step + items.kick;
   }
 
+  String getDiceString() {
+    if (dice != null) {
+      if (dice! <= 2) {
+        return '${dice!}/2';
+      }
+      else {
+        return '2/2 + ${dice! - 2}';
+      }
+    }
+    else {
+      return '0/2';
+    }
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
