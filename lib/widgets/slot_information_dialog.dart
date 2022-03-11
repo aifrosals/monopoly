@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:monopoly/providers/user_provider.dart';
+import 'package:monopoly/widgets/slot_graphic.dart';
 import 'package:provider/provider.dart';
 
 class SlotInformationDialog extends StatelessWidget {
@@ -13,22 +14,79 @@ class SlotInformationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Dialog(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Slot Information',
-              style: TextStyle(fontWeight: FontWeight.bold),),
-            const SizedBox(
-              height: 20,
+            Stack(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Image.asset(
+                        SlotGraphic.getBackgroundImage(slot.type),
+                        height: 190,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.cancel_outlined)),
+                  ),
+                )
+              ],
             ),
-            Text('Name: ${slot.name}'),
-            const SizedBox(
-              height: 2,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  const Text(
+                    'Slot Information',
+                    style: TextStyle(fontWeight: FontWeight.bold),),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text('Name: ${slot.name}'),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  slotInfo(slot, userProvider.user),
+                  const SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.amber,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(25))),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'OK',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            slotInfo(slot, userProvider.user)
           ],
         ),
       ),

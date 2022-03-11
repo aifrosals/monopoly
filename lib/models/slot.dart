@@ -8,6 +8,7 @@ class Slot {
 
   /// type indicates the current type of the slot
   String type;
+  String? image;
   String initialType;
   User? owner;
   int? price;
@@ -18,19 +19,19 @@ class Slot {
   Color color;
   Map<String, dynamic>? allStepCount;
 
-  Slot(
-      {required this.name,
-      required this.type,
-      required this.index,
-      this.endKey,
-      this.price,
-      this.updatedPrice,
-      this.owner,
-      this.status,
-      this.level,
-      required this.color,
-      this.allStepCount,
-      required this.initialType});
+  Slot({required this.name,
+    required this.type,
+    required this.index,
+    this.endKey,
+    this.price,
+    this.updatedPrice,
+    this.owner,
+    this.status,
+    this.level,
+    this.image,
+    required this.color,
+    this.allStepCount,
+    required this.initialType});
 
   factory Slot.fromJson(Map<String, dynamic> json) {
     User? user;
@@ -54,6 +55,7 @@ class Slot {
       owner: user,
       index: json['index'],
       level: json['level'],
+      image: json['image'],
       status: json['status'] ?? '',
       updatedPrice: json['updated_price'],
       allStepCount: json['all_step_count'],

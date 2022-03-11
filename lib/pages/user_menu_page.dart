@@ -39,7 +39,8 @@ class UserMenuPage extends StatelessWidget {
                           padding: const EdgeInsets.all(3.0),
                           child: Container(
                             key: boardProvider.slots[index].endKey,
-                            decoration: SlotGraphic.getBackgroundImage(
+                            decoration: SlotGraphic
+                                .getBackgroundImageDecoration(
                                 boardProvider.slots[index].type),
                             child: ListTile(
                               dense: true,

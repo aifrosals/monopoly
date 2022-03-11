@@ -68,7 +68,7 @@ class SocketProvider extends ChangeNotifier {
               listen: false)
           .user;
       if (user.credits < 50) {
-        HelpingDialog.showNotEnoughCredDialog();
+        HelpingDialog.showNotEnoughCredDialog(50);
         return;
       }
       debugPrint('buy land is triggered');
@@ -215,7 +215,7 @@ class SocketProvider extends ChangeNotifier {
       }
 
       if (user.credits < price) {
-        HelpingDialog.showNotEnoughCredUpgradeDialog();
+        HelpingDialog.showNotEnoughCredUpgradeDialog(price);
         return;
       }
       showDialog(
@@ -372,7 +372,7 @@ class SocketProvider extends ChangeNotifier {
     }
 
     if (user.credits < sellingPrice) {
-      HelpingDialog.showNotEnoughCredDialog();
+      HelpingDialog.showNotEnoughCredDialog(sellingPrice);
       return;
     }
     showDialog(
@@ -480,7 +480,7 @@ class SocketProvider extends ChangeNotifier {
     }
 
     if (user.credits < sellingPrice) {
-      HelpingDialog.showNotEnoughCredDialog();
+      HelpingDialog.showNotEnoughCredDialog(sellingPrice);
       return;
     }
 
@@ -735,9 +735,11 @@ class SocketProvider extends ChangeNotifier {
 
   showRentMessage(dynamic data) {
     try {
-      Provider.of<BoardProvider>(Values.navigatorKey.currentContext!,
-              listen: false)
-          .showMessage(data);
+      // Provider.of<BoardProvider>(Values.navigatorKey.currentContext!,
+      //         listen: false)
+      //     .showMessage(data);
+
+      HelpingDialog.showServerResponseDialog('You have paid $data rent');
 
       final player = AudioCache();
 

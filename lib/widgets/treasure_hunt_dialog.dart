@@ -41,30 +41,30 @@ class TreasureHuntDialog extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(
-                                Icons.cancel_outlined,
-                                color: Colors.white,
-                              )),
-                        ),
-                      ),
+                      // Align(
+                      //   alignment: Alignment.topRight,
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: InkWell(
+                      //         onTap: () {
+                      //           Navigator.pop(context);
+                      //         },
+                      //         child: const Icon(
+                      //           Icons.cancel_outlined,
+                      //           color: Colors.white,
+                      //         )),
+                      //   ),
+                      // ),
                       Consumer<TreasureHuntProvider>(
                           builder: (context, treasureHuntProvider, child) {
-                        return Column(
-                          children: [
-                            Row(
+                            return Column(
                               children: [
-                                Column(
+                                Row(
                                   children: [
-                                    Stack(
+                                    Column(
                                       children: [
+                                        Stack(
+                                          children: [
                                         RotationTransition(
                                           turns: const AlwaysStoppedAnimation(
                                               30 / 360),

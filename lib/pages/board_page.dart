@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/config/screen_config.dart';
 import 'package:monopoly/models/user.dart';
@@ -12,6 +13,7 @@ import 'package:monopoly/widgets/offline_user_info_dialog.dart';
 import 'package:monopoly/widgets/slot_graphic.dart';
 import 'package:monopoly/widgets/slot_information_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:cupertino_icons/cupertino_icons.dart';
 
 class BoardPage extends StatefulWidget {
   const BoardPage({Key? key}) : super(key: key);
@@ -43,6 +45,56 @@ class _BoardPageState extends State<BoardPage> {
             title: Text('Hi ${userProvider.user.id}'),
             elevation: 0.0,
             centerTitle: true,
+            actions: [
+              SizedBox(
+                height: 30,
+                child: TextButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<
+                        RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                            const UserMenuPage()));
+                  },
+                  child: const Icon(
+                    CupertinoIcons.person_alt_circle, color: Colors.black,),
+                ),
+              ),
+              Consumer<BoardProvider>(
+                  builder: (context, boardProvider, child) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        child: Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.attach_money),
+                              Text(
+                                '${userProvider.user.credits}',
+                                style: TextStyle(
+                                    color: boardProvider.isCharacterStatic
+                                        ? Colors.black
+                                        : Colors.amber,
+                                    fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+
+            ],
           ),
           body: SafeArea(
             child: Stack(
@@ -68,7 +120,8 @@ class _BoardPageState extends State<BoardPage> {
                                           child: Container(
                                             key: boardProvider.slots[index].endKey,
                                             decoration:
-                                            SlotGraphic.getBackgroundImage(
+                                            SlotGraphic
+                                                .getBackgroundImageDecoration(
                                                 boardProvider
                                                     .slots[index].type),
                                             child: ListTile(
@@ -327,45 +380,45 @@ class _BoardPageState extends State<BoardPage> {
                     ],
                   ),
                 ),
-                const SizedBox(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    //TODO: Add according to the top padding
-                    SizedBox(
-                      height: ScreenConfig.paddingTop + 10,
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Consumer<BoardProvider>(
-                          builder: (context, boardProvider, child) {
-                            return AnimatedOpacity(
-                              opacity: boardProvider.showMessageOpacity,
-                              duration: const Duration(milliseconds: 2000),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.8)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(boardProvider.message),
-                                        InkWell(
-                                          onTap: () {
-                                            boardProvider.hideMessage();
-                                          },
-                                          child: const Icon(Icons.cancel_outlined),
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                            );
-                          }),
-                    )
-                  ],
-                ),
+
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: [
+                //     //TODO: Add according to the top padding
+                //     SizedBox(
+                //       height: ScreenConfig.paddingTop + 10,
+                //     ),
+                //     Align(
+                //       alignment: Alignment.center,
+                //       child: Consumer<BoardProvider>(
+                //           builder: (context, boardProvider, child) {
+                //             return AnimatedOpacity(
+                //               opacity: boardProvider.showMessageOpacity,
+                //               duration: const Duration(milliseconds: 2000),
+                //               child: Container(
+                //                   decoration: BoxDecoration(
+                //                       color: Colors.white.withOpacity(0.8)),
+                //                   child: Padding(
+                //                     padding: const EdgeInsets.all(8.0),
+                //                     child: Row(
+                //                       mainAxisAlignment:
+                //                       MainAxisAlignment.spaceBetween,
+                //                       children: [
+                //                         Text(boardProvider.message),
+                //                         InkWell(
+                //                           onTap: () {
+                //                             boardProvider.hideMessage();
+                //                           },
+                //                           child: const Icon(Icons.cancel_outlined),
+                //                         ),
+                //                       ],
+                //                     ),
+                //                   )),
+                //             );
+                //           }),
+                //     )
+                //   ],
+                // ),
                 Consumer3<UserProvider, BoardProvider, SocketProvider>(builder:
                     (context, userProvider, boardProvider, socketProvider,
                     child) {
@@ -782,34 +835,7 @@ class _BoardPageState extends State<BoardPage> {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SizedBox(
-                          height: 30,
-                          child: TextButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white.withOpacity(0.3)),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  //  side: const BorderSide(color: Colors.red)
-                                ),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                      const UserMenuPage()));
-                            },
-                            child: Text(userProvider.user.id,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                        ),
+
                         const SizedBox(
                           width: 10,
                         ),
@@ -841,17 +867,6 @@ class _BoardPageState extends State<BoardPage> {
                             : const SizedBox()
                       ],
                     ),
-                    Consumer<BoardProvider>(
-                        builder: (context, boardProvider, child) {
-                          return Text(
-                            'Credits: ${userProvider.user.credits}',
-                            style: TextStyle(
-                                color: boardProvider.isCharacterStatic
-                                    ? Colors.white
-                                    : Colors.amber,
-                                fontSize: 12),
-                          );
-                        }),
                     const SizedBox(),
                   ],
                 ),
