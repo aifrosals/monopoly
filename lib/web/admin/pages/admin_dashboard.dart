@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monopoly/web/admin/pages/challenge/challenge_menu.dart';
+import 'package:monopoly/web/admin/pages/user/manage_user.dart';
 
 class AdminDashboard extends StatefulWidget {
   static const String route = '/dashboard';
@@ -38,6 +39,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           _index = 1;
                         });
                       }),
+                  ListTile(
+                      title: Text('Manage User',
+                          style: TextStyle(
+                              color:
+                                  _index == 2 ? Colors.white : Colors.black)),
+                      tileColor: _index == 2 ? Colors.black : Colors.white,
+                      onTap: () {
+                        setState(() {
+                          _index = 2;
+                        });
+                      }),
                 ],
               ),
             ),
@@ -57,6 +69,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
       case 1:
         {
           return const ChallengeMenu();
+        }
+      case 2:
+        {
+          return const ManageUserPage();
         }
     }
   }

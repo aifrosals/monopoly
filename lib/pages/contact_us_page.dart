@@ -7,7 +7,6 @@ class ContactUsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String vlaue = '';
     return ChangeNotifierProvider<ContactUsProvider>(
       create: (context) => ContactUsProvider(),
       child: Scaffold(
@@ -47,7 +46,7 @@ class ContactUsPage extends StatelessWidget {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[300]!)
                   ),
-                  child: TextField(
+                  child: const TextField(
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration.collapsed(
                         hintText: 'Enter your e-mail'),
@@ -56,11 +55,10 @@ class ContactUsPage extends StatelessWidget {
                 const SizedBox(height: 10,),
 
                 Container(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey[300]!)
-                  ),
-                  child: TextField(
+                      border: Border.all(color: Colors.grey[300]!)),
+                  child: const TextField(
                     maxLines: 8,
                     decoration: InputDecoration.collapsed(
                         hintText: 'Wirte here what you want to say'),

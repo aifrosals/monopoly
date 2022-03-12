@@ -14,6 +14,8 @@ class UserProvider extends ChangeNotifier {
       loops: 0,
       dice: 0,
       credits: 0,
+      diceUpdatedAt: '',
+      premium: false,
       id: '',
       serverId: '',
       challengeProgress: 0,

@@ -11,7 +11,9 @@ class User {
   String serverId;
   String presence;
   int challengeProgress;
+  bool premium;
   Item items;
+  String diceUpdatedAt;
 
   User(
       {required this.id,
@@ -19,6 +21,8 @@ class User {
       required this.dice,
       required this.loops,
       required this.bonus,
+      required this.premium,
+      required this.diceUpdatedAt,
       required this.challengeProgress,
       required this.serverId,
       required this.shield,
@@ -58,6 +62,8 @@ class User {
         currentSlot: json['current_slot'] ?? 0,
         challengeProgress: json['challenge_progress'] ?? 0,
         serverId: json['_id'],
+        diceUpdatedAt: json['dice_updated_at'],
+        premium: json['premium'],
         bonus: bonus,
         items: items,
         shield: shield);
@@ -71,12 +77,10 @@ class User {
     if (dice != null) {
       if (dice! <= 2) {
         return '${dice!}/2';
-      }
-      else {
+      } else {
         return '2/2 + ${dice! - 2}';
       }
-    }
-    else {
+    } else {
       return '0/2';
     }
   }
