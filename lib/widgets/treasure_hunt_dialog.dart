@@ -603,28 +603,30 @@ class TreasureHuntDialog extends StatelessWidget {
                           const SizedBox(
                             height: 5,
                           ),
-                          TextButton(
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(100))),
-                              onPressed: () async {
-                                await treasureHuntProvider.getRewards(user);
-                              },
-                              child: const SizedBox(
-                                height: 35,
-                                width: 200,
-                                child: Center(
-                                  child: Text(
-                                    'Take Rewards',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                        treasureHuntProvider.answeredDirections.length >= 2
+                              ? TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100))),
+                                  onPressed: () async {
+                                    await treasureHuntProvider.getRewards(user);
+                                  },
+                                  child: const SizedBox(
+                                    height: 35,
+                                    width: 200,
+                              child: Center(
+                                child: Text(
+                                  'Take Rewards',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              )),
+                              ),
+                            ))
+                            : const SizedBox(),
                         ],
                       ),
                       const SizedBox(

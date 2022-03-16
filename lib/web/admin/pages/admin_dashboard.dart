@@ -40,7 +40,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         });
                       }),
                   ListTile(
-                      title: Text('Manage User',
+                      title: Text('Users',
                           style: TextStyle(
                               color:
                                   _index == 2 ? Colors.white : Colors.black)),

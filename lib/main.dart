@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monopoly/pages/dice_page.dart';
 import 'package:monopoly/pages/login_page.dart';
+import 'package:monopoly/pages/onboarding/onboarding_main_page.dart';
 import 'package:monopoly/providers/admin_provider.dart';
 import 'package:monopoly/providers/admin_questions_provider.dart';
 import 'package:monopoly/providers/board_provider.dart';
@@ -11,6 +12,7 @@ import 'package:monopoly/providers/transaction_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/web/admin/admin_app.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'config/values.dart';
 import 'services/connection_status_singleton.dart';
@@ -58,12 +60,16 @@ class MyApp extends StatelessWidget {
       scaffoldMessengerKey: Values.snackBarKey,
       title: 'Monopoly',
       theme: ThemeData(
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context)
+              .textTheme, // If this is not set, then ThemeData.light().textTheme is used.
+        ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.grey[200],
         ),
         primarySwatch: Colors.grey,
       ),
-      home: const LoginPage(),
+      home: const OnboardingMainPage(),
       //const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

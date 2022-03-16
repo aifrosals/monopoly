@@ -42,6 +42,8 @@ dependencies:
   audioplayers: ^0.20.1
   flutter_cube: ^0.1.1
   shared_preferences: ^2.0.13
+  smooth_page_indicator: ^1.0.0+2
+  google_fonts: ^2.3.1
 
 
 

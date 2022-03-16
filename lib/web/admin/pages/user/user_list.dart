@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/providers/admin_user_provider.dart';
 import 'package:monopoly/web/admin/pages/user/user_data_source.dart';
@@ -15,10 +17,10 @@ class UserList extends StatelessWidget {
             children: [
               Consumer<AdminUserProvider>(
                   builder: (context, adminQuestionProvider, child) {
-                return adminQuestionProvider.userLoading
-                    ? const LinearProgressIndicator()
-                    : const SizedBox();
-              }),
+                    return adminQuestionProvider.userLoading
+                        ? const LinearProgressIndicator()
+                        : const SizedBox();
+                  }),
               const SizedBox(
                 height: 20,
               ),
@@ -26,49 +28,40 @@ class UserList extends StatelessWidget {
           ),
           Consumer<AdminUserProvider>(
               builder: (context, adminUserProvider, child) {
-            return PaginatedDataTable(
-              source: UserDataSource(users: adminUserProvider.users),
-              //    header: const Text('My Products'),
-              columns: const [
-                DataColumn(label: Text('#')),
-                DataColumn(label: Text('User Name')),
-                DataColumn(label: Text('User ID'))
-              ],
-              columnSpacing: 100,
-              horizontalMargin: 10,
-              rowsPerPage: 8,
-              showCheckboxColumn: false,
+            return ScrollConfiguration(
+              behavior: MyCustomScrollBehavior(),
+              child: PaginatedDataTable(
+                source: UserDataSource(
+                    users: adminUserProvider.users, context: context),
+                //    header: const Text('My Products'),
+                columns: const [
+                  DataColumn(label: Text('#')),
+                  DataColumn(label: Text('User Name')),
+                  DataColumn(label: Text('User ID')),
+                  DataColumn(label: Text('Credits ID')),
+                  DataColumn(label: Text('Dice')),
+                  DataColumn(label: Text('Add dice')),
+                  DataColumn(label: Text('Premium'))
+                ],
+                columnSpacing: 100,
+                horizontalMargin: 10,
+                rowsPerPage: 8,
+                showCheckboxColumn: false,
+              ),
             );
-            // return Table(
-            //     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            //     columnWidths: const {
-            //       0: FlexColumnWidth(1),
-            //     },
-            //     children: adminUserProvider.users
-            //         .asMap()
-            //         .map(
-            //           (index, u) => MapEntry(
-            //             index,
-            //             TableRow(
-            //               decoration: BoxDecoration(
-            //                   borderRadius: BorderRadius.circular(12),
-            //                   color: index.isEven
-            //                       ? Colors.grey[200]
-            //                       : Colors.white),
-            //               children: [
-            //                 Text('${index + 1}'),
-            //                 Text(u.id),
-            //                 Text((u.serverId),
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
-            //         )
-            //         .values
-            //         .toList());
           }),
         ],
       ),
     );
   }
+}
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
 }

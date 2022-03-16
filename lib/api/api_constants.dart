@@ -1,6 +1,6 @@
 class ApiConstants {
-  static const String domain = 'http://172.168.1.107:3000/';
-  static const String socketPoint = 'http://172.168.1.107:3000/';
+  static const String domain = 'http://192.168.10.14:3000/';
+  static const String socketPoint = 'http://192.168.10.14:3000/';
 
   // static const String domain = 'https://desolate-sierra-90130.herokuapp.com/';
   // static const String socketPoint =
@@ -36,4 +36,7 @@ class ApiConstants {
 
   ///Admin User
   static const String getAllUsers = 'getAllUsers';
+  static const String activatePremium = 'activatePremium';
+  static const String deactivatePremium = 'deactivatePremium';
+  static const String addDice = 'addDice';
 }

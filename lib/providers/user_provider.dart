@@ -10,6 +10,7 @@ class UserProvider extends ChangeNotifier {
   final _scrollController = ScrollController();
 
    User _user = User(
+       token: '',
       presence: 'offline',
       loops: 0,
       dice: 0,
@@ -21,8 +22,8 @@ class UserProvider extends ChangeNotifier {
       challengeProgress: 0,
       shield: Shield(active: false),
       bonus: Bonus(active: false, moves: 0),
-      items: Item(kick: 0, step: 0),
-      currentSlot: 0);
+       items: Item(kick: 0, step: 0),
+       currentSlot: 0);
 
   login(String id) async {
     try {
@@ -65,7 +66,6 @@ class UserProvider extends ChangeNotifier {
       // _scrollController.animateTo(60.0 * _user.currentSlot!,
       //     duration: const Duration(milliseconds: 1500), curve: Curves.easeOut);
     }
-
     notifyListeners();
   }
 

@@ -13,10 +13,8 @@ class ManageUserPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(
-              height: 20,
-            ),
             Row(
               children: [
                 Container(
@@ -24,22 +22,29 @@ class ManageUserPage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[300]!)),
-                  child: const TextField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration.collapsed(hintText: 'Search'),
-                  ),
+                  child: Consumer<AdminUserProvider>(
+                      builder: (context, adminUserProvider, child) {
+                    return TextField(
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        adminUserProvider.inputQuery(value);
+                      },
+                      decoration:
+                          const InputDecoration.collapsed(hintText: 'Search'),
+                    );
+                  }),
                 ),
-                TextButton(
-                    style: TextButton.styleFrom(
-                        backgroundColor: Colors.blue, primary: Colors.white),
-                    onPressed: () {},
-                    child: Text('Go'))
+                // TextButton(
+                //     style: TextButton.styleFrom(
+                //         backgroundColor: Colors.blue, primary: Colors.white),
+                //     onPressed: () {},
+                //     child: Text('Go'))
               ],
             ),
             const SizedBox(
               height: 20,
             ),
-            UserList(),
+            Flexible(child: const UserList()),
           ],
         ),
       ),
