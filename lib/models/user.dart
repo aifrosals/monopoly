@@ -14,7 +14,7 @@ class User {
   bool premium;
   Item items;
   String diceUpdatedAt;
-  String token;
+  String? token;
 
   User(
       {required this.id,
@@ -29,7 +29,7 @@ class User {
       required this.shield,
       required this.presence,
       required this.items,
-      required this.token,
+      this.token,
       this.currentSlot});
 
   factory User.fromJson(Map<String, dynamic> json) {

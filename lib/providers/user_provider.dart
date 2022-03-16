@@ -28,7 +28,8 @@ class UserProvider extends ChangeNotifier {
   Future<Map<String, dynamic>> registerUserWithEmail(
       String email, String id, String password, String confirmPassword) async {
     try {
-      Uri url = Uri.parse('${ApiConstants.domain}${ApiConstants.login}');
+      Uri url = Uri.parse(
+          '${ApiConstants.domain}${ApiConstants.registerUserWithEmail}');
       var body = {
         'email': email,
         'id': id,
@@ -66,6 +67,51 @@ class UserProvider extends ChangeNotifier {
       return {'status': false, 'message': 'Unknown error'};
     } finally {
       notifyListeners();
+    }
+  }
+
+  Future<Map<String, dynamic>> loginWithEmail(
+      String email, String password) async {
+    {
+      try {
+        Uri url =
+            Uri.parse('${ApiConstants.domain}${ApiConstants.loginWithEmail}');
+        var body = {
+          'email': email,
+          'password': password,
+        };
+        debugPrint('$url');
+        var response = await http.post(
+          url,
+          body: json.encode(body),
+          headers: {'Content-Type': 'application/json'},
+        );
+        if (response.statusCode == 200) {
+          debugPrint('user data ${response.body}');
+          var resData = json.decode(response.body);
+          debugPrint(' credits from server ${resData['credits']}');
+          _user = User.fromJson(resData);
+          return {
+            'status': true,
+          };
+        } else if (response.statusCode == 400 ||
+            response.statusCode == 401 ||
+            response.statusCode == 402 ||
+            response.statusCode == 403 ||
+            response.statusCode == 405) {
+          return {'status': false, 'message': response.body};
+        } else {
+          return {
+            'status': false,
+            'message': 'Unknown server error ${response.statusCode}'
+          };
+        }
+      } catch (error, st) {
+        debugPrint('UserProvider $error $st');
+        return {'status': false, 'message': 'Unknown error'};
+      } finally {
+        notifyListeners();
+      }
     }
   }
 

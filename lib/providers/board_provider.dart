@@ -165,7 +165,7 @@ class BoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getBoardSlots() async {
+  Future<Map<String, dynamic>> getBoardSlots(User user) async {
     try {
       debugPrint('called');
       Uri url = Uri.parse('${ApiConstants.domain}${ApiConstants.slots}');
@@ -174,21 +174,33 @@ class BoardProvider extends ChangeNotifier {
       var response = await http.get(
         url,
         // body: json.encode(body),
-        //TODO: Create jwt on server
         headers: {
-          'Content-Type': 'application/json'
-          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-          //'${user.token}',
+          'Content-Type': 'application/json',
+          'x-access-token': user.token ?? ''
         },
       );
       debugPrint('BoardProvider getBoardSlots ${response.body}');
-      var resData = json.decode(response.body) as List;
-      _slots = resData.map((e) => Slot.fromJson(e)).toList();
-      //  user.id = id;
-      //   user.currentSlot = resData['current_slot'];
-
+      if (response.statusCode == 200) {
+        var resData = json.decode(response.body) as List;
+        _slots = resData.map((e) => Slot.fromJson(e)).toList();
+        return {
+          'status': true,
+        };
+      } else if (response.statusCode == 400 ||
+          response.statusCode == 401 ||
+          response.statusCode == 402 ||
+          response.statusCode == 403 ||
+          response.statusCode == 405) {
+        return {'status': false, 'message': response.body};
+      } else {
+        return {
+          'status': false,
+          'message': 'Unknown server error ${response.statusCode}'
+        };
+      }
     } catch (error, st) {
       debugPrint('BoardProvider $error $st');
+      return {'status': false, 'message': 'Unknown error'};
     } finally {
       notifyListeners();
     }
@@ -434,7 +446,7 @@ class BoardProvider extends ChangeNotifier {
 
   bool get isItemListVisible => _isItemListVisible;
 
-  bool get isItemEffectAcitve => _isItemEffectActive;
+  bool get isItemEffectActive => _isItemEffectActive;
 
   double get kSlotHeight => _kSlotHeight;
 }

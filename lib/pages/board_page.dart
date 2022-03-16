@@ -446,8 +446,8 @@ class _BoardPageState extends State<BoardPage> {
                                               color: Colors.white),
                                           textAlign: TextAlign.end,
                                         ),
-                                        boardProvider.isItemEffectAcitve
-                                            ? ElevatedButton(
+                                        boardProvider.isItemEffectActive
+                                                  ? ElevatedButton(
                                           style: ElevatedButton
                                               .styleFrom(
                                             primary: Colors.amber,
@@ -521,8 +521,8 @@ class _BoardPageState extends State<BoardPage> {
                                               color: Colors.white),
                                           textAlign: TextAlign.end,
                                         ),
-                                        boardProvider.isItemEffectAcitve
-                                            ? ElevatedButton(
+                                        boardProvider.isItemEffectActive
+                                                  ? ElevatedButton(
                                           style: ElevatedButton
                                               .styleFrom(
                                             primary: Colors.amber,
@@ -571,8 +571,8 @@ class _BoardPageState extends State<BoardPage> {
                               Icons.cancel,
                               color: Colors.white,
                             )),
-                        boardProvider.isItemEffectAcitve
-                            ? const Positioned(
+                        boardProvider.isItemEffectActive
+                                  ? const Positioned(
                             right: 0,
                             child: Padding(
                               padding: EdgeInsets.all(4.0),

@@ -7,14 +7,14 @@ import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/widgets/helping_dialog.dart';
 import 'package:provider/provider.dart';
 
-class UserSingUpPage extends StatefulWidget {
-  const UserSingUpPage({Key? key}) : super(key: key);
+class UserSignUpPage extends StatefulWidget {
+  const UserSignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<UserSingUpPage> createState() => _UserSingUpPageState();
+  State<UserSignUpPage> createState() => _UserSignUpPageState();
 }
 
-class _UserSingUpPageState extends State<UserSingUpPage> {
+class _UserSignUpPageState extends State<UserSignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -28,6 +28,7 @@ class _UserSingUpPageState extends State<UserSingUpPage> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
     final diceProvider = Provider.of<DiceProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Signup'),
@@ -64,7 +65,7 @@ class _UserSingUpPageState extends State<UserSingUpPage> {
                       } else if (!Validator.validateEmail(value)) {
                         return 'Enter correct e-mail';
                       }
-                      return '';
+                      return null;
                     },
                     decoration:
                         const InputDecoration.collapsed(hintText: 'E-mail'),
@@ -76,12 +77,13 @@ class _UserSingUpPageState extends State<UserSingUpPage> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[300]!)),
                   child: TextFormField(
+                    controller: _userNameController,
                     keyboardType: TextInputType.text,
                     validator: (value) {
                       if (value == null) {
                         return 'Cannot be empty';
                       }
-                      return '';
+                      return null;
                     },
                     decoration:
                         const InputDecoration.collapsed(hintText: 'Username'),
@@ -93,6 +95,7 @@ class _UserSingUpPageState extends State<UserSingUpPage> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[300]!)),
                   child: TextFormField(
+                    controller: _passwordController,
                     keyboardType: TextInputType.text,
                     obscureText: true,
                     validator: (value) {
@@ -101,10 +104,10 @@ class _UserSingUpPageState extends State<UserSingUpPage> {
                       } else if (!Validator.validatePassword(value)) {
                         return 'Password must be at least 6 characters';
                       }
-                      return '';
+                      return null;
                     },
                     decoration:
-                        const InputDecoration.collapsed(hintText: 'Password'),
+                    const InputDecoration.collapsed(hintText: 'Password'),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -113,13 +116,14 @@ class _UserSingUpPageState extends State<UserSingUpPage> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[300]!)),
                   child: TextFormField(
+                    controller: _confirmPasswordController,
                     keyboardType: TextInputType.text,
                     obscureText: true,
                     validator: (value) {
                       if (value != _passwordController.text) {
                         return 'Password does not match';
                       }
-                      return '';
+                      return null;
                     },
                     decoration: const InputDecoration.collapsed(
                         hintText: 'Confirm Password'),
@@ -131,7 +135,29 @@ class _UserSingUpPageState extends State<UserSingUpPage> {
                         backgroundColor: Colors.amber,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25))),
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        HelpingDialog.showLoadingDialog();
+                        Map res = await userProvider.registerUserWithEmail(
+                            _emailController.text,
+                            _userNameController.text,
+                            _passwordController.text,
+                            _confirmPasswordController.text);
+                        if (res['status'] == true) {
+                          await boardProvider.getBoardSlots(userProvider.user);
+                          diceProvider.resetFace();
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const BoardPage()));
+                        } else {
+                          Navigator.pop(context);
+                          HelpingDialog.showServerResponseDialog(
+                              res['message']);
+                        }
+                      }
+                    },
                     child: const Text(
                       'Let\'s Play!',
                       style: TextStyle(
@@ -147,32 +173,7 @@ class _UserSingUpPageState extends State<UserSingUpPage> {
                         backgroundColor: Colors.blue,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25))),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        HelpingDialog.showLoadingDialog();
-                        Map res = await userProvider.registerUserWithEmail(
-                            _emailController.text,
-                            _userNameController.text,
-                            _passwordController.text,
-                            _confirmPasswordController.text);
-                        if (res['status'] == true) {
-                          showDialog(
-                              context: context,
-                              builder: (context) => const Center(
-                                  child: CircularProgressIndicator()));
-                          await boardProvider.getBoardSlots();
-                          diceProvider.resetFace();
-                          Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const BoardPage()));
-                        } else {
-                          HelpingDialog.showServerResponseDialog(
-                              res['message']);
-                        }
-                      }
-                    },
+                    onPressed: () async {},
                     child: const Text(
                       'Continue as a Guest',
                       style: TextStyle(

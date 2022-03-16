@@ -3,6 +3,7 @@ import 'package:monopoly/pages/contact_us_page.dart';
 import 'package:monopoly/pages/learn_more_page.dart';
 import 'package:monopoly/pages/login_page.dart';
 import 'package:monopoly/pages/transaction_page.dart';
+import 'package:monopoly/pages/user_login_page.dart';
 
 class MonopolyDrawer extends StatelessWidget {
   const MonopolyDrawer({Key? key}) : super(key: key);
@@ -36,9 +37,11 @@ class MonopolyDrawer extends StatelessWidget {
                   builder: (context) => const ContactUsPage()));
             }, trailing: Icon(Icons.contact_support_rounded),),
             ListTile(title: Text('Logout'), onTap: () {
-              Navigator.pushAndRemoveUntil(context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()), (
-                      route) => false);
+              Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const UserLoginPage()),
+                    (route) => false);
             }, trailing: Icon(Icons.logout),),
           ],
         ),

@@ -6,15 +6,17 @@ class ApiConstants {
   // static const String socketPoint =
   //     'https://desolate-sierra-90130.herokuapp.com/';
 
+  static const String registerUserWithEmail = 'registerUserWithEmail';
+  static const String loginWithEmail = 'loginWithEmail';
   static const String login = 'login';
   static const String slots = 'getSlots';
 
   /// GameActions
   static const String buyLand = 'buyLand';
   static const String upgradeSlot = 'upgradeSlot';
- static const String buyProperty = 'buyProperty';
- static const String buyPropertyHalf = 'buyPropertyHalf';
- static const String urgentSell = 'urgentSell';
+  static const String buyProperty = 'buyProperty';
+  static const String buyPropertyHalf = 'buyPropertyHalf';
+  static const String urgentSell = 'urgentSell';
   static const String getChallengeQuestion = 'getChallengeQuestion';
   static const String submitAnswer = 'submitAnswer';
   static const String kickUser = 'kickUser';
