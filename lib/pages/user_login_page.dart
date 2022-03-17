@@ -152,6 +152,26 @@ class _UserLoginPageState extends State<UserLoginPage> {
                           fontSize: 16),
                       textAlign: TextAlign.center,
                     )),
+                const SizedBox(height: 5),
+                TextButton(
+                    style: TextButton.styleFrom(
+                        primary: Colors.pink,
+                        backgroundColor: Colors.grey[200]),
+                    onPressed: () async {
+                      showDialog(
+                          context: context,
+                          builder: (context) =>
+                              const Center(child: CircularProgressIndicator()));
+                      await userProvider.login('user3');
+                      await boardProvider.getBoardSlots(userProvider.user);
+                      diceProvider.resetFace();
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const BoardPage()));
+                    },
+                    child: const Text('Login user 3')),
               ],
             ),
           ),

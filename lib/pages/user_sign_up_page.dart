@@ -107,7 +107,7 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
                       return null;
                     },
                     decoration:
-                    const InputDecoration.collapsed(hintText: 'Password'),
+                        const InputDecoration.collapsed(hintText: 'Password'),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -173,7 +173,22 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
                         backgroundColor: Colors.blue,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25))),
-                    onPressed: () async {},
+                    onPressed: () async {
+                      HelpingDialog.showLoadingDialog();
+                      Map res = await userProvider.registerGuest();
+                      if (res['status'] == true) {
+                        await boardProvider.getBoardSlots(userProvider.user);
+                        diceProvider.resetFace();
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const BoardPage()));
+                      } else {
+                        Navigator.pop(context);
+                        HelpingDialog.showServerResponseDialog(res['message']);
+                      }
+                    },
                     child: const Text(
                       'Continue as a Guest',
                       style: TextStyle(

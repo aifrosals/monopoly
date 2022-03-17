@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monopoly/pages/board_page.dart';
 import 'package:monopoly/pages/dice_page.dart';
 import 'package:monopoly/pages/login_page.dart';
 import 'package:monopoly/pages/onboarding/onboarding_main_page.dart';
 import 'package:monopoly/pages/start_page.dart';
+import 'package:monopoly/pages/user_login_page.dart';
 import 'package:monopoly/providers/admin_provider.dart';
 import 'package:monopoly/providers/admin_questions_provider.dart';
 import 'package:monopoly/providers/board_provider.dart';
@@ -33,11 +35,11 @@ void main() async {
     ], child: const AdminApp()));
   } else {
     runApp(MultiProvider(providers: [
-      ChangeNotifierProvider<BoardProvider>(
-        create: (context) => BoardProvider(),
-      ),
       ChangeNotifierProvider<UserProvider>(
         create: (context) => UserProvider(),
+      ),
+      ChangeNotifierProvider<BoardProvider>(
+        create: (context) => BoardProvider(),
       ),
       ChangeNotifierProvider<DiceProvider>(
         create: (context) => DiceProvider(),
@@ -52,8 +54,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final boardProvider = Provider.of<UserProvider>(context, listen: false);
-    final diceProvider = Provider.of<DiceProvider>(context, listen: false);
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -73,13 +73,8 @@ class MyApp extends StatelessWidget {
         ),
         primarySwatch: Colors.grey,
       ),
-      home: Consumer<UserProvider>(builder: (context, userProvider, child) {
-        if (userProvider.sessionError != '') {
-          if (userProvider.user.id != '' && userProvider.user.serverId != '') {}
-        }
-        return const StartPage();
-      }),
-      //const MyHomePage(title: 'Flutter Demo Home Page'),
+        home: const StartPage()
+        //const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }

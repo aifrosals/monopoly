@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:monopoly/pages/contact_us_page.dart';
 import 'package:monopoly/pages/learn_more_page.dart';
-import 'package:monopoly/pages/login_page.dart';
 import 'package:monopoly/pages/transaction_page.dart';
 import 'package:monopoly/pages/user_login_page.dart';
+import 'package:monopoly/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class MonopolyDrawer extends StatelessWidget {
   const MonopolyDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Drawer(
       child: SafeArea(
         child: ListView(
           children: [
-            const SizedBox(height: 5,),
-            ListTile(title: Text('Transactions'),
+            const SizedBox(
+              height: 5,
+            ),
+            ListTile(
+              title: Text('Transactions'),
               trailing: const Icon(Icons.assignment),
               onTap: () {
                 Navigator.push(
@@ -37,12 +42,13 @@ class MonopolyDrawer extends StatelessWidget {
                   builder: (context) => const ContactUsPage()));
             }, trailing: Icon(Icons.contact_support_rounded),),
             ListTile(title: Text('Logout'), onTap: () {
-              Navigator.pushAndRemoveUntil(
+              userProvider.deleteSession();
+                Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const UserLoginPage()),
                     (route) => false);
-            }, trailing: Icon(Icons.logout),),
+              }, trailing: Icon(Icons.logout),),
           ],
         ),
       ),

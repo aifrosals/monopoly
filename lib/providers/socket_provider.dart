@@ -17,7 +17,13 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'board_provider.dart';
 
 class SocketProvider extends ChangeNotifier {
- late io.Socket socket;
+  io.Socket socket = io.io(
+    ApiConstants.socketPoint,
+    <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': false,
+    },
+  );
 
   // late StreamSubscription _connectionChangeStream;
 
@@ -29,15 +35,11 @@ class SocketProvider extends ChangeNotifier {
     // ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
     // _connectionChangeStream = connectionStatus.connectionChange.listen(connectionChanged);
 
-    socket = io.io(
-      ApiConstants.socketPoint,
-      <String, dynamic>{
-        'transports': ['websocket'],
-        'autoConnect': false,
-        'setExtraHeaders': user.token
-      },
-    );
-
+    if (user.id == 'user3') {
+      socket.io.options['extraHeaders'] = {'token': 'user3'};
+    } else {
+      socket.io.options['extraHeaders'] = {'token': user.token};
+    }
     debugPrint('this is the user ${user.id}');
     // socket.query = json.encode({'token': user.token});
 

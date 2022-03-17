@@ -8,10 +8,6 @@ import 'package:monopoly/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
-  UserProvider() {
-    loadSession();
-  }
-
   final _scrollController = ScrollController();
 
   String _sessionError = '';
@@ -79,11 +75,51 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>> loginWithEmail(String email, String password) async {
+  Future<Map<String, dynamic>> registerGuest() async {
+    try {
+      Uri url =
+          Uri.parse('${ApiConstants.domain}${ApiConstants.registerGuest}');
+      debugPrint('$url');
+      var response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+      );
+      if (response.statusCode == 200) {
+        debugPrint('user data ${response.body}');
+        var resData = json.decode(response.body);
+        debugPrint(' credits from server ${resData['credits']}');
+        _user = User.fromJson(resData);
+        await saveSession(_user);
+
+        return {
+          'status': true,
+        };
+      } else if (response.statusCode == 400 ||
+          response.statusCode == 401 ||
+          response.statusCode == 402 ||
+          response.statusCode == 403 ||
+          response.statusCode == 405) {
+        return {'status': false, 'message': response.body};
+      } else {
+        return {
+          'status': false,
+          'message': 'Unknown server error ${response.statusCode}'
+        };
+      }
+    } catch (error, st) {
+      debugPrint('UserProvider $error $st');
+      return {'status': false, 'message': 'Unknown error'};
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<Map<String, dynamic>> loginWithEmail(
+      String email, String password) async {
     {
       try {
         Uri url =
-        Uri.parse('${ApiConstants.domain}${ApiConstants.loginWithEmail}');
+            Uri.parse('${ApiConstants.domain}${ApiConstants.loginWithEmail}');
         var body = {
           'email': email,
           'password': password,
@@ -128,7 +164,7 @@ class UserProvider extends ChangeNotifier {
     {
       try {
         Uri url =
-            Uri.parse('${ApiConstants.domain}${ApiConstants.loginWithEmail}');
+            Uri.parse('${ApiConstants.domain}${ApiConstants.loginWithToken}');
         var body = {
           'token': token,
         };
@@ -205,10 +241,15 @@ class UserProvider extends ChangeNotifier {
     await storage.write(key: 'token', value: user.token);
   }
 
-  loadSession() async {
+  Future<String?> loadSession() async {
     const storage = FlutterSecureStorage();
     String? token = await storage.read(key: 'token');
-    loginWithToken(token);
+    return token;
+  }
+
+  deleteSession() {
+    const storage = FlutterSecureStorage();
+    storage.deleteAll();
   }
 
   setCurrentSlot(int diceFace) {
