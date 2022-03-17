@@ -15,6 +15,7 @@ class User {
   Item items;
   String diceUpdatedAt;
   String? token;
+  bool guest;
 
   User(
       {required this.id,
@@ -30,6 +31,7 @@ class User {
       required this.presence,
       required this.items,
       this.token,
+      required this.guest,
       this.currentSlot});
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -67,6 +69,7 @@ class User {
         diceUpdatedAt: json['dice_updated_at'],
         premium: json['premium'],
         token: json['token'],
+        guest: json['guest'],
         bonus: bonus,
         items: items,
         shield: shield);
@@ -98,7 +101,23 @@ class User {
       'current_slot': currentSlot,
       'dice': dice,
       'challenge_progress': challengeProgress,
-      'bonus': bonus.toJson()
+      'bonus': bonus.toJson(),
+      'premium': premium,
+    };
+  }
+
+  Map<String, dynamic> toJsonFull() {
+    return {
+      'id': id,
+      'credits': credits,
+      'loops': loops,
+      'serverId': serverId,
+      'presence': presence,
+      'current_slot': currentSlot,
+      'dice': dice,
+      'challenge_progress': challengeProgress,
+      'bonus': bonus.toJson(),
+      'items': items.toJson(),
     };
   }
 }

@@ -44,6 +44,7 @@ dependencies:
   shared_preferences: ^2.0.13
   smooth_page_indicator: ^1.0.0+2
   google_fonts: ^2.3.1
+  flutter_secure_storage: ^5.0.2
 
 
 

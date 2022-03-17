@@ -2,12 +2,19 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:monopoly/api/api_constants.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class UserProvider extends ChangeNotifier {
+  UserProvider() {
+    loadSession();
+  }
+
   final _scrollController = ScrollController();
+
+  String _sessionError = '';
 
   User _user = User(
       token: '',
@@ -19,14 +26,14 @@ class UserProvider extends ChangeNotifier {
       premium: false,
       id: '',
       serverId: '',
+      guest: true,
       challengeProgress: 0,
       shield: Shield(active: false),
       bonus: Bonus(active: false, moves: 0),
       items: Item(kick: 0, step: 0),
       currentSlot: 0);
 
-  Future<Map<String, dynamic>> registerUserWithEmail(
-      String email, String id, String password, String confirmPassword) async {
+  Future<Map<String, dynamic>> registerUserWithEmail(String email, String id, String password, String confirmPassword) async {
     try {
       Uri url = Uri.parse(
           '${ApiConstants.domain}${ApiConstants.registerUserWithEmail}');
@@ -47,6 +54,8 @@ class UserProvider extends ChangeNotifier {
         var resData = json.decode(response.body);
         debugPrint(' credits from server ${resData['credits']}');
         _user = User.fromJson(resData);
+        await saveSession(_user);
+
         return {
           'status': true,
         };
@@ -70,12 +79,11 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>> loginWithEmail(
-      String email, String password) async {
+  Future<Map<String, dynamic>> loginWithEmail(String email, String password) async {
     {
       try {
         Uri url =
-            Uri.parse('${ApiConstants.domain}${ApiConstants.loginWithEmail}');
+        Uri.parse('${ApiConstants.domain}${ApiConstants.loginWithEmail}');
         var body = {
           'email': email,
           'password': password,
@@ -91,6 +99,7 @@ class UserProvider extends ChangeNotifier {
           var resData = json.decode(response.body);
           debugPrint(' credits from server ${resData['credits']}');
           _user = User.fromJson(resData);
+          await saveSession(_user);
           return {
             'status': true,
           };
@@ -108,6 +117,54 @@ class UserProvider extends ChangeNotifier {
         }
       } catch (error, st) {
         debugPrint('UserProvider $error $st');
+        return {'status': false, 'message': 'Unknown error'};
+      } finally {
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<Map<String, dynamic>> loginWithToken(String? token) async {
+    {
+      try {
+        Uri url =
+            Uri.parse('${ApiConstants.domain}${ApiConstants.loginWithEmail}');
+        var body = {
+          'token': token,
+        };
+        debugPrint('$url');
+        var response = await http.post(
+          url,
+          body: json.encode(body),
+          headers: {'Content-Type': 'application/json'},
+        );
+        if (response.statusCode == 200) {
+          debugPrint('user data ${response.body}');
+          var resData = json.decode(response.body);
+          debugPrint(' credits from server ${resData['credits']}');
+          _user = User.fromJson(resData);
+          await saveSession(_user);
+          _sessionError = '';
+          return {
+            'status': true,
+          };
+        } else if (response.statusCode == 400 ||
+            response.statusCode == 401 ||
+            response.statusCode == 402 ||
+            response.statusCode == 403 ||
+            response.statusCode == 405) {
+          _sessionError = response.body;
+          return {'status': false, 'message': response.body};
+        } else {
+          _sessionError = 'Unknown server error';
+          return {
+            'status': false,
+            'message': 'Unknown server error ${response.statusCode}'
+          };
+        }
+      } catch (error, st) {
+        debugPrint('UserProvider $error $st');
+        _sessionError = 'Unknown error';
         return {'status': false, 'message': 'Unknown error'};
       } finally {
         notifyListeners();
@@ -141,6 +198,17 @@ class UserProvider extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  saveSession(User user) async {
+    const storage = FlutterSecureStorage();
+    await storage.write(key: 'token', value: user.token);
+  }
+
+  loadSession() async {
+    const storage = FlutterSecureStorage();
+    String? token = await storage.read(key: 'token');
+    loginWithToken(token);
   }
 
   setCurrentSlot(int diceFace) {
@@ -212,6 +280,8 @@ class UserProvider extends ChangeNotifier {
   }
 
   User get user => _user;
+
+  String? get sessionError => _sessionError;
 
   ScrollController get scrollController => _scrollController;
 }

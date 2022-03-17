@@ -56,7 +56,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
                       border: Border.all(color: Colors.grey[300]!)),
                   child: TextFormField(
                     controller: _emailController,
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.emailAddress,
                     onChanged: (value) {},
                     validator: (value) {
                       if (value == null) {

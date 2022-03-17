@@ -57,7 +57,7 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[300]!)),
                   child: TextFormField(
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.emailAddress,
                     controller: _emailController,
                     validator: (value) {
                       if (value == null) {

@@ -17,10 +17,7 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'board_provider.dart';
 
 class SocketProvider extends ChangeNotifier {
-  io.Socket socket = io.io(ApiConstants.socketPoint, <String, dynamic>{
-    'transports': ['websocket'],
-    'autoConnect': false,
-  });
+ late io.Socket socket;
 
   // late StreamSubscription _connectionChangeStream;
 
@@ -32,9 +29,21 @@ class SocketProvider extends ChangeNotifier {
     // ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
     // _connectionChangeStream = connectionStatus.connectionChange.listen(connectionChanged);
 
+    socket = io.io(
+      ApiConstants.socketPoint,
+      <String, dynamic>{
+        'transports': ['websocket'],
+        'autoConnect': false,
+        'setExtraHeaders': user.token
+      },
+    );
+
     debugPrint('this is the user ${user.id}');
+    // socket.query = json.encode({'token': user.token});
+
     socket.connect();
     socket.onConnect((data) => userConnected(user));
+
     socket.on('checkUsers', (data) => updateSlotPresence(data));
     socket.on('checkBoard', (data) => updateBoard(data));
     socket.on('buy_land', (data) => notifyBuyLand());
@@ -50,6 +59,17 @@ class SocketProvider extends ChangeNotifier {
     socket.on('challenge', (data) => notifyChallenge(data, user));
     socket.on('treasure_hunt', (data) => notifyTreasureHunt(data, user));
     socket.on('end', (data) => notifyBundleReward(data));
+
+    socket.onConnectError((error) {
+      debugPrint('socket connection error $error');
+      HelpingDialog.showServerResponseDialog('Unknown error occurred');
+    });
+
+    socket.onError((error) {
+      debugPrint('socket error $error');
+      HelpingDialog.showServerResponseDialog(error.toString());
+    });
+
     socket.onDisconnect((_) {
       debugPrint('disconnect');
     });
