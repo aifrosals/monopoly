@@ -10,6 +10,7 @@ class User {
   Shield shield;
   String serverId;
   String presence;
+  int cash;
   int challengeProgress;
   bool premium;
   Item items;
@@ -29,6 +30,7 @@ class User {
       required this.serverId,
       required this.shield,
       required this.presence,
+      required this.cash,
       required this.items,
       this.token,
       required this.guest,
@@ -66,10 +68,11 @@ class User {
         currentSlot: json['current_slot'] ?? 0,
         challengeProgress: json['challenge_progress'] ?? 0,
         serverId: json['_id'],
-        diceUpdatedAt: json['dice_updated_at'],
-        premium: json['premium'],
+        diceUpdatedAt: json['dice_updated_at'] ?? '',
+        premium: json['premium'] ?? false,
         token: json['token'],
-        guest: json['guest'],
+        cash: json['cash'] ?? 0,
+        guest: json['guest'] ?? true,
         bonus: bonus,
         items: items,
         shield: shield);
@@ -82,12 +85,12 @@ class User {
   String getDiceString() {
     if (dice != null) {
       if (dice! <= 2) {
-        return '${dice!}/2';
+        return '0/${premium ? '20' : '15'} + $dice';
       } else {
-        return '2/2 + ${dice! - 2}';
+        return '${dice! - 2}/${premium ? '20' : '15'} + 2';
       }
     } else {
-      return '0/2';
+      return '0/${premium ? '20' : '15'} + 0';
     }
   }
 

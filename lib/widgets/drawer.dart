@@ -27,22 +27,50 @@ class MonopolyDrawer extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const TransactionPage()));
-              },),
-            ListTile(title: Text('About Us'), onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const LearnMorePage()));
-            }, trailing: const Icon(Icons.info_outlined),),
-            ListTile(title: Text('Withdrawal'),
-              trailing: Image.asset(
-                'assets/images/dollar.png', height: 30, width: 30,),),
-            ListTile(title: Text('Contact Us'), onTap: () {
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => const ContactUsPage()));
-            }, trailing: Icon(Icons.contact_support_rounded),),
-            ListTile(title: Text('Logout'), onTap: () {
-              userProvider.deleteSession();
+              },
+            ),
+            ListTile(
+              title: Text('About Us'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LearnMorePage()));
+              },
+              trailing: const Icon(Icons.info_outlined),
+            ),
+            ListTile(
+              title: Text('Withdrawal'),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${userProvider.user.cash}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 2),
+                  Image.asset(
+                    'assets/images/dollar.png',
+                    height: 30,
+                    width: 30,
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: Text('Contact Us'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ContactUsPage()));
+              },
+              trailing: Icon(Icons.contact_support_rounded),
+            ),
+            ListTile(
+              title: Text('Logout'),
+              onTap: () {
+                userProvider.deleteSession();
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(

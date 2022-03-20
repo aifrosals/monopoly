@@ -128,7 +128,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
                       }
                     },
                     child: const Text(
-                      'Let\'s Play!',
+                      'Login',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 20,

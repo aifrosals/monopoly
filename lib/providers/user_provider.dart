@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:monopoly/api/api_constants.dart';
@@ -22,6 +20,7 @@ class UserProvider extends ChangeNotifier {
       premium: false,
       id: '',
       serverId: '',
+      cash: 0,
       guest: true,
       challengeProgress: 0,
       shield: Shield(active: false),

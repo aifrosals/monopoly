@@ -41,7 +41,7 @@ class SlotInformationDialog extends StatelessWidget {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: Icon(Icons.cancel_outlined)),
+                        child: const Icon(Icons.cancel_outlined)),
                   ),
                 )
               ],
@@ -50,9 +50,6 @@ class SlotInformationDialog extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  const Text(
-                    'Slot Information',
-                    style: TextStyle(fontWeight: FontWeight.bold),),
                   const SizedBox(
                     height: 20,
                   ),
@@ -116,42 +113,55 @@ class SlotInformationDialog extends StatelessWidget {
         }
       case 'start':
         {
-          return const Text('This is the starting point of the game');
+          return const Text(
+            'This is the starting point of the game',
+            textAlign: TextAlign.center,
+          );
         }
       case 'end':
         {
           return const Text(
-              'This is the end point of the slot. On your next dice roll you will be going from the Start again');
+              'This is the end point of the slot. On your next dice roll you will be going from the Start again. If you will step on this, you will get 150 credits, 20 dices, 1 item and 5 RM cash',
+              textAlign: TextAlign.center);
         }
       case 'chest':
         {
-          return const Text('Community chest contains random credits rewards');
+          return const Text('Community chest contains random credits rewards',
+              textAlign: TextAlign.center);
         }
       case 'chance':
         {
-          return const Text('Text to be added');
+          return const Text('Get random chances of getting or losing',
+              textAlign: TextAlign.center);
         }
       case 'black_hole':
         {
-          return const Text('A black hole can make you go any step back');
+          return const Text('A black hole can make you go any step back',
+              textAlign: TextAlign.center);
         }
       case 'challenge':
         {
-          return const Text('Text to be added');
+          return const Text(
+              'Step on this slot, answer question the questions to fill the bar and earn credits',
+              textAlign: TextAlign.center);
         }
       case 'treasure_hunt':
         {
-          return const Text('Text to be added');
+          return const Text(
+              'Guess the direction of the treasure. Guess correct and get the treasure. Wrong guess will make you lose credits',
+              textAlign: TextAlign.center);
         }
       case 'worm_hole':
         {
           return const Text(
-              'A wormhole will take you any step further on the board');
+              'A wormhole will take you any step further on the board',
+              textAlign: TextAlign.center);
         }
       case 'reward':
         {
           return const Text(
-              'Step on it to get a star, when you will have 5 stars, you will earn 50 credits');
+              'Step on it to get a star, when you will have 5 stars, you will earn 50 RM cash',
+              textAlign: TextAlign.center);
         }
       default:
         return const SizedBox();
@@ -164,7 +174,6 @@ class SlotInformationDialog extends StatelessWidget {
         const Text(
           'Owned by you', style: TextStyle(fontWeight: FontWeight.bold),),
         Text('Rent: ${slot.getRent()}'),
-        Text('')
         ],);
     }
     else if (slot.owner != null && slot.owner!.serverId != user.serverId) {
