@@ -43,6 +43,7 @@ class UserList extends StatelessWidget {
                   DataColumn(label: Text('Add dice')),
                   DataColumn(label: Text('Premium'))
                 ],
+
                 columnSpacing: 100,
                 horizontalMargin: 10,
                 rowsPerPage: 8,

@@ -29,6 +29,7 @@ class UserQuestionsProvider extends ChangeNotifier {
         body: jsonEncode(body),
         headers: {
           'Content-Type': 'application/json',
+          'x-access-token': user.token ?? ''
         },
       );
       debugPrint(
@@ -67,6 +68,7 @@ class UserQuestionsProvider extends ChangeNotifier {
         body: jsonEncode(body),
         headers: {
           'Content-Type': 'application/json',
+          'x-access-token': user.token ?? ''
         },
       );
       if (response.statusCode == 200 ||

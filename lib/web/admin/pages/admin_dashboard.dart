@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monopoly/web/admin/pages/challenge/challenge_menu.dart';
+import 'package:monopoly/web/admin/pages/feedback/feedback_list.dart';
 import 'package:monopoly/web/admin/pages/user/manage_user.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -50,6 +51,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           _index = 2;
                         });
                       }),
+                  ListTile(
+                      title: Text('Message',
+                          style: TextStyle(
+                              color:
+                                  _index == 3 ? Colors.white : Colors.black)),
+                      tileColor: _index == 3 ? Colors.black : Colors.white,
+                      onTap: () {
+                        setState(() {
+                          _index = 3;
+                        });
+                      }),
                 ],
               ),
             ),
@@ -73,6 +85,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
       case 2:
         {
           return const ManageUserPage();
+        }
+      case 3:
+        {
+          return const FeedbackList();
         }
     }
   }

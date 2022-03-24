@@ -134,9 +134,8 @@ class SocketProvider extends ChangeNotifier {
                                       body: json.encode(body),
                                       //TODO: add token
                                       headers: {
-                                        'Content-Type': 'application/json'
-                                        // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-                                        //'${user.token}',
+                                        'Content-Type': 'application/json',
+                                        'x-access-token': user.token ?? ''
                                       },
                                     );
                                     Navigator.pop(
@@ -278,9 +277,8 @@ class SocketProvider extends ChangeNotifier {
                                     body: json.encode(body),
                                     //TODO: add token
                                     headers: {
-                                      'Content-Type': 'application/json'
-                                      // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-                                      //'${user.token}',
+                                      'Content-Type': 'application/json',
+                                      'x-access-token': user.token ?? ''
                                     },
                                   );
                                   Navigator.pop(
@@ -326,9 +324,8 @@ class SocketProvider extends ChangeNotifier {
                                     body: json.encode(body),
                                     //TODO: add token
                                     headers: {
-                                      'Content-Type': 'application/json'
-                                      // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-                                      //'${user.token}',
+                                      'Content-Type': 'application/json',
+                                      'x-access-token': user.token ?? ''
                                     },
                                   );
                                   debugPrint(
@@ -435,9 +432,8 @@ class SocketProvider extends ChangeNotifier {
                                   body: json.encode(body),
                                   //TODO: add token
                                   headers: {
-                                    'Content-Type': 'application/json'
-                                    // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-                                    //'${user.token}',
+                                    'Content-Type': 'application/json',
+                                    'x-access-token': user.token ?? ''
                                   },
                                 );
                                 debugPrint('notify buy land ${response.body}');
@@ -544,9 +540,8 @@ class SocketProvider extends ChangeNotifier {
                                   body: json.encode(body),
                                   //TODO: add token
                                   headers: {
-                                    'Content-Type': 'application/json'
-                                    // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-                                    //'${user.token}',
+                                    'Content-Type': 'application/json',
+                                    'x-access-token': user.token ?? ''
                                   },
                                 );
                                 debugPrint('notify buy land ${response.body}');

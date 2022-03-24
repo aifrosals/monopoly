@@ -248,6 +248,23 @@ class UserProvider extends ChangeNotifier {
 
   deleteSession() {
     const storage = FlutterSecureStorage();
+    _user = User(
+        token: '',
+        presence: 'offline',
+        loops: 0,
+        dice: 0,
+        credits: 0,
+        diceUpdatedAt: '',
+        premium: false,
+        id: '',
+        serverId: '',
+        cash: 0,
+        guest: true,
+        challengeProgress: 0,
+        shield: Shield(active: false),
+        bonus: Bonus(active: false, moves: 0),
+        items: Item(kick: 0, step: 0),
+        currentSlot: 0);
     storage.deleteAll();
   }
 

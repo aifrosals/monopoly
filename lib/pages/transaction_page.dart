@@ -4,14 +4,43 @@ import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/widgets/transaction_tile.dart';
 import 'package:provider/provider.dart';
 
-class TransactionPage extends StatelessWidget {
+class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
 
-  //TODO: Provide the realtime transactions update
+  @override
+  State<TransactionPage> createState() => _TransactionPageState();
+}
+
+class _TransactionPageState extends State<TransactionPage> {
+  final _scrollController = ScrollController();
+  late UserProvider userProvider;
+  late TransactionProvider transactionProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
+    transactionProvider.getTransactions(userProvider.user);
+    _scrollController.addListener(_scrollListener);
+  }
+
+  _scrollListener() async {
+    debugPrint('yes');
+    debugPrint(_scrollController.position.extentAfter.toString());
+    double maxScroll = _scrollController.position.maxScrollExtent;
+    double currentScroll = _scrollController.position.pixels;
+    double delta = MediaQuery.of(context).size.height * 0.1;
+    //  if (maxScroll - currentScroll <= delta) {
+    if (_scrollController.position.extentAfter < 1) {
+      transactionProvider.getPaginatedTransactions(userProvider.user);
+      debugPrint('yes');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -20,7 +49,7 @@ class TransactionPage extends StatelessWidget {
             'Transactions',
             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
             tabs: [
               Tab(
                 text: 'Your Actions',
@@ -30,92 +59,105 @@ class TransactionPage extends StatelessWidget {
             ],
           ),
         ),
-        body: ChangeNotifierProvider(
-          create: (context) => TransactionProvider(userProvider.user),
-          child: TabBarView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    Flexible(
-                      child: Consumer<TransactionProvider>(
-                          builder: (context, transactionProvider, child) {
-                        if (transactionProvider.loadTransaction) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        } else if (transactionProvider.errorMessage != '') {
-                          return Center(
-                              child: Text(
-                            transactionProvider.errorMessage,
-                            textAlign: TextAlign.center,
-                          ));
-                        } else if (transactionProvider
-                            .activeTransaction.isNotEmpty) {
-                          return ListView.builder(
-                              itemCount:
-                                  transactionProvider.activeTransaction.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return TransactionTile(
-                                  index: index,
-                                  transaction: transactionProvider
-                                      .activeTransaction[index],
-                                );
-                              });
-                        } else {
-                          return const Center(
-                              child: Text('No transactions to show'));
-                        }
-                      }),
-                    ),
-                  ],
-                ),
+        body: TabBarView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Flexible(
+                    child: Consumer<TransactionProvider>(
+                        builder: (context, transactionProvider, child) {
+                      if (transactionProvider.loadTransaction) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (transactionProvider.errorMessage != '') {
+                        return Center(
+                            child: Text(
+                          transactionProvider.errorMessage,
+                          textAlign: TextAlign.center,
+                        ));
+                      } else if (transactionProvider
+                          .activeTransaction.isNotEmpty) {
+                        return ListView.builder(
+                            controller: _scrollController,
+                            itemCount:
+                                transactionProvider.activeTransaction.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return TransactionTile(
+                                index: index,
+                                transaction: transactionProvider
+                                    .activeTransaction[index],
+                              );
+                            });
+                      } else {
+                        return const Center(
+                            child: Text('No transactions to show'));
+                      }
+                    }),
+                  ),
+                  Consumer<TransactionProvider>(
+                      builder: (context, transactionProvider, child) {
+                    if (transactionProvider.loadPaginatedTransactions) {
+                      return const Center(child: Text('Loading...'));
+                    } else {
+                      return const SizedBox();
+                    }
+                  })
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    Flexible(
-                      child: Consumer<TransactionProvider>(
-                          builder: (context, transactionProvider, child) {
-                        if (transactionProvider.loadTransaction) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        } else if (transactionProvider.errorMessage != '') {
-                          return Center(
-                              child: Text(
-                            transactionProvider.errorMessage,
-                            textAlign: TextAlign.center,
-                          ));
-                        } else if (transactionProvider
-                            .passiveTransaction.isNotEmpty) {
-                          return ListView.builder(
-                              itemCount:
-                                  transactionProvider.passiveTransaction.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return TransactionTile(
-                                  index: index,
-                                  transaction: transactionProvider
-                                      .passiveTransaction[index],
-                                );
-                              });
-                        } else {
-                          return const Center(
-                              child: Text('No transactions to show'));
-                        }
-                      }),
-                    ),
-                  ],
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Flexible(
+                    child: Consumer<TransactionProvider>(
+                        builder: (context, transactionProvider, child) {
+                      if (transactionProvider.loadTransaction) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (transactionProvider.errorMessage != '') {
+                        return Center(
+                            child: Text(
+                          transactionProvider.errorMessage,
+                          textAlign: TextAlign.center,
+                        ));
+                      } else if (transactionProvider
+                          .passiveTransaction.isNotEmpty) {
+                        return ListView.builder(
+                            controller: _scrollController,
+                            itemCount:
+                                transactionProvider.passiveTransaction.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return TransactionTile(
+                                index: index,
+                                transaction: transactionProvider
+                                    .passiveTransaction[index],
+                              );
+                            });
+                      } else {
+                        return const Center(
+                            child: Text('No transactions to show'));
+                      }
+                    }),
+                  ),
+                  Consumer<TransactionProvider>(
+                      builder: (context, transactionProvider, child) {
+                    if (transactionProvider.loadPaginatedTransactions) {
+                      return const Center(child: Text('Loading...'));
+                    } else {
+                      return const SizedBox();
+                    }
+                  })
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

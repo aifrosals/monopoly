@@ -317,9 +317,8 @@ class BoardProvider extends ChangeNotifier {
         body: json.encode(body),
         //TODO: add token
         headers: {
-          'Content-Type': 'application/json'
-          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-          //'${user.token}',
+          'Content-Type': 'application/json',
+          'x-access-token': user.token ?? ''
         },
       );
       if (response.statusCode == 200) {
@@ -362,9 +361,8 @@ class BoardProvider extends ChangeNotifier {
         body: json.encode(body),
         //TODO: add token
         headers: {
-          'Content-Type': 'application/json'
-          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-          //'${user.token}',
+          'Content-Type': 'application/json',
+          'x-access-token': user.token ?? ''
         },
       );
       if (response.statusCode == 200) {

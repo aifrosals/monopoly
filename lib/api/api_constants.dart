@@ -1,10 +1,10 @@
 class ApiConstants {
-  // static const String domain = 'http://172.168.1.112:3000/';
-  // static const String socketPoint = 'http://172.168.1.112:3000/';
+  static const String domain = 'http://192.168.10.6:3000/';
+  static const String socketPoint = 'http://192.168.10.6:3000/';
 
-  static const String domain = 'https://desolate-sierra-90130.herokuapp.com/';
-  static const String socketPoint =
-      'https://desolate-sierra-90130.herokuapp.com/';
+  // static const String domain = 'https://desolate-sierra-90130.herokuapp.com/';
+  // static const String socketPoint =
+  //     'https://desolate-sierra-90130.herokuapp.com/';
 
   static const String registerUserWithEmail = 'registerUserWithEmail';
   static const String registerGuest = 'registerGuest';
@@ -28,6 +28,7 @@ class ApiConstants {
 
   /// Transaction
   static const String getTransaction = 'getTransactions';
+  static const String getPaginatedTransactions = 'getPaginatedTransactions';
 
   /// Admin
   static const String adminLogin = 'adminLogin';
@@ -38,9 +39,14 @@ class ApiConstants {
   static const String updateQuestion = 'updateQuestion';
   static const String deleteQuestion = 'deleteQuestion';
 
-  ///Admin User
+  /// Admin User
   static const String getAllUsers = 'getAllUsers';
   static const String activatePremium = 'activatePremium';
   static const String deactivatePremium = 'deactivatePremium';
   static const String addDice = 'addDice';
+
+  /// Feedback
+  static const String submitFeedback = 'submitFeedback';
+  static const String getFeedback = 'getFeedback';
+  static const String getPaginatedFeedback = 'getPaginatedFeedback';
 }

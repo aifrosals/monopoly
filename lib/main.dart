@@ -11,6 +11,7 @@ import 'package:monopoly/providers/admin_provider.dart';
 import 'package:monopoly/providers/admin_questions_provider.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
+import 'package:monopoly/providers/feedback_provider.dart';
 import 'package:monopoly/providers/transaction_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/web/admin/admin_app.dart';
@@ -31,7 +32,8 @@ void main() async {
         create: (context) => AdminProvider(),
       ),
       ChangeNotifierProvider<AdminQuestionProvider>(
-          create: (context) => AdminQuestionProvider())
+        create: (context) => AdminQuestionProvider(),
+      ),
     ], child: const AdminApp()));
   } else {
     runApp(MultiProvider(providers: [
@@ -44,6 +46,9 @@ void main() async {
       ChangeNotifierProvider<DiceProvider>(
         create: (context) => DiceProvider(),
       ),
+      ChangeNotifierProvider<TransactionProvider>(
+        create: (context) => TransactionProvider(),
+      ),
     ], child: const MyApp()));
   }
 }
@@ -54,28 +59,26 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
-      navigatorKey: Values.navigatorKey,
-      scaffoldMessengerKey: Values.snackBarKey,
-      title: 'Monopoly',
-      theme: ThemeData(
-        textTheme: GoogleFonts.poppinsTextTheme(
-          Theme.of(context)
-              .textTheme, // If this is not set, then ThemeData.light().textTheme is used.
+        navigatorKey: Values.navigatorKey,
+        scaffoldMessengerKey: Values.snackBarKey,
+        title: 'Monopoly',
+        theme: ThemeData(
+          textTheme: GoogleFonts.poppinsTextTheme(
+            Theme.of(context)
+                .textTheme, // If this is not set, then ThemeData.light().textTheme is used.
+          ),
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.grey[200],
+          ),
+          primarySwatch: Colors.grey,
         ),
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.grey[200],
-        ),
-        primarySwatch: Colors.grey,
-      ),
         home: const StartPage()
         //const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+        );
   }
 }
-

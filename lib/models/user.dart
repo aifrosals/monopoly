@@ -84,11 +84,12 @@ class User {
 
   String getDiceString() {
     if (dice != null) {
-      if (dice! <= 2) {
-        return '0/${premium ? '20' : '15'} + $dice';
-      } else {
-        return '${dice! - 2}/${premium ? '20' : '15'} + 2';
-      }
+      return '$dice/${premium ? '20' : '15'} + $dice';
+      // if (dice! <= 2) {
+      //   return '0/${premium ? '20' : '15'} + $dice';
+      // } else {
+      //   return '${dice! - 2}/${premium ? '20' : '15'} + 2';
+      // }
     } else {
       return '0/${premium ? '20' : '15'} + 0';
     }

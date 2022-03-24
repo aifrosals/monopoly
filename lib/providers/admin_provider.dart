@@ -11,6 +11,7 @@ import '../models/admin.dart';
 
 class AdminProvider extends ChangeNotifier {
   Admin? _admin;
+
   bool _sessionLoading = false;
 
   AdminProvider() {

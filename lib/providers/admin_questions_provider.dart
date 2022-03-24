@@ -8,7 +8,9 @@ import 'package:http/http.dart' as http;
 
 class AdminQuestionProvider extends ChangeNotifier {
   bool _addQuestionLoading = false;
+
   bool _questionLoading = false;
+
   List<Question> _questions = [];
 
   Future<bool> addQuestion(Admin admin, Question question) async {
@@ -23,8 +25,6 @@ class AdminQuestionProvider extends ChangeNotifier {
         headers: {
           'Content-Type': 'application/json',
           'x-access-token': admin.token
-          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-          //'${user.token}',
         },
       );
       debugPrint(

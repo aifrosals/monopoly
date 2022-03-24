@@ -44,7 +44,7 @@ class ManageUserPage extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Flexible(child: const UserList()),
+            const Flexible(child: UserList()),
           ],
         ),
       ),

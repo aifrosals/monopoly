@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class ContactUsProvider extends ChangeNotifier {
   String _type = 'For Contact Us';
+
   final List<String> _types = [
     'For Contact Us',
     'For Complain',

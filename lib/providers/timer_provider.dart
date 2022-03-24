@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class TimerProvider extends ChangeNotifier {
   int _time = 0;
+
   Timer? _timer;
 
   TimerProvider(int time) {

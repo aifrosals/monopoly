@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/api/api_constants.dart';
 import 'package:monopoly/config/values.dart';
@@ -12,18 +13,20 @@ import 'package:provider/provider.dart';
 
 class TreasureHuntProvider extends ChangeNotifier {
   static const int maxDirections = 6;
+
   TreasureHuntStates _treasureHuntState = TreasureHuntStates.postHunt;
+
   final List<Directions> _directions =
       DirectionGnerator.generateRandomDirections(maxDirections);
   List<Directions> _answeredDirections = [];
   int _turn = 0;
   String _message = '';
 
-  TreasureHuntProvider() {
-    _directions.forEach((element) {
-      debugPrint('directions $element');
-    });
-  }
+  // TreasureHuntProvider() {
+  //   _directions.forEach((element) {
+  //     debugPrint('directions $element');
+  //   });
+  // }
 
   setContinueHunt() {
     _treasureHuntState = TreasureHuntStates.hunt;
@@ -60,14 +63,15 @@ class TreasureHuntProvider extends ChangeNotifier {
         body: json.encode(body),
         //TODO: add token
         headers: {
-          'Content-Type': 'application/json'
-          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-          //'${user.token}',
+          'Content-Type': 'application/json',
+          'x-access-token': user.token ?? ''
         },
       );
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         User user = User.fromJson(data['user']);
+        final player = AudioCache();
+        player.play('sounds/coins.mp3');
         HelpingDialog.showServerResponseDialog(data['message']);
         Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
                 listen: false)
@@ -106,9 +110,8 @@ class TreasureHuntProvider extends ChangeNotifier {
         body: json.encode(body),
         //TODO: add token
         headers: {
-          'Content-Type': 'application/json'
-          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-          //'${user.token}',
+          'Content-Type': 'application/json',
+          'x-access-token': user.token ?? ''
         },
       );
       if (response.statusCode == 200) {
