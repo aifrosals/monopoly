@@ -614,6 +614,7 @@ class SocketProvider extends ChangeNotifier {
   notifyTreasureHunt(dynamic data, User user) {
     try {
       showDialog(
+          barrierDismissible: false,
           context: Values.navigatorKey.currentContext!,
           builder: (context) => TreasureHuntDialog(user: user));
     } catch (error, st) {

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/config/screen_config.dart';
 import 'package:monopoly/models/user.dart';
+import 'package:monopoly/pages/items_page.dart';
 import 'package:monopoly/pages/user_menu_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
@@ -13,7 +14,6 @@ import 'package:monopoly/widgets/offline_user_info_dialog.dart';
 import 'package:monopoly/widgets/slot_graphic.dart';
 import 'package:monopoly/widgets/slot_information_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
 
 class BoardPage extends StatefulWidget {
   const BoardPage({Key? key}) : super(key: key);
@@ -44,17 +44,51 @@ class _BoardPageState extends State<BoardPage> {
           appBar: AppBar(
             title: Text('Hi ${userProvider.user.id}'),
             elevation: 0.0,
-            centerTitle: true,
             actions: [
+              Consumer<SocketProvider>(
+                  builder: (context, socketProvider, child) {
+                return SizedBox(
+                  height: 30,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.white.withOpacity(0.3)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          //  side: const BorderSide(color: Colors.red)
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      // boardProvider.showItemList();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ChangeNotifierProvider<SocketProvider>.value(
+                                      value: socketProvider,
+                                      child: ItemsPage())));
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset('assets/images/items.png'),
+                        Text('(${userProvider.user.getItemCount()})',
+                            style: const TextStyle(
+                                fontSize: 8, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                );
+              }),
               SizedBox(
                 height: 30,
                 child: TextButton(
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all<
-                        RoundedRectangleBorder>(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.0),
-
                       ),
                     ),
                   ),
@@ -807,31 +841,6 @@ class _BoardPageState extends State<BoardPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const SizedBox(),
-                    SizedBox(
-                      height: 30,
-                      child: TextButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.white.withOpacity(0.3)),
-                          shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                              //  side: const BorderSide(color: Colors.red)
-                            ),
-                          ),
-                        ),
-                        onPressed: () {
-                          boardProvider.showItemList();
-                        },
-                        child: Text(
-                            'Items(${userProvider.user.getItemCount()})',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

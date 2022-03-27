@@ -22,11 +22,11 @@ class TreasureHuntProvider extends ChangeNotifier {
   int _turn = 0;
   String _message = '';
 
-  // TreasureHuntProvider() {
-  //   _directions.forEach((element) {
-  //     debugPrint('directions $element');
-  //   });
-  // }
+  TreasureHuntProvider() {
+    _directions.forEach((element) {
+      debugPrint('directions $element');
+    });
+  }
 
   setContinueHunt() {
     _treasureHuntState = TreasureHuntStates.hunt;
@@ -142,27 +142,27 @@ class TreasureHuntProvider extends ChangeNotifier {
 
   String getRewardText() {
     switch (turn) {
-      case 1:
+      case 0:
         {
           return '30 credits and 1 item';
         }
-      case 2:
+      case 1:
         {
           return '130 credits and 3 items';
         }
-      case 3:
+      case 2:
         {
           return '630 credits and 6 items';
         }
-      case 4:
+      case 3:
         {
           return '2130 credits and 10 items';
         }
-      case 5:
+      case 4:
         {
           return '7130 credits and 15 items';
         }
-      case 6:
+      case 5:
         {
           return '27130 credits and 21 items';
         }
