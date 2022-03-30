@@ -84,14 +84,32 @@ class User {
 
   String getDiceString() {
     if (dice != null) {
-      return '$dice/${premium ? '20' : '15'} + $dice';
+      return '$dice/${premium ? '15' : '10'}';
       // if (dice! <= 2) {
       //   return '0/${premium ? '20' : '15'} + $dice';
       // } else {
       //   return '${dice! - 2}/${premium ? '20' : '15'} + 2';
       // }
     } else {
-      return '0/${premium ? '20' : '15'} + 0';
+      return '0/${premium ? '15' : '10'}';
+    }
+  }
+
+  int getDiceTime() {
+    try {
+      DateTime updatedAt = DateTime.parse(diceUpdatedAt).toLocal();
+      DateTime nextDate = DateTime(updatedAt.year, updatedAt.month,
+          updatedAt.day, updatedAt.hour, updatedAt.minute, updatedAt.second);
+      DateTime now = DateTime.now();
+      if (now.isAfter(nextDate)) {
+        return 0;
+      }
+      debugPrint('dice date $updatedAt');
+      debugPrint('dice date $now');
+      return DateTime.now().millisecondsSinceEpoch +
+          100 * now.difference(updatedAt).inSeconds;
+    } catch (error, st) {
+      return 0;
     }
   }
 

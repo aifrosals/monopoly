@@ -42,7 +42,10 @@ class _BoardPageState extends State<BoardPage> {
       child: Scaffold(
           drawer: const MonopolyDrawer(),
           appBar: AppBar(
-            title: Text('Hi ${userProvider.user.id}'),
+            title:
+                Consumer<UserProvider>(builder: (context, userProvider, child) {
+              return Text('Hi ${userProvider.user.id}');
+            }),
             elevation: 0.0,
             actions: [
               Consumer<SocketProvider>(
@@ -869,14 +872,17 @@ class _BoardPageState extends State<BoardPage> {
                         ),
                         userProvider.user.shield.active
                             ? const Icon(
-                          Icons.shield_rounded,
-                          color: Colors.lightBlueAccent,
-                          semanticLabel: 'Shield',
-                        )
+                                Icons.shield_rounded,
+                                color: Colors.lightBlueAccent,
+                                semanticLabel: 'Shield',
+                              )
                             : const SizedBox()
                       ],
                     ),
                     const SizedBox(),
+                    // CountdownTimer(
+                    //   endTime: userProvider.user.getDiceTime(),
+                    // ),
                   ],
                 ),
               );
