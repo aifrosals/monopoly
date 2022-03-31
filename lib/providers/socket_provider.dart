@@ -45,9 +45,9 @@ class SocketProvider extends ChangeNotifier {
 
     socket.connect();
     socket.onConnect((data) => userConnected(user));
-
-    socket.on('checkUsers', (data) => updateSlotPresence(data));
-    socket.on('checkBoard', (data) => updateBoard(data));
+    socket.on(user.serverId, (data) => updateUser(data));
+    socket.on('check_users', (data) => updateSlotPresence(data));
+    socket.on('check_board', (data) => updateBoard(data));
     socket.on('buy_land', (data) => notifyBuyLand());
     socket.on('upgrade_slot', (data) => notifyUpgradeSlot(data));
     socket.on('buy_owned_slot', (data) => notifyBuyOwnedSlot(data));
@@ -82,6 +82,19 @@ class SocketProvider extends ChangeNotifier {
     debugPrint('Connected');
   }
 
+  updateUser(dynamic userData) {
+    try {
+      debugPrint('SocketProvider update user gets called $userData');
+      User user = User.fromJson(userData);
+      Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
+              listen: false)
+          .updateUser(user);
+    } catch (error, st) {
+      debugPrint('update user $error $st');
+    } finally {
+      notifyListeners();
+    }
+  }
 
   notifyBuyLand() {
     try {
