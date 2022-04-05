@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/models/user.dart';
+import 'package:monopoly/providers/admin_provider.dart';
 import 'package:monopoly/providers/admin_user_provider.dart';
 import 'package:monopoly/web/widgets/user_add_dices_dialog.dart';
 import 'package:monopoly/web/widgets/user_change_premium_dialog.dart';
@@ -37,23 +38,24 @@ class UserDataSource extends DataTableSource {
         ],
       )),
       DataCell(
-        Consumer<AdminUserProvider>(
-            builder: (context, adminUserProvider, child) {
+        Consumer2<AdminProvider, AdminUserProvider>(
+            builder: (context, adminProvider, adminUserProvider, child) {
           return IconButton(
             onPressed: () async {
               var res = await showDialog(
                   context: context,
                   builder: (context) => const UserAddDicesDialog());
               if (res.runtimeType == int && res != null) {
-                adminUserProvider.addDices(users[index], res);
+                adminUserProvider.addDices(
+                    adminProvider.admin!, users[index], res);
               }
             },
             icon: const Icon(Icons.add_outlined),
           );
         }),
       ),
-      DataCell(Consumer<AdminUserProvider>(
-          builder: (context, adminUserProvider, child) {
+      DataCell(Consumer2<AdminProvider, AdminUserProvider>(
+          builder: (context, adminProvider, adminUserProvider, child) {
         return CupertinoSwitch(
           onChanged: (value) async {
             users[index].premium = value;
@@ -66,7 +68,8 @@ class UserDataSource extends DataTableSource {
               users[index].premium = !value;
               adminUserProvider.setState();
             } else {
-              await adminUserProvider.setPremiumStatus(users[index], value);
+                  await adminUserProvider.setPremiumStatus(
+                  adminProvider.admin!, users[index], value);
             }
           },
           value: users[index].premium,

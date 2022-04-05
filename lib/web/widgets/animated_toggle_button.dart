@@ -59,10 +59,10 @@ class _AnimatedToggleState extends State<AnimatedToggle> {
                         horizontal: ScreenConfig.safeWidth * 0.05),
                     child: Text(
                       widget.values[index],
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Rubik',
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xAA000000),
+                        color: Color(0xAA000000),
                       ),
                     ),
                   ),

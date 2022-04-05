@@ -3,7 +3,6 @@ import 'package:monopoly/config/values.dart';
 import 'package:monopoly/providers/admin_provider.dart';
 import 'package:monopoly/web/admin/pages/admin_dashboard.dart';
 import 'package:monopoly/web/admin/pages/admin_login.dart';
-import 'package:monopoly/web/admin/pages/challenge/challenge_menu.dart';
 import 'package:monopoly/web/admin/pages/challenge/question_menu.dart';
 import 'package:provider/provider.dart';
 

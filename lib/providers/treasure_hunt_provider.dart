@@ -23,9 +23,9 @@ class TreasureHuntProvider extends ChangeNotifier {
   String _message = '';
 
   TreasureHuntProvider() {
-    _directions.forEach((element) {
-      debugPrint('directions $element');
-    });
+    // _directions.forEach((element) {
+    //   debugPrint('directions $element');
+    // });
   }
 
   setContinueHunt() {

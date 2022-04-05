@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:monopoly/pages/board_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/widgets/slot_graphic.dart';

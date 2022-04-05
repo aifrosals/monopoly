@@ -25,33 +25,35 @@ class SocketProvider extends ChangeNotifier {
     },
   );
 
-  // late StreamSubscription _connectionChangeStream;
-
   bool _activeMove = true;
 
   List<User> _users = [];
 
   SocketProvider(User user) {
-    // ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
-    // _connectionChangeStream = connectionStatus.connectionChange.listen(connectionChanged);
-
+    /// Bypass user3 without the token
     if (user.id == 'user3') {
       socket.io.options['extraHeaders'] = {'token': 'user3'};
     } else {
       socket.io.options['extraHeaders'] = {'token': user.token};
     }
-    debugPrint('this is the user ${user.id}');
-    // socket.query = json.encode({'token': user.token});
 
     socket.connect();
     socket.onConnect((data) => userConnected(user));
-    socket.on(user.serverId, (data) => updateUser(data));
-    socket.on('check_users', (data) => updateSlotPresence(data));
-    socket.on('check_board', (data) => updateBoard(data));
+    socket.on(
+        user.serverId,
+        (data) => updateUser(
+            data)); // Update user directly from stream whenever update occur
+    socket.on('check_users',
+        (data) => updateSlotPresence(data)); // Check for all users
+    socket.on('check_board',
+        (data) => updateBoard(data)); // Check for the slots update
     socket.on('buy_land', (data) => notifyBuyLand());
     socket.on('upgrade_slot', (data) => notifyUpgradeSlot(data));
     socket.on('buy_owned_slot', (data) => notifyBuyOwnedSlot(data));
-    socket.on('update_current_user', (data) => updateCurrentUser(data));
+    socket.on(
+        'update_current_user',
+        (data) => updateCurrentUser(
+            data)); // Update current user after completing the move
     socket.on('buy_owned_slot_half', (data) => notifyBuyOwnedSlotHalf(data));
     socket.on('chest', (data) => notifyCommunityChest(data));
     socket.on('reward', (data) => notifyReward(data));
@@ -202,7 +204,7 @@ class SocketProvider extends ChangeNotifier {
 
     try {
       User user = Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
-          listen: false)
+              listen: false)
           .user;
       debugPrint('upgradeSlot userslot ${user.currentSlot}');
       int price = 0;
@@ -391,7 +393,7 @@ class SocketProvider extends ChangeNotifier {
     Slot slot = Slot.fromJson(data['slot']);
     User owner = User.fromJson(data['owner']);
     User user = Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
-        listen: false)
+            listen: false)
         .user;
 
     debugPrint('Slot type ${slot.type}');
@@ -498,7 +500,7 @@ class SocketProvider extends ChangeNotifier {
     Slot slot = Slot.fromJson(data['slot']);
     User owner = User.fromJson(data['owner']);
     User user = Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
-        listen: false)
+            listen: false)
         .user;
 
     debugPrint('Slot type ${slot.type}');
@@ -713,21 +715,6 @@ class SocketProvider extends ChangeNotifier {
     _activeMove = true;
   }
 
-  // blackHoleEffect(dynamic slot) {
-  //   try {
-  //     debugPrint('blackHoleEffect reached $slot');
-  //     Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
-  //             listen: false)
-  //         .setCurrentSlotServer(slot);
-  //     updateUserCurrentSlot(Provider.of<UserProvider>(
-  //             Values.navigatorKey.currentContext!,
-  //             listen: false)
-  //         .user);
-  //   } catch (error, st) {
-  //     debugPrint('SocketProvider blackHoleEffect $error $st');
-  //   }
-  // }
-
   getOfflineUsers(int slot) {
     int currentSlotUsers = 0;
     for (var user in _users) {
@@ -765,9 +752,6 @@ class SocketProvider extends ChangeNotifier {
 
   showRentMessage(dynamic data) {
     try {
-      // Provider.of<BoardProvider>(Values.navigatorKey.currentContext!,
-      //         listen: false)
-      //     .showMessage(data);
 
       HelpingDialog.showServerResponseDialog('You have paid $data rent');
 
@@ -784,9 +768,6 @@ class SocketProvider extends ChangeNotifier {
     socket.dispose();
   }
 
-  // connectionChanged(dynamic hasConnection) {
-  //  debugPrint('internet connection test $hasConnection');
-  // }
 
   int getSellingFactor(int level) {
     switch (level) {

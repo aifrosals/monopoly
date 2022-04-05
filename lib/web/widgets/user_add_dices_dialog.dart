@@ -47,6 +47,8 @@ class _UserAddDicesDiaState extends State<UserAddDicesDialog> {
                             return 'Cannot be empty';
                           } else if (!Validator.validateDigit(value)) {
                             return 'Should be a digit';
+                          } else {
+                            return null;
                           }
                         },
                       ),

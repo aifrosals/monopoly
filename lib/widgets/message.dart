@@ -11,9 +11,9 @@ class Message {
         children: [
           Flexible(child: Text(message)),
           InkWell(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: const Icon(Icons.cancel_outlined),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(Icons.cancel_outlined),
             ),
             onTap: () {
               Values.snackBarKey.currentState?.hideCurrentSnackBar();

@@ -63,7 +63,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                     height: 10,
                   ),
                   Container(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey[300]!)),
                     child: TextField(

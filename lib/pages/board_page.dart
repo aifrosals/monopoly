@@ -68,13 +68,13 @@ class _BoardPageState extends State<BoardPage> {
                         onPressed: () {
                           // boardProvider.showItemList();
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
                                   ChangeNotifierProvider<SocketProvider>.value(
                                       value: socketProvider,
-                                      child: ItemsPage())));
-                        },
+                                      child: const ItemsPage())));
+                    },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [

@@ -3,7 +3,6 @@ import 'package:monopoly/config/validator.dart';
 import 'package:monopoly/providers/admin_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'admin_dashboard.dart';
 
 class AdminLogin extends StatefulWidget {
   static const String route = '/adminLogin';

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:monopoly/api/api_constants.dart';
+import 'package:monopoly/models/admin.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:monopoly/web/widgets/web_dialog.dart';
@@ -13,15 +14,15 @@ class AdminUserProvider extends ChangeNotifier {
 
   List<User> _users = [];
 
-  AdminUserProvider() {
-    getAllUsers();
+  AdminUserProvider(Admin admin) {
+    getAllUsers(admin);
   }
 
   setState() {
     notifyListeners();
   }
 
-  getAllUsers() async {
+  getAllUsers(Admin admin) async {
     try {
       await Future.delayed(Duration.zero);
       _userLoading = true;
@@ -31,9 +32,8 @@ class AdminUserProvider extends ChangeNotifier {
         url,
         //TODO: Create jwt on server
         headers: {
-          'Content-Type': 'application/json'
-          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-          //'${user.token}',
+          'Content-Type': 'application/json',
+          'x-access-token': admin.token
         },
       );
       debugPrint('getAllUsers response ${response.body}');
@@ -57,14 +57,14 @@ class AdminUserProvider extends ChangeNotifier {
     }
   }
 
-  inputQuery(String query) {
+  inputQuery(Admin admin, String query) {
     _query = query;
-    searchUser(_query);
+    searchUser(admin, _query);
   }
 
-  searchUser(String query) async {
+  searchUser(Admin admin, String query) async {
     if (query.isEmpty || query == '') {
-      await getAllUsers();
+      await getAllUsers(admin);
     } else {
       _users = _users
           .where((user) =>
@@ -75,15 +75,15 @@ class AdminUserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setPremiumStatus(User user, bool premium) async {
+  setPremiumStatus(Admin admin, User user, bool premium) async {
     if (premium) {
-      await activatePremium(user);
+      await activatePremium(admin, user);
     } else {
-      await deactivatePremium(user);
+      await deactivatePremium(admin, user);
     }
   }
 
-  activatePremium(User user) async {
+  activatePremium(Admin admin, User user) async {
     try {
       await Future.delayed(Duration.zero);
       _userLoading = true;
@@ -96,15 +96,12 @@ class AdminUserProvider extends ChangeNotifier {
         body: json.encode(body),
         //TODO: Create jwt on server
         headers: {
-          'Content-Type': 'application/json'
-          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-          //'${user.token}',
+          'Content-Type': 'application/json',
+          'x-access-token': admin.token
         },
       );
       debugPrint('getAllUsers response ${response.body}');
       if (response.statusCode == 200) {
-        var resData = json.decode(response.body);
-        User user = User.fromJson(resData);
         WebDialog.showServerResponseDialog('Premium activated');
       } else if (response.statusCode == 400 ||
           response.statusCode == 401 ||
@@ -120,11 +117,11 @@ class AdminUserProvider extends ChangeNotifier {
     } finally {
       _userLoading = false;
       notifyListeners();
-      getAllUsers();
+      getAllUsers(admin);
     }
   }
 
-  deactivatePremium(User user) async {
+  deactivatePremium(Admin admin, User user) async {
     try {
       await Future.delayed(Duration.zero);
       _userLoading = true;
@@ -137,15 +134,12 @@ class AdminUserProvider extends ChangeNotifier {
         body: json.encode(body),
         //TODO: Create jwt on server
         headers: {
-          'Content-Type': 'application/json'
-          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-          //'${user.token}',
+          'Content-Type': 'application/json',
+          'x-access-token': admin.token
         },
       );
       debugPrint('getAllUsers response ${response.body}');
       if (response.statusCode == 200) {
-        var resData = json.decode(response.body);
-        User user = User.fromJson(resData);
         WebDialog.showServerResponseDialog('Premium deactivated');
       } else if (response.statusCode == 400 ||
           response.statusCode == 401 ||
@@ -161,11 +155,11 @@ class AdminUserProvider extends ChangeNotifier {
     } finally {
       _userLoading = false;
       notifyListeners();
-      getAllUsers();
+      getAllUsers(admin);
     }
   }
 
-  addDices(User user, int dices) async {
+  addDices(Admin admin, User user, int dices) async {
     try {
       await Future.delayed(Duration.zero);
       _userLoading = true;
@@ -177,15 +171,12 @@ class AdminUserProvider extends ChangeNotifier {
         body: json.encode(body),
         //TODO: Create jwt on server
         headers: {
-          'Content-Type': 'application/json'
-          // HttpHeaders.authorizationHeader: 'Bearer ${user.token}'
-          //'${user.token}',
+          'Content-Type': 'application/json',
+          'x-access-token': admin.token
         },
       );
       debugPrint('getAllUsers response ${response.body}');
       if (response.statusCode == 200) {
-        var resData = json.decode(response.body);
-        User user = User.fromJson(resData);
         WebDialog.showServerResponseDialog('Dices Added');
       } else if (response.statusCode == 400 ||
           response.statusCode == 401 ||
@@ -201,7 +192,7 @@ class AdminUserProvider extends ChangeNotifier {
     } finally {
       _userLoading = false;
       notifyListeners();
-      getAllUsers();
+      getAllUsers(admin);
     }
   }
 

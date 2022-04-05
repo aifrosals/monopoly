@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:monopoly/providers/timer_provider.dart';
@@ -42,7 +41,7 @@ class UserChallengeDialog extends StatelessWidget {
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: Icon(Icons.cancel_outlined)),
+                          child: const Icon(Icons.cancel_outlined)),
                     ),
                   )
                 ],

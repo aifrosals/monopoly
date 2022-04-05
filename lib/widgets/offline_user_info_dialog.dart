@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/models/user.dart';
-import 'package:monopoly/pages/board_page.dart';
 
 class OfflineUserInfoDialog extends StatelessWidget {
   final List<User> users;

@@ -10,7 +10,7 @@ class UserDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User\'s Details'),
+        title: const Text('User\'s Details'),
       ),
       body: SingleChildScrollView(
           child: Padding(
@@ -19,7 +19,7 @@ class UserDetailPage extends StatelessWidget {
           children: [
             Text(
               user.id,
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             Card(
               shape: const RoundedRectangleBorder(
