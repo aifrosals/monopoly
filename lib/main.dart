@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monopoly/pages/3d/cube_main_page.dart';
 import 'package:monopoly/pages/board_page.dart';
 import 'package:monopoly/pages/dice_page.dart';
 import 'package:monopoly/pages/login_page.dart';
@@ -77,8 +78,6 @@ class MyApp extends StatelessWidget {
           ),
           primarySwatch: Colors.grey,
         ),
-        home: const StartPage()
-        //const MyHomePage(title: 'Flutter Demo Home Page'),
-        );
+        home: const StartPage());
   }
 }

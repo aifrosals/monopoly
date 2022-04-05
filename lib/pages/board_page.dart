@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/config/screen_config.dart';
@@ -14,6 +15,7 @@ import 'package:monopoly/widgets/offline_user_info_dialog.dart';
 import 'package:monopoly/widgets/slot_graphic.dart';
 import 'package:monopoly/widgets/slot_information_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:rive/rive.dart';
 
 class BoardPage extends StatefulWidget {
   const BoardPage({Key? key}) : super(key: key);
@@ -43,48 +45,48 @@ class _BoardPageState extends State<BoardPage> {
           drawer: const MonopolyDrawer(),
           appBar: AppBar(
             title:
-                Consumer<UserProvider>(builder: (context, userProvider, child) {
-              return Text('Hi ${userProvider.user.id}');
+            Consumer<UserProvider>(builder: (context, userProvider, child) {
+              return FittedBox(child: Text('Hi ${userProvider.user.id}'));
             }),
             elevation: 0.0,
             actions: [
               Consumer<SocketProvider>(
                   builder: (context, socketProvider, child) {
-                return SizedBox(
-                  height: 30,
-                  child: TextButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          Colors.white.withOpacity(0.3)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          //  side: const BorderSide(color: Colors.red)
+                    return SizedBox(
+                      height: 30,
+                      child: TextButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.white.withOpacity(0.3)),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              //  side: const BorderSide(color: Colors.red)
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    onPressed: () {
-                      // boardProvider.showItemList();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
+                        onPressed: () {
+                          // boardProvider.showItemList();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
                                   ChangeNotifierProvider<SocketProvider>.value(
                                       value: socketProvider,
                                       child: ItemsPage())));
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset('assets/images/items.png'),
-                        Text('(${userProvider.user.getItemCount()})',
-                            style: const TextStyle(
-                                fontSize: 8, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
-                );
-              }),
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset('assets/images/items.png'),
+                            Text('(${userProvider.user.getItemCount()})',
+                                style: const TextStyle(
+                                    fontSize: 8, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
               SizedBox(
                 height: 30,
                 child: TextButton(
@@ -484,7 +486,7 @@ class _BoardPageState extends State<BoardPage> {
                                           textAlign: TextAlign.end,
                                         ),
                                         boardProvider.isItemEffectActive
-                                                  ? ElevatedButton(
+                                            ? ElevatedButton(
                                           style: ElevatedButton
                                               .styleFrom(
                                             primary: Colors.amber,
@@ -559,7 +561,7 @@ class _BoardPageState extends State<BoardPage> {
                                           textAlign: TextAlign.end,
                                         ),
                                         boardProvider.isItemEffectActive
-                                                  ? ElevatedButton(
+                                            ? ElevatedButton(
                                           style: ElevatedButton
                                               .styleFrom(
                                             primary: Colors.amber,
@@ -609,7 +611,7 @@ class _BoardPageState extends State<BoardPage> {
                               color: Colors.white,
                             )),
                         boardProvider.isItemEffectActive
-                                  ? const Positioned(
+                            ? const Positioned(
                             right: 0,
                             child: Padding(
                               padding: EdgeInsets.all(4.0),
@@ -765,17 +767,18 @@ class _BoardPageState extends State<BoardPage> {
                             onPressed: () async {
                               if (!((userProvider.user.dice ?? 0) <= 0)) {
                                 socketProvider.disableMove();
-                                int diceFace = diceProvider.rollDice();
-                                await boardProvider.animateA(diceFace);
-                                userProvider.setCurrentSlot(diceFace);
-                                userProvider.setCurrentSlotServer(
-                                    await boardProvider
-                                        .checkSlotEffect(
-                                        userProvider.user));
-                                socketProvider.updateUserCurrentSlot(
-                                    userProvider.user, diceFace);
+                                        final player = AudioCache();
+                                        player.play('sounds/dice_roll.mp3');
+                                        int diceFace = diceProvider.rollDice();
+                                        await boardProvider.animateA(diceFace);
+                                        userProvider.setCurrentSlot(diceFace);
+                                        userProvider.setCurrentSlotServer(
+                                            await boardProvider.checkSlotEffect(
+                                                userProvider.user));
+                                        socketProvider.updateUserCurrentSlot(
+                                            userProvider.user, diceFace);
 
-                                debugPrint(
+                                        debugPrint(
                                     'user loop count ${userProvider.user
                                         .loops}');
                               }
@@ -790,18 +793,28 @@ class _BoardPageState extends State<BoardPage> {
                                   return Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('dice${diceProvider.face != 0
-                                          ? ': ${diceProvider.face}'
-                                          : ''}',
-                                          style: const TextStyle(
-                                              color: Colors.white)),
-                                      FittedBox(
-                                        child: Text(
-                                            userProvider.user.getDiceString(),
-                                            style: const TextStyle(
-                                                color: Colors.white)),
-                                      )
-                                    ],
+                                          // Text('dice${diceProvider.face != 0
+                                          //     ? ': ${diceProvider.face}'
+                                          //     : ''}',
+                                          //     style: const TextStyle(
+                                          //         color: Colors.white)),
+                                          SizedBox(
+                                              height: 35,
+                                              width: 35,
+                                              child: RiveAnimation.asset(
+                                                'assets/animations/dice.riv',
+                                                animations: [
+                                                  'sFace${diceProvider.face}'
+                                                ],
+                                              )),
+                                          FittedBox(
+                                            child: Text(
+                                                userProvider.user
+                                                    .getDiceString(),
+                                                style: const TextStyle(
+                                                    color: Colors.white)),
+                                          )
+                                        ],
                                   );
                                 }),
                             backgroundColor: Colors.pinkAccent,
@@ -816,12 +829,21 @@ class _BoardPageState extends State<BoardPage> {
                                   return Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      diceProvider.face != 0
-                                          ? Text('${diceProvider.face}',
-                                          style: const TextStyle(
-                                              color: Colors.white))
-                                          : const SizedBox()
-                                    ],
+                                          // diceProvider.face != 0
+                                          //     ? Text('${diceProvider.face}',
+                                          //     style: const TextStyle(
+                                          //         color: Colors.white))
+                                          //     : const SizedBox()
+                                          SizedBox(
+                                              height: 50,
+                                              width: 50,
+                                              child: RiveAnimation.asset(
+                                                'assets/animations/dice.riv',
+                                                animations: [
+                                                  'face${diceProvider.face}'
+                                                ],
+                                              ))
+                                        ],
                                   );
                                 }),
                             backgroundColor: Colors.pinkAccent,
@@ -872,10 +894,10 @@ class _BoardPageState extends State<BoardPage> {
                         ),
                         userProvider.user.shield.active
                             ? const Icon(
-                                Icons.shield_rounded,
-                                color: Colors.lightBlueAccent,
-                                semanticLabel: 'Shield',
-                              )
+                          Icons.shield_rounded,
+                          color: Colors.lightBlueAccent,
+                          semanticLabel: 'Shield',
+                        )
                             : const SizedBox()
                       ],
                     ),

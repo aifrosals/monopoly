@@ -46,6 +46,7 @@ dependencies:
   google_fonts: ^2.3.1
   flutter_secure_storage: ^5.0.2
   flutter_countdown_timer: ^4.1.0
+  rive: ^0.8.4
 
 
 
@@ -77,6 +78,7 @@ flutter:
     - assets/images/
     - assets/sounds/
     - assets/objects/
+    - assets/animations/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
