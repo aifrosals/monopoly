@@ -29,9 +29,9 @@ class BoardProvider extends ChangeNotifier {
 
   List<Slot> _slots = [];
 
-  double _characterWidth = 30;
+  double _characterWidth = 25;
 
-  double _characterHight = 30;
+  double _characterHight = 25;
 
 // value for test purpose
 //  int _characterIndex = 0;
@@ -41,7 +41,6 @@ class BoardProvider extends ChangeNotifier {
   double _showMessageOpacity = 0;
 
   String _message = '';
-
 
   /* Method for testing
   setCharacterIndex(int number) {
@@ -244,7 +243,11 @@ class BoardProvider extends ChangeNotifier {
 
   Future<User> blackHoleEffect(User user) async {
     _isCharacterStatic = false;
+    _characterHight = 0;
+    _characterWidth = 0;
     notifyListeners();
+    final player = AudioCache();
+    player.play('sounds/teleport_in.wav');
     await Future.delayed(const Duration(seconds: 1));
 
     /// randomly push to previous slot
@@ -256,20 +259,30 @@ class BoardProvider extends ChangeNotifier {
     int moveOffset = user.currentSlot! - randomPreviousSlot;
     user.currentSlot = randomPreviousSlot;
     //_characterIndex = randomPreviousSlot;
-
     setEffectScroll(moveOffset, 'black_hole');
+    await Future.delayed(const Duration(seconds: 1));
+    _characterHight = 0;
+    _characterWidth = 0;
+    notifyListeners();
+    await Future.delayed(const Duration(seconds: 1));
+    _characterHight = 25;
+    _characterWidth = 25;
+    notifyListeners();
     return user;
   }
 
   Future<User> wormHoleEffect(User user) async {
     _isCharacterStatic = false;
+    _characterHight = 0;
+    _characterWidth = 0;
     notifyListeners();
+    final player = AudioCache();
+    player.play('sounds/teleport_in.wav');
     await Future.delayed(const Duration(seconds: 1));
     Random random = Random();
     int max = _slots.length;
     int min = user.currentSlot! + 1;
     //  int min = _characterIndex + 1;
-
     int randomNextSlot = min + random.nextInt(max - min);
     // int moveOffset = (_characterIndex - randomNextSlot).abs();
     int moveOffset = (user.currentSlot! - randomNextSlot).abs();
@@ -278,6 +291,10 @@ class BoardProvider extends ChangeNotifier {
     // _characterIndex = randomNextSlot;
     setEffectScroll(moveOffset, 'worm_hole');
 
+    await Future.delayed(const Duration(seconds: 2));
+    _characterHight = 25;
+    _characterWidth = 25;
+    notifyListeners();
     return user;
   }
 

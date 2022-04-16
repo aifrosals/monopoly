@@ -47,6 +47,7 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   flutter_countdown_timer: ^4.1.0
   rive: ^0.8.4
+  charts_flutter: ^0.12.0
 
 
 

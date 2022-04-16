@@ -385,9 +385,11 @@ class _BoardPageState extends State<BoardPage> {
                                         key: boardProvider.staticCharacterKey,
                                         left: 120,
                                         top: 15,
-                                        child: Container(
-                                          height: 25,
-                                          width: 25,
+                                        child: AnimatedContainer(
+                                          duration: const Duration(
+                                              milliseconds: 1000),
+                                          height: boardProvider.characterHeight,
+                                          width: boardProvider.characterWidth,
                                           decoration: const BoxDecoration(
                                               shape: BoxShape.circle,
                                               color: Colors.lightGreen),
@@ -406,9 +408,10 @@ class _BoardPageState extends State<BoardPage> {
                               duration: const Duration(milliseconds: 500),
                               top: boardProvider.characterTop,
                               left: 120,
-                              child: Container(
-                                height: 25,
-                                width: 25,
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 1000),
+                                height: boardProvider.characterHeight,
+                                width: boardProvider.characterWidth,
                                 decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.blue),

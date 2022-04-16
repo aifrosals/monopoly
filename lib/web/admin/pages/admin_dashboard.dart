@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:monopoly/theme/web_palette.dart';
 import 'package:monopoly/web/admin/pages/challenge/challenge_menu.dart';
 import 'package:monopoly/web/admin/pages/feedback/feedback_list.dart';
+import 'package:monopoly/web/admin/pages/stats/stats.dart';
 import 'package:monopoly/web/admin/pages/user/manage_user.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -30,11 +33,34 @@ class _AdminDashboardState extends State<AdminDashboard> {
               child: Column(
                 children: [
                   ListTile(
+                      title: Text('Stats',
+                          style: TextStyle(
+                              color: _index == 0
+                                  ? Colors.white
+                                  : WebPalette.primary)),
+                      tileColor:
+                          _index == 0 ? WebPalette.primary : Colors.white,
+                      trailing: Icon(
+                        CupertinoIcons.news,
+                        color: _index == 0 ? Colors.white : WebPalette.primary,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _index = 0;
+                        });
+                      }),
+                  ListTile(
                       title: Text('Challenge',
                           style: TextStyle(
-                              color:
-                                  _index == 1 ? Colors.white : Colors.black)),
-                      tileColor: _index == 1 ? Colors.black : Colors.white,
+                              color: _index == 1
+                                  ? Colors.white
+                                  : WebPalette.primary)),
+                      tileColor:
+                          _index == 1 ? WebPalette.primary : Colors.white,
+                      trailing: Icon(
+                        CupertinoIcons.bolt_fill,
+                        color: _index == 1 ? Colors.white : WebPalette.primary,
+                      ),
                       onTap: () {
                         setState(() {
                           _index = 1;
@@ -43,9 +69,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ListTile(
                       title: Text('Users',
                           style: TextStyle(
-                              color:
-                                  _index == 2 ? Colors.white : Colors.black)),
-                      tileColor: _index == 2 ? Colors.black : Colors.white,
+                              color: _index == 2
+                                  ? Colors.white
+                                  : WebPalette.primary)),
+                      tileColor:
+                          _index == 2 ? WebPalette.primary : Colors.white,
+                      trailing: Icon(
+                        CupertinoIcons.doc_person,
+                        color: _index == 2 ? Colors.white : WebPalette.primary,
+                      ),
                       onTap: () {
                         setState(() {
                           _index = 2;
@@ -54,9 +86,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ListTile(
                       title: Text('Message',
                           style: TextStyle(
-                              color:
-                                  _index == 3 ? Colors.white : Colors.black)),
-                      tileColor: _index == 3 ? Colors.black : Colors.white,
+                              color: _index == 3
+                                  ? Colors.white
+                                  : WebPalette.primary)),
+                      tileColor:
+                          _index == 3 ? WebPalette.primary : Colors.white,
+                      trailing: Icon(
+                        CupertinoIcons.envelope,
+                        color: _index == 3 ? Colors.white : WebPalette.primary,
+                      ),
                       onTap: () {
                         setState(() {
                           _index = 3;
@@ -66,7 +104,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
             ),
           ),
-          Expanded(flex: 9, child: getMainWidgets())
+          Expanded(flex: 10, child: getMainWidgets())
         ],
       ),
     );
@@ -76,7 +114,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     switch (_index) {
       case 0:
         {
-          return const Text('Home');
+          return const Stats();
         }
       case 1:
         {
