@@ -1,11 +1,10 @@
 class ApiConstants {
+  // static const String domain = 'http://172.168.1.110:3000/';
+  // static const String socketPoint = 'http://172.168.1.110:3000/';
 
-  static const String domain = 'http://172.168.1.112:3000/';
-  static const String socketPoint = 'http://172.168.1.112:3000/';
-
-  // static const String domain = 'https://desolate-sierra-90130.herokuapp.com/';
-  // static const String socketPoint =
-  //     'https://desolate-sierra-90130.herokuapp.com/';
+  static const String domain = 'https://desolate-sierra-90130.herokuapp.com/';
+  static const String socketPoint =
+      'https://desolate-sierra-90130.herokuapp.com/';
 
   static const String registerUserWithEmail = 'registerUserWithEmail';
   static const String registerGuest = 'registerGuest';
@@ -46,6 +45,12 @@ class ApiConstants {
   static const String activatePremium = 'activatePremium';
   static const String deactivatePremium = 'deactivatePremium';
   static const String addDice = 'addDice';
+
+  /// Stats
+  static const String getUserCountStats = 'getUserCountStats';
+  static const String getMonthlyActivity = 'getMonthlyActivity';
+  static const String get3DayActivity = 'get3DayActivity';
+  static const String getWeeklyActivity = 'getWeeklyActivity';
 
   /// Feedback
   static const String submitFeedback = 'submitFeedback';

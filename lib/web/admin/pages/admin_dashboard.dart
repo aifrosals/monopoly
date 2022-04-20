@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:monopoly/providers/admin_provider.dart';
+import 'package:monopoly/providers/stats_provider.dart';
 import 'package:monopoly/theme/web_palette.dart';
 import 'package:monopoly/web/admin/pages/challenge/challenge_menu.dart';
 import 'package:monopoly/web/admin/pages/feedback/feedback_list.dart';
 import 'package:monopoly/web/admin/pages/stats/stats.dart';
 import 'package:monopoly/web/admin/pages/user/manage_user.dart';
+import 'package:provider/provider.dart';
 
 class AdminDashboard extends StatefulWidget {
   static const String route = '/dashboard';

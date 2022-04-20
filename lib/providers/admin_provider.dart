@@ -1,12 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:monopoly/api/api_constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:monopoly/models/admin.dart';
 import 'package:monopoly/web/widgets/web_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../models/admin.dart';
 
 class AdminProvider extends ChangeNotifier {
   Admin? _admin;
