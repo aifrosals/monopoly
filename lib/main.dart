@@ -11,7 +11,6 @@ import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/web/admin/admin_app.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'config/values.dart';
 
 void main() async {
@@ -58,7 +57,7 @@ class MyApp extends StatelessWidget {
         scaffoldMessengerKey: Values.snackBarKey,
         title: 'Monopoly',
         theme: ThemeData(
-          textTheme: GoogleFonts.poppinsTextTheme(
+          textTheme: GoogleFonts.tekoTextTheme(
             Theme.of(context).textTheme,
           ),
           appBarTheme: AppBarTheme(

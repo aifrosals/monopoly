@@ -66,7 +66,7 @@ class SocketProvider extends ChangeNotifier {
 
     socket.onConnectError((error) {
       debugPrint('socket connection error $error');
-      HelpingDialog.showServerResponseDialog('Unknown error occurred');
+      //  HelpingDialog.showServerResponseDialog('Unknown error occurred');
     });
 
     socket.onError((error) {

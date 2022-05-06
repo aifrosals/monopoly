@@ -19,7 +19,7 @@ class BoardProvider extends ChangeNotifier {
 
   final _staticCharacterKey = GlobalKey();
 
-  final double _kSlotHeight = 102.0;
+  final double _kSlotHeight = 108.0;
 
   bool _isCharacterStatic = true;
 
