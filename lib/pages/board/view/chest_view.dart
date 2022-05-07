@@ -57,14 +57,13 @@ class ChestView extends StatelessWidget {
                                 children: [
                                   SizedBox(
                                       height: 55,
-                                      child: Flexible(
-                                          child: Text(
+                                      child: Text(
                                         slot.name,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 48,
                                             color: Colors.white),
-                                      ))),
+                                      )),
                                 ],
                               ))),
                           const Spacer(),

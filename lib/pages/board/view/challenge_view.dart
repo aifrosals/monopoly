@@ -33,53 +33,47 @@ class ChallengeView extends StatelessWidget {
               key: slot.endKey,
               decoration: BoxDecoration(
                 color: slot.color,
-                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
               ),
               child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.asset('assets/images/challenge.jpg'),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      minRadius: 55,
+                      backgroundImage:
+                          AssetImage('assets/images/challenge.jpg'),
                     ),
                   ),
                   const SizedBox(
                     width: 16.0,
                   ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          slot.name,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Expanded(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(25),
-                              child: Container(
-                                height: 20,
-                                color: Colors.white,
-                                child: LinearProgressIndicator(
-                                  value:
-                                      userProvider.user.challengeProgress / 10,
-                                  color: Colors.green,
-                                ),
-                              ),
-                            ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        slot.name,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 48,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 25,
+                        width: 180,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: LinearProgressIndicator(
+                            value: userProvider.user.challengeProgress / 10,
+                            color: Colors.green,
                           ),
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                    ],
                   ),
                 ],
               ),

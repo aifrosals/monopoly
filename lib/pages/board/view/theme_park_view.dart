@@ -3,9 +3,9 @@ import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class ThemeParkView extends StatelessWidget {
-  final UserProvider? userProvider;
   final BoardProvider? boardProvider;
   final SocketProvider? socketProvider;
   final Slot slot;
@@ -13,7 +13,6 @@ class ThemeParkView extends StatelessWidget {
 
   const ThemeParkView(
       {Key? key,
-      this.userProvider,
       this.socketProvider,
       this.boardProvider,
       required this.slot,
@@ -22,6 +21,8 @@ class ThemeParkView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     return InkWell(
       onTap: onSlotClick,
       child: Padding(
@@ -33,44 +34,104 @@ class ThemeParkView extends StatelessWidget {
               key: slot.endKey,
               decoration: BoxDecoration(
                 color: slot.color,
-                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
               ),
               child: Row(
                 children: [
                   const SizedBox(
                     width: 16.0,
                   ),
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Stack(
-                        children: [
-                          Image.asset('assets/images/business_center.png'),
-                          slot.status == 'for_sell'
-                              ? Positioned.fill(
-                                  child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child:
-                                      Image.asset('assets/images/for_sale.png'),
-                                ))
-                              : const SizedBox()
-                        ],
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Stack(
+                      children: [
+                        Image.asset('assets/images/business_center.png'),
+                        slot.status == 'for_sell'
+                            ? Positioned.fill(
+                                child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child:
+                                    Image.asset('assets/images/for_sale.png'),
+                              ))
+                            : const SizedBox()
+                      ],
                     ),
                   ),
                   const SizedBox(
                     width: 16.0,
                   ),
                   Expanded(
-                    child: SizedBox(
-                      height: 55,
-                      child: Text(
-                        slot.name,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 48,
-                            fontWeight: FontWeight.bold),
-                      ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 55,
+                          child: Text(
+                            slot.name,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 48,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                  width: 25,
+                                  child:
+                                      Image.asset('assets/images/walking.png')),
+                              const SizedBox(
+                                width: 3.0,
+                              ),
+                              slot.allStepCount != null &&
+                                      slot.allStepCount![
+                                              userProvider.user.serverId] !=
+                                          null
+                                  ? Text(
+                                      "${slot.allStepCount![userProvider.user.serverId]}",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : const SizedBox(),
+                              const SizedBox(
+                                width: 12.0,
+                              ),
+                              SizedBox(
+                                  width: 25,
+                                  child:
+                                      Image.asset('assets/images/dollar.png')),
+                              const SizedBox(
+                                width: 3.0,
+                              ),
+                              Text(
+                                '${slot.status == 'for_sell' ? slot.getHalfSellingPrice() : slot.getSellingPrice()}',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                width: 12.0,
+                              ),
+                              SizedBox(
+                                  width: 25,
+                                  child:
+                                      Image.asset('assets/images/payment.png')),
+                              const SizedBox(
+                                width: 3.0,
+                              ),
+                              Text(
+                                '${slot.getRent()}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ],
