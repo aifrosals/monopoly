@@ -34,7 +34,7 @@ class RewardView extends StatelessWidget {
               key: slot.endKey,
               decoration: BoxDecoration(
                 color: slot.color,
-                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
               ),
               child: Row(
                 children: [
@@ -47,24 +47,25 @@ class RewardView extends StatelessWidget {
                           left: 0,
                           child: Padding(
                             padding:
-                                const EdgeInsets.only(top: 8.0, right: 8.0),
+                            const EdgeInsets.only(top: 8.0, right: 8.0),
                             child: Image.asset(
                               'assets/images/star.png',
                               scale: 1.2,
                             ),
                           ),
                         ),
-                        slot.allStepCount != null &&
-                                slot.allStepCount![
-                                        userProvider.user.serverId] >=
-                                    1
+                        slot.allStepCount != null && slot.allStepCount![
+                        userProvider.user.serverId] != null &&
+                            slot.allStepCount![
+                            userProvider.user.serverId] >=
+                                1
                             ? Positioned(
-                                top: 0,
-                                left: 0,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 8.0, right: 8.0),
-                                  child: Image.asset(
+                          top: 0,
+                          left: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 8.0, right: 8.0),
+                            child: Image.asset(
                                     'assets/images/star.png',
                                     scale: 1.2,
                                   ),
@@ -85,9 +86,11 @@ class RewardView extends StatelessWidget {
                           ),
                         ),
                         slot.allStepCount != null &&
-                                slot.allStepCount![
-                                        userProvider.user.serverId] >=
-                                    2
+                            slot.allStepCount![
+                            userProvider.user.serverId] != null &&
+                            slot.allStepCount![
+                            userProvider.user.serverId] >=
+                                2
                             ? Positioned(
                                 top: 35,
                                 left: 35,
@@ -111,9 +114,11 @@ class RewardView extends StatelessWidget {
                           ),
                         ),
                         slot.allStepCount != null &&
-                                slot.allStepCount![
-                                        userProvider.user.serverId] >=
-                                    3
+                            slot.allStepCount![
+                            userProvider.user.serverId] != null &&
+                            slot.allStepCount![
+                            userProvider.user.serverId] >=
+                                3
                             ? Positioned(
                                 top: 6,
                                 left: 70,
@@ -133,9 +138,11 @@ class RewardView extends StatelessWidget {
                           ),
                         ),
                         slot.allStepCount != null &&
-                                slot.allStepCount![
-                                        userProvider.user.serverId] >=
-                                    4
+                            slot.allStepCount![
+                            userProvider.user.serverId] != null &&
+                            slot.allStepCount![
+                            userProvider.user.serverId] >=
+                                4
                             ? Positioned(
                                 top: 1,
                                 left: 133,
@@ -155,9 +162,11 @@ class RewardView extends StatelessWidget {
                           ),
                         ),
                         slot.allStepCount != null &&
-                                slot.allStepCount![
-                                        userProvider.user.serverId] >=
-                                    5
+                            slot.allStepCount![
+                            userProvider.user.serverId] != null &&
+                            slot.allStepCount![
+                            userProvider.user.serverId] >=
+                                5
                             ? Positioned(
                                 top: 25,
                                 left: 170,

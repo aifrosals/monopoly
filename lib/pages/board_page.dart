@@ -208,6 +208,10 @@ class _BoardPageState extends State<BoardPage> {
                                             height: 25,
                                             width: 25,
                                             decoration: const BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: AssetImage(
+                                                        'assets/images/pawn.png')
+                                                ),
                                                 shape: BoxShape.circle,
                                                 color: Colors.lightGreen),
                                           ),
@@ -230,6 +234,8 @@ class _BoardPageState extends State<BoardPage> {
                                   height: boardProvider.characterHeight,
                                   width: boardProvider.characterWidth,
                                   decoration: const BoxDecoration(
+                                      image: DecorationImage(image: AssetImage(
+                                          'assets/images/pawn.png'),),
                                       shape: BoxShape.circle,
                                       color: Colors.blue),
                                 ),
