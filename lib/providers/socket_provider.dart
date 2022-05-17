@@ -63,6 +63,7 @@ class SocketProvider extends ChangeNotifier {
     socket.on('challenge', (data) => notifyChallenge(data, user));
     socket.on('treasure_hunt', (data) => notifyTreasureHunt(data, user));
     socket.on('end', (data) => notifyBundleReward(data));
+    socket.on('abrupt', (data) => debugPrint(data.toString()));
 
     socket.onConnectError((error) {
       debugPrint('socket connection error $error');

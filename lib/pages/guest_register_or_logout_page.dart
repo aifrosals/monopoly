@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:monopoly/config/validator.dart';
+import 'package:monopoly/pages/user_login_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/widgets/helping_dialog.dart';
 import 'package:provider/provider.dart';
 
-class GuestRegisterPage extends StatefulWidget {
-  const GuestRegisterPage({Key? key}) : super(key: key);
+class GuestRegisterOrLogoutPage extends StatefulWidget {
+  const GuestRegisterOrLogoutPage({Key? key}) : super(key: key);
 
   @override
-  State<GuestRegisterPage> createState() => _GuestRegisterPageState();
+  State<GuestRegisterOrLogoutPage> createState() =>
+      _GuestRegisterOrLogoutPageState();
 }
 
-class _GuestRegisterPageState extends State<GuestRegisterPage> {
+class _GuestRegisterOrLogoutPageState extends State<GuestRegisterOrLogoutPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -43,7 +45,7 @@ class _GuestRegisterPageState extends State<GuestRegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    'To continue to withdraw RM cash. Sing up with email',
+                    'Sign Up with e-mail before you logout otherwise your data will be lost',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.purple,
@@ -165,6 +167,19 @@ class _GuestRegisterPageState extends State<GuestRegisterPage> {
                   const SizedBox(
                     height: 20,
                   ),
+                  InkWell(
+                      onTap: () async {
+                        userProvider.deleteSession();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const UserLoginPage()),
+                            (route) => false);
+                      },
+                      child: const Text(
+                        'Still want to Logout',
+                        style: TextStyle(color: Colors.red),
+                      ))
                 ],
               ),
             ),

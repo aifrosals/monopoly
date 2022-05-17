@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monopoly/pages/contact_us_page.dart';
+import 'package:monopoly/pages/guest_register_or_logout_page.dart';
 import 'package:monopoly/pages/guest_register_page.dart';
 import 'package:monopoly/pages/learn_more_page.dart';
 import 'package:monopoly/pages/transaction_page.dart';
@@ -81,12 +82,20 @@ class MonopolyDrawer extends StatelessWidget {
             ListTile(
               title: const Text('Logout'),
               onTap: () {
-                userProvider.deleteSession();
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const UserLoginPage()),
-                    (route) => false);
+                if (userProvider.user.guest) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const GuestRegisterOrLogoutPage()));
+                } else {
+                  userProvider.deleteSession();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const UserLoginPage()),
+                      (route) => false);
+                }
               },
               trailing: const Icon(Icons.logout),
             ),

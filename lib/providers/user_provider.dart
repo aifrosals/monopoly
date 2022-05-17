@@ -10,6 +10,8 @@ class UserProvider extends ChangeNotifier {
 
   String _sessionError = '';
 
+  int _slotSize = 0;
+
   User _user = User(
       token: '',
       presence: 'offline',
@@ -319,8 +321,8 @@ class UserProvider extends ChangeNotifier {
   setCurrentSlot(int diceFace) {
     if (_user.currentSlot != null) {
       int slot = _user.currentSlot! + diceFace;
-      if (slot > 16) {
-        _user.currentSlot = slot - 17;
+      if (slot > _slotSize - 1) {
+        _user.currentSlot = slot - _slotSize;
         _user.loops = _user.loops + 1;
       } else {
         _user.currentSlot = slot;
@@ -355,6 +357,10 @@ class UserProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  setSlotSize(int slotSize) {
+    _slotSize = slotSize;
   }
 
   setScroll() {

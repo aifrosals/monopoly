@@ -143,8 +143,6 @@ class BoardProvider extends ChangeNotifier {
 
     _isCharacterStatic = true;
     notifyListeners();
-
-
   }
 
   setCharacterPositionAtBinding(double scrollOffset) {
@@ -182,6 +180,9 @@ class BoardProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         var resData = json.decode(response.body) as List;
         _slots = resData.map((e) => Slot.fromJson(e)).toList();
+        Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
+                listen: false)
+            .setSlotSize(_slots.length);
         return {
           'status': true,
         };
@@ -465,4 +466,3 @@ class BoardProvider extends ChangeNotifier {
 
   double get kSlotHeight => _kSlotHeight;
 }
-
