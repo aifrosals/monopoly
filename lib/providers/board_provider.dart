@@ -31,7 +31,7 @@ class BoardProvider extends ChangeNotifier {
 
   double _characterWidth = 25;
 
-  double _characterHight = 25;
+  double _characterHeight = 25;
 
 // value for test purpose
 //  int _characterIndex = 0;
@@ -56,6 +56,7 @@ class BoardProvider extends ChangeNotifier {
   }*/
 
   setScroll() {
+    debugPrint('set scroll is working');
     if (_staticCharacterKey.currentContext != null) {
       Scrollable.ensureVisible(_staticCharacterKey.currentContext!,
           duration: const Duration(milliseconds: 1000),
@@ -122,6 +123,7 @@ class BoardProvider extends ChangeNotifier {
         debugPrint('char position ${position.dy}');
 
         if (position.dy > position2.dy + 20) {
+          debugPrint('Condition is true');
           _characterTop = 15;
           notifyListeners();
           _scrollController.animateTo(0,
@@ -129,6 +131,7 @@ class BoardProvider extends ChangeNotifier {
               curve: Curves.easeOut);
         }
         if (_characterKey.currentContext != null) {
+          debugPrint('condition is not true');
           Scrollable.ensureVisible(_characterKey.currentContext!,
               duration: const Duration(milliseconds: 500),
               alignment: 0.2,
@@ -146,6 +149,7 @@ class BoardProvider extends ChangeNotifier {
   }
 
   setCharacterPositionAtBinding(double scrollOffset) {
+    debugPrint('binding gets called');
     RenderBox box2 =
         _staticCharacterKey.currentContext?.findRenderObject() as RenderBox;
     Offset position2 = box2.localToGlobal(Offset.zero);
@@ -244,7 +248,7 @@ class BoardProvider extends ChangeNotifier {
 
   Future<User> blackHoleEffect(User user) async {
     _isCharacterStatic = false;
-    _characterHight = 0;
+    _characterHeight = 0;
     _characterWidth = 0;
     notifyListeners();
     final player = AudioCache();
@@ -262,11 +266,11 @@ class BoardProvider extends ChangeNotifier {
     //_characterIndex = randomPreviousSlot;
     setEffectScroll(moveOffset, 'black_hole');
     await Future.delayed(const Duration(seconds: 1));
-    _characterHight = 0;
+    _characterHeight = 0;
     _characterWidth = 0;
     notifyListeners();
     await Future.delayed(const Duration(seconds: 1));
-    _characterHight = 25;
+    _characterHeight = 25;
     _characterWidth = 25;
     notifyListeners();
     return user;
@@ -274,7 +278,7 @@ class BoardProvider extends ChangeNotifier {
 
   Future<User> wormHoleEffect(User user) async {
     _isCharacterStatic = false;
-    _characterHight = 0;
+    _characterHeight = 0;
     _characterWidth = 0;
     notifyListeners();
     final player = AudioCache();
@@ -293,7 +297,7 @@ class BoardProvider extends ChangeNotifier {
     setEffectScroll(moveOffset, 'worm_hole');
 
     await Future.delayed(const Duration(seconds: 2));
-    _characterHight = 25;
+    _characterHeight = 25;
     _characterWidth = 25;
     notifyListeners();
     return user;
@@ -442,7 +446,7 @@ class BoardProvider extends ChangeNotifier {
 
   List<Slot> get slots => _slots;
 
-  double get characterHeight => _characterHight;
+  double get characterHeight => _characterHeight;
 
   double get characterWidth => _characterWidth;
 

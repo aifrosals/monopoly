@@ -56,7 +56,7 @@ class ThemeParkView extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Stack(
                           children: [
-                            Image.asset('assets/images/business_center.png'),
+                            Image.asset('assets/images/amusement_park.png'),
                             slot.status == 'for_sell'
                                 ? Positioned.fill(
                                     child: Padding(

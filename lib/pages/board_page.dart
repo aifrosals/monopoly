@@ -1,9 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:monopoly/config/screen_config.dart';
 import 'package:monopoly/models/user.dart';
-import 'package:monopoly/pages/board/view/land_view.dart';
 import 'package:monopoly/pages/items_page.dart';
 import 'package:monopoly/pages/user_menu_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
@@ -14,15 +14,8 @@ import 'package:monopoly/widgets/drawer.dart';
 import 'package:monopoly/widgets/helping_dialog.dart';
 import 'package:monopoly/widgets/offline_user_info_dialog.dart';
 import 'package:monopoly/widgets/slot_graphic.dart';
-import 'package:monopoly/widgets/slot_information_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
-import 'board/view/black_hole_view.dart';
-import 'board/view/chance_view.dart';
-import 'board/view/chest_view.dart';
-import 'board/view/condo_view.dart';
-import 'board/view/house_view.dart';
-import 'board/view/start_view.dart';
 
 class BoardPage extends StatefulWidget {
   const BoardPage({Key? key}) : super(key: key);
@@ -151,76 +144,89 @@ class _BoardPageState extends State<BoardPage> {
                       Consumer3<BoardProvider, UserProvider, SocketProvider>(
                           builder: (context, boardProvider, userProvider,
                               socketProvider, child) {
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: boardProvider.slots.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Stack(
-                                children: [
-                                  SizedBox(
-                                    height: boardProvider.kSlotHeight,
-                                    child: SlotGraphic.getSlotWidget(
-                                        boardProvider.slots[index]),
-                                  ),
-                                  socketProvider.getOfflineUsers(index) != 0
-                                      ? Align(
-                                          alignment: Alignment.topRight,
-                                          child: InkWell(
-                                            onTap: () {
-                                              debugPrint('pressed');
-                                              List<User> offlineUsers =
-                                                  socketProvider
-                                                      .getOfflineUserData(
-                                                          index);
-                                              debugPrint(
-                                                  'offline users boardPage ${offlineUsers.first.id}');
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      OfflineUserInfoDialog(
-                                                          users: offlineUsers));
-                                            },
-                                            child: SizedBox(
-                                              height: 30,
-                                              width: 30,
-                                              child: Center(
-                                                  child: Text(
-                                                      '${socketProvider.getOfflineUsers(index)}',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.white
-                                                              .withOpacity(
-                                                                  0.4)))),
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: boardProvider.slots.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Stack(
+                                  children: [
+                                    SizedBox(
+                                      height: boardProvider.kSlotHeight,
+                                      child: SlotGraphic.getSlotWidget(
+                                          boardProvider.slots[index]),
+                                    ),
+                                    socketProvider.getOfflineUsers(index) != 0
+                                        ? Align(
+                                            alignment: Alignment.topRight,
+                                            child: InkWell(
+                                              onTap: () {
+                                                debugPrint('pressed');
+                                                List<User> offlineUsers =
+                                                    socketProvider
+                                                        .getOfflineUserData(
+                                                            index);
+                                                debugPrint(
+                                                    'offline users boardPage ${offlineUsers.first.id}');
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        OfflineUserInfoDialog(
+                                                            users:
+                                                                offlineUsers));
+                                              },
+                                              child: SizedBox(
+                                                height: 30,
+                                                width: 30,
+                                                child: Center(
+                                                    child: Text(
+                                                        '${socketProvider.getOfflineUsers(index)}',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.white
+                                                                .withOpacity(
+                                                                    0.4)))),
+                                              ),
                                             ),
-                                          ),
-                                        )
-                                      : const SizedBox(),
-                                  // (index == boardProvider.characterIndex &&
-                                  (index == userProvider.user.currentSlot &&
-                                          boardProvider.isCharacterStatic)
-                                      ? Positioned(
-                                          key: boardProvider.staticCharacterKey,
-                                          left: 120,
-                                          top: 15,
-                                          child: Container(
-                                            height: 25,
-                                            width: 25,
-                                            decoration: const BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/images/pawn.png')
-                                                ),
-                                                shape: BoxShape.circle,
-                                                color: Colors.lightGreen),
-                                          ),
-                                        )
-                                      : const SizedBox()
-                                ],
-                              );
-                            });
-                      }),
+                                          )
+                                        : const SizedBox(),
+                                    // (index == boardProvider.characterIndex &&
+                                    (index == userProvider.user.currentSlot &&
+                                            boardProvider.isCharacterStatic)
+                                        ? Positioned(
+                                            key: boardProvider
+                                                .staticCharacterKey,
+                                            left: 120,
+                                            top: 15,
+                                            child: Container(
+                                              height: 25,
+                                              width: 25,
+                                              decoration: const BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: AssetImage(
+                                                          'assets/images/pawn.png')),
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.lightGreen),
+                                            ),
+                                          )
+                                        : const SizedBox(),
+
+                                    Positioned(
+                                        left: 10,
+                                        top: 9,
+                                        child: Text('${index + 1}',
+                                            style: const TextStyle(
+                                                color: Colors.white))),
+                                  ],
+                                );
+                              }),
+                        ],
+                      );
+                    }),
                       Consumer<BoardProvider>(
                           builder: (context, boardProvider, child) {
                         return boardProvider.isCharacterStatic == false
@@ -442,18 +448,128 @@ class _BoardPageState extends State<BoardPage> {
                                       child: Padding(
                                         padding: EdgeInsets.all(4.0),
                                         child: SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                      ))
-                                  : const SizedBox()
-                            ],
-                          ),
-                        )
-                      : const SizedBox();
-                })
-              ],
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ))
+                                : const SizedBox()
+                          ],
+                        ),
+                      )
+                    : const SizedBox();
+              }),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 28.0, right: 178.0, bottom: 2.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Consumer<UserProvider>(
+                        builder: (context, userProvider, child) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Card(
+                                  color: Colors.pink.shade300,
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: FittedBox(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: userProvider.user.bonus.active
+                                            ? Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: const [
+                                                  Text(
+                                                    '2x',
+                                                    style: TextStyle(
+                                                        color: Colors.yellow),
+                                                  ),
+                                                  Icon(
+                                                    Icons
+                                                        .monetization_on_rounded,
+                                                    color: Colors.yellow,
+                                                    size: 20,
+                                                  ),
+                                                ],
+                                              )
+                                            : Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: const [
+                                                  Center(
+                                                    child: Text(
+                                                      '2x',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                  Center(
+                                                    child: Icon(
+                                                      Icons
+                                                          .monetization_on_rounded,
+                                                      color: Colors.white,
+                                                      size: 20,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Card(
+                                  color: Colors.pink.shade300,
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: FittedBox(
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: userProvider.user.shield.active
+                                              ? const Icon(
+                                                  Icons.shield_rounded,
+                                                  color: Colors.lightBlueAccent,
+                                                  semanticLabel: 'Shield',
+                                                )
+                                              : const Icon(
+                                                  Icons.shield_rounded,
+                                                  color: Colors.white,
+                                                  semanticLabel: 'Shield',
+                                                )),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(),
+                            // CountdownTimer(
+                            //   endTime: userProvider.user.getDiceTime(),
+                            // ),
+                          ],
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+            ],
             ),
           ),
           floatingActionButton: userProvider.user.id == 'user3'
@@ -583,19 +699,18 @@ class _BoardPageState extends State<BoardPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Consumer<SocketProvider>(
-                            builder: (context, socketProvider, child) {
-                          return socketProvider.activeMove
-                              ? SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: FloatingActionButton(
-                                    onPressed: () async {
-                                      if (!((userProvider.user.dice ?? 0) <=
-                                          0)) {
-                                        socketProvider.disableMove();
-                                        final player = AudioCache();
-                                        player.play('sounds/dice_roll.mp3');
+                      Consumer2<SocketProvider, UserProvider>(builder:
+                          (context, socketProvider, userProvider, child) {
+                        return socketProvider.activeMove
+                            ? SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: FloatingActionButton(
+                                  onPressed: () async {
+                                    if (!((userProvider.user.dice ?? 0) <= 0)) {
+                                      socketProvider.disableMove();
+                                      final player = AudioCache();
+                                      player.play('sounds/dice_roll.mp3');
                                         int diceFace = diceProvider.rollDice();
                                         await boardProvider.animateA(diceFace);
                                         userProvider.setCurrentSlot(diceFace);
@@ -624,24 +739,39 @@ class _BoardPageState extends State<BoardPage> {
                                           //     ? ': ${diceProvider.face}'
                                           //     : ''}',
                                           //     style: const TextStyle(
-                                          //         color: Colors.white)),
-                                          SizedBox(
-                                              height: 35,
-                                              width: 35,
-                                              child: RiveAnimation.asset(
-                                                'assets/animations/dice.riv',
-                                                animations: [
-                                                  'sFace${diceProvider.face}'
-                                                ],
-                                              )),
-                                          FittedBox(
-                                            child: Text(
-                                                userProvider.user
-                                                    .getDiceString(),
-                                                style: const TextStyle(
-                                                    color: Colors.white)),
-                                          )
-                                        ],
+                                        //         color: Colors.white)),
+                                        SizedBox(
+                                            height: 35,
+                                            width: 35,
+                                            child: RiveAnimation.asset(
+                                              'assets/animations/dice.riv',
+                                              animations: [
+                                                'sFace${diceProvider.face}'
+                                              ],
+                                            )),
+                                        SizedBox(
+                                          height: 20,
+                                          width: 40,
+                                          child: FittedBox(
+                                            child: (userProvider.user.dice ==
+                                                        0 &&
+                                                    userProvider.user
+                                                            .getDiceTime() !=
+                                                        0)
+                                                ? CountdownTimer(
+                                                    endTime: userProvider.user
+                                                        .getDiceTime(),
+                                                    textStyle: const TextStyle(
+                                                        color: Colors.white),
+                                                  )
+                                                : Text(
+                                                    userProvider.user
+                                                        .getDiceString(),
+                                                    style: const TextStyle(
+                                                        color: Colors.white)),
+                                          ),
+                                        )
+                                      ],
                                       );
                                     }),
                                     backgroundColor: Colors.pinkAccent,
@@ -673,70 +803,80 @@ class _BoardPageState extends State<BoardPage> {
                                               ))
                                         ],
                                       );
-                                    }),
-                                    backgroundColor: Colors.pinkAccent,
-                                    onPressed: () {},
-                                  ),
-                                );
-                        }),
-                      ],
-                    ),
+                                  }),
+                                  backgroundColor: Colors.pinkAccent,
+                                  onPressed: () {},
+                                ),
+                              );
+                      }),
+                    ],
                   ),
                 ),
-          bottomNavigationBar: Container(
-            height: 40,
-            color: Colors.purple,
-            child:
-                Consumer<UserProvider>(builder: (context, userProvider, child) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        userProvider.user.bonus.active
-                            ? Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: const [
-                                  Text(
-                                    '2x',
-                                    style: TextStyle(color: Colors.yellow),
-                                  ),
-                                  Icon(
-                                    Icons.monetization_on_rounded,
-                                    color: Colors.yellow,
-                                    size: 20,
-                                  ),
-                                ],
-                              )
-                            : const SizedBox(),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        userProvider.user.shield.active
-                            ? const Icon(
-                                Icons.shield_rounded,
-                                color: Colors.lightBlueAccent,
-                                semanticLabel: 'Shield',
-                              )
-                            : const SizedBox()
-                      ],
-                    ),
-                    const SizedBox(),
-                    // CountdownTimer(
-                    //   endTime: userProvider.user.getDiceTime(),
-                    // ),
-                  ],
-                ),
-              );
-            }),
-          )),
+              ),
+        // bottomNavigationBar: Theme(
+        //   data: ThemeData(scaffoldBackgroundColor: Colors.green),
+        //   child: Padding(
+        //     padding: const EdgeInsets.only(left: 28.0, right: 28.0),
+        //     child: ClipRRect(
+        //       borderRadius: BorderRadius.circular(25),
+        //       child: Container(
+        //         height: 40,
+        //         color: Colors.purple,
+        //         child:
+        //             Consumer<UserProvider>(builder: (context, userProvider, child) {
+        //           return Padding(
+        //             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+        //             child: Row(
+        //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //               children: [
+        //                 const SizedBox(),
+        //                 Row(
+        //                   mainAxisSize: MainAxisSize.min,
+        //                   children: [
+        //                     const SizedBox(
+        //                       width: 10,
+        //                     ),
+        //                     userProvider.user.bonus.active
+        //                         ? Row(
+        //                             mainAxisSize: MainAxisSize.min,
+        //                             children: const [
+        //                               Text(
+        //                                 '2x',
+        //                                 style: TextStyle(color: Colors.yellow),
+        //                               ),
+        //                               Icon(
+        //                                 Icons.monetization_on_rounded,
+        //                                 color: Colors.yellow,
+        //                                 size: 20,
+        //                               ),
+        //                             ],
+        //                           )
+        //                         : const SizedBox(),
+        //                     const SizedBox(
+        //                       width: 10,
+        //                     ),
+        //                     userProvider.user.shield.active
+        //                         ? const Icon(
+        //                             Icons.shield_rounded,
+        //                             color: Colors.lightBlueAccent,
+        //                             semanticLabel: 'Shield',
+        //                           )
+        //                         : const SizedBox()
+        //                   ],
+        //                 ),
+        //                 const SizedBox(),
+        //                 // CountdownTimer(
+        //                 //   endTime: userProvider.user.getDiceTime(),
+        //                 // ),
+        //               ],
+        //             ),
+        //           );
+        //         }),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+      ),
     );
   }
 }

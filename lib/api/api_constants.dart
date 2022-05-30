@@ -1,6 +1,6 @@
 class ApiConstants {
-  // static const String domain = 'http://192.168.10.21:3000/';
-  // static const String socketPoint = 'http://192.168.10.21:3000/';
+  // static const String domain = 'http://192.168.10.17:3000/';
+  // static const String socketPoint = 'http://192.168.10.17:3000/';
 
   static const String domain = 'https://desolate-sierra-90130.herokuapp.com/';
   static const String socketPoint =

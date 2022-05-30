@@ -15,6 +15,7 @@ class User {
   bool premium;
   Item items;
   String diceUpdatedAt;
+  String? nextDiceUpdate;
   String? token;
   bool guest;
 
@@ -33,6 +34,7 @@ class User {
       required this.cash,
       required this.items,
       this.token,
+      this.nextDiceUpdate,
       required this.guest,
       this.currentSlot});
 
@@ -73,6 +75,7 @@ class User {
         token: json['token'],
         cash: json['cash'] ?? 0,
         guest: json['guest'] ?? true,
+        nextDiceUpdate: json['next_dice_update'],
         bonus: bonus,
         items: items,
         shield: shield);
@@ -97,17 +100,22 @@ class User {
 
   int getDiceTime() {
     try {
+      DateTime? nextUpdate;
       DateTime updatedAt = DateTime.parse(diceUpdatedAt).toLocal();
-      DateTime nextDate = DateTime(updatedAt.year, updatedAt.month,
-          updatedAt.day, updatedAt.hour, updatedAt.minute, updatedAt.second);
+      if (nextDiceUpdate != null) {
+        nextUpdate = DateTime.parse(nextDiceUpdate!).toLocal();
+      } else {
+        return 0;
+      }
+      debugPrint('next date is ${nextUpdate}');
       DateTime now = DateTime.now();
-      if (now.isAfter(nextDate)) {
+      debugPrint('now date is $now');
+      if (now.isAfter(nextUpdate)) {
         return 0;
       }
       debugPrint('dice date $updatedAt');
       debugPrint('dice date $now');
-      return DateTime.now().millisecondsSinceEpoch +
-          100 * now.difference(updatedAt).inSeconds;
+      return nextUpdate.millisecondsSinceEpoch;
     } catch (error, st) {
       return 0;
     }
