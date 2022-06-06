@@ -30,7 +30,7 @@ class Transaction {
       color: Colors.black,
       initialType: '',
       type: '',
-    );
+      slotKey: GlobalKey());
     try {
       _slot = Slot.fromJson(json['child']);
     } catch (error, st) {

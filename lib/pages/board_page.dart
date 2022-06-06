@@ -35,18 +35,18 @@ class _BoardPageState extends State<BoardPage> {
     final diceProvider = Provider.of<DiceProvider>(context, listen: false);
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
 
-    WidgetsBinding.instance
-        ?.addPostFrameCallback((_) => boardProvider.setScroll());
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        boardProvider.setScroll());
 
     return ChangeNotifierProvider<SocketProvider>(
       lazy: false,
       create: (context) => SocketProvider(userProvider.user),
       child: Scaffold(
-          drawer: const MonopolyDrawer(),
-          appBar: AppBar(
-            title:
-            Consumer<UserProvider>(builder: (context, userProvider, child) {
-              return FittedBox(child: Text('Hi ${userProvider.user.id}'));
+        drawer: const MonopolyDrawer(),
+        appBar: AppBar(
+          title:
+          Consumer<UserProvider>(builder: (context, userProvider, child) {
+            return FittedBox(child: Text('Hi ${userProvider.user.id}'));
             }),
             elevation: 0.0,
             actions: [
@@ -144,107 +144,108 @@ class _BoardPageState extends State<BoardPage> {
                       Consumer3<BoardProvider, UserProvider, SocketProvider>(
                           builder: (context, boardProvider, userProvider,
                               socketProvider, child) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: boardProvider.slots.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Stack(
-                                  children: [
-                                    SizedBox(
-                                      height: boardProvider.kSlotHeight,
-                                      child: SlotGraphic.getSlotWidget(
-                                          boardProvider.slots[index]),
-                                    ),
-                                    socketProvider.getOfflineUsers(index) != 0
-                                        ? Align(
-                                            alignment: Alignment.topRight,
-                                            child: InkWell(
-                                              onTap: () {
-                                                debugPrint('pressed');
-                                                List<User> offlineUsers =
-                                                    socketProvider
-                                                        .getOfflineUserData(
-                                                            index);
-                                                debugPrint(
-                                                    'offline users boardPage ${offlineUsers.first.id}');
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        OfflineUserInfoDialog(
-                                                            users:
-                                                                offlineUsers));
-                                              },
-                                              child: SizedBox(
-                                                height: 30,
-                                                width: 30,
-                                                child: Center(
-                                                    child: Text(
-                                                        '${socketProvider.getOfflineUsers(index)}',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.white
-                                                                .withOpacity(
-                                                                    0.4)))),
-                                              ),
-                                            ),
-                                          )
-                                        : const SizedBox(),
-                                    // (index == boardProvider.characterIndex &&
-                                    (index == userProvider.user.currentSlot &&
-                                            boardProvider.isCharacterStatic)
-                                        ? Positioned(
-                                            key: boardProvider
-                                                .staticCharacterKey,
-                                            left: 120,
-                                            top: 15,
-                                            child: Container(
-                                              height: 25,
-                                              width: 25,
-                                              decoration: const BoxDecoration(
-                                                  image: DecorationImage(
-                                                      image: AssetImage(
-                                                          'assets/images/pawn.png')),
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.lightGreen),
-                                            ),
-                                          )
-                                        : const SizedBox(),
+                            return ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: boardProvider.slots.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Stack(
 
-                                    Positioned(
-                                        left: 10,
-                                        top: 9,
-                                        child: Text('${index + 1}',
-                                            style: const TextStyle(
-                                                color: Colors.white))),
-                                  ],
-                                );
-                              }),
-                        ],
-                      );
+                                    children: [
+
+                                      SizedBox(
+                                        height: boardProvider.kSlotHeight,
+                                        child: SlotGraphic.getSlotWidget(
+                                            boardProvider.slots[index]),
+                                      ),
+
+                                      socketProvider.getOfflineUsers(index) != 0
+                                          ? Align(
+                                        alignment: Alignment.topRight,
+                                        child: InkWell(
+                                          onTap: () {
+                                            debugPrint('pressed');
+                                            List<User> offlineUsers =
+                                            socketProvider
+                                                .getOfflineUserData(
+                                                index);
+                                            debugPrint(
+                                                'offline users boardPage ${offlineUsers
+                                                    .first.id}');
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    OfflineUserInfoDialog(
+                                                        users:
+                                                        offlineUsers));
+                                          },
+                                          child: SizedBox(
+                                            height: 30,
+                                            width: 30,
+                                            child: Center(
+                                                child: Text(
+                                                    '${socketProvider
+                                                        .getOfflineUsers(
+                                                        index)}',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                        color: Colors.white
+                                                            .withOpacity(
+                                                            0.4)))),
+                                          ),
+                                        ),
+                                      )
+                                          : const SizedBox(),
+                                      // (index == boardProvider.characterIndex &&
+                                      (index == userProvider.user.currentSlot &&
+                                          boardProvider.isCharacterStatic)
+                                          ? Positioned(
+                                        key: boardProvider
+                                            .staticCharacterKey,
+                                        right: 40,
+                                        top: 15,
+                                        child: Container(
+                                          height: 25,
+                                          width: 25,
+                                          decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/images/pawn.png')),
+                                              shape: BoxShape.circle,
+                                              color: Colors.lightGreen),
+                                        ),
+                                      )
+                                          : const SizedBox(),
+
+                                      Positioned(
+                                          left: 10,
+                                          top: 9,
+                                          child: Text('${index + 1}',
+                                              style: const TextStyle(
+                                                  color: Colors.white))),
+                                    ],
+                                  );
+                                });
                     }),
                       Consumer<BoardProvider>(
                           builder: (context, boardProvider, child) {
                         return boardProvider.isCharacterStatic == false
                             ? AnimatedPositioned(
-                                key: boardProvider.characterKey,
-                                duration: const Duration(milliseconds: 500),
-                                top: boardProvider.characterTop,
-                                left: 120,
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 1000),
-                                  height: boardProvider.characterHeight,
-                                  width: boardProvider.characterWidth,
-                                  decoration: const BoxDecoration(
-                                      image: DecorationImage(image: AssetImage(
-                                          'assets/images/pawn.png'),),
-                                      shape: BoxShape.circle,
-                                      color: Colors.blue),
-                                ),
+                          key: boardProvider.characterKey,
+                          duration: const Duration(milliseconds: 500),
+                          top: boardProvider.characterTop,
+                          right: 40,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 1000),
+                            height: boardProvider.characterHeight,
+                            width: boardProvider.characterWidth,
+                            decoration: const BoxDecoration(
+                                image: DecorationImage(image: AssetImage(
+                                    'assets/images/pawn.png'),),
+                                shape: BoxShape.circle,
+                                color: Colors.blue),
+                          ),
                               )
                             : const SizedBox();
                       }),

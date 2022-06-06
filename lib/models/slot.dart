@@ -5,6 +5,7 @@ import 'package:monopoly/models/user.dart';
 class Slot {
   String name;
   GlobalKey? endKey;
+  GlobalKey slotKey;
 
   /// type indicates the current type of the slot
   String type;
@@ -19,19 +20,21 @@ class Slot {
   Color color;
   Map<String, dynamic>? allStepCount;
 
-  Slot({required this.name,
-    required this.type,
-    required this.index,
-    this.endKey,
-    this.price,
-    this.updatedPrice,
-    this.owner,
-    this.status,
-    this.level,
-    this.image,
-    required this.color,
-    this.allStepCount,
-    required this.initialType});
+  Slot(
+      {required this.name,
+      required this.type,
+      required this.index,
+      required this.slotKey,
+      this.endKey,
+      this.price,
+      this.updatedPrice,
+      this.owner,
+      this.status,
+      this.level,
+      this.image,
+      required this.color,
+      this.allStepCount,
+      required this.initialType});
 
   factory Slot.fromJson(Map<String, dynamic> json) {
     User? user;
@@ -60,6 +63,7 @@ class Slot {
       updatedPrice: json['updated_price'],
       allStepCount: json['all_step_count'],
       endKey: json['initial_type'] == 'end' ? GlobalKey() : null,
+      slotKey: GlobalKey(),
     );
   }
 

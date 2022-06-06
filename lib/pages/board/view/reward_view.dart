@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -185,10 +186,11 @@ class RewardView extends StatelessWidget {
                     child: Text(
                       slot.name,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: GoogleFonts.teko(
                         color: Colors.white,
-                        fontSize: 38,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
+                        letterSpacing: 1.5,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),

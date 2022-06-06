@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -56,16 +57,30 @@ class ChestView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                      height: 55,
-                                      child: Text(
-                                        slot.name,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 48,
-                                            color: Colors.white),
-                                      )),
+                                    height: 30,
+                                    child: Text(
+                                      'Community',
+                                      style: GoogleFonts.teko(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 1.5,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    'Chest',
+                                    style: GoogleFonts.teko(
+                                      fontSize: 30,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 1.5,
+                                    ),
+                                  ),
                                 ],
-                              ))),
+                              ),
+                            ),
+                          ),
                           const Spacer(),
                           Padding(
                             padding:

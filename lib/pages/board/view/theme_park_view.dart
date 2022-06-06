@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -74,14 +75,18 @@ class ThemeParkView extends StatelessWidget {
                       Expanded(
                         child: Column(
                           children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
                             SizedBox(
-                              height: 55,
+                              height: 40,
                               child: Text(
                                 slot.name,
-                                style: const TextStyle(
+                                style: GoogleFonts.teko(
                                     color: Colors.white,
-                                    fontSize: 48,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: 38,
+                                    letterSpacing: 1.5,
+                                    fontWeight: FontWeight.w700),
                               ),
                             ),
                             Padding(

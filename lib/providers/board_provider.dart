@@ -430,6 +430,13 @@ class BoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  getWidgetImage() {
+    return Positioned(
+      child: Text('hello'),
+    );
+  }
+
   List<Icon> getRewardStars(int? count) {
     List<Icon> stars = [];
     if (count != null) {

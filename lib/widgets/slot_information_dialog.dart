@@ -103,7 +103,8 @@ class SlotInformationDialog extends StatelessWidget {
                   ? Column(
                       children: [
                         const Text('For Urgent Sell'),
-                        Text('Selling Price: ${slot.getHalfSellingPrice()}'),
+                        Text('Half Selling Price: ${slot
+                            .getHalfSellingPrice()}'),
                       ],
                     )
                   : Text('Upgraded Price: ${slot.updatedPrice}'),

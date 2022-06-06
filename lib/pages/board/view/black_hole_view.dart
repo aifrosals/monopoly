@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -46,13 +47,14 @@ class BlackHoleView extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 32.0, bottom: 8.0),
+                      padding: const EdgeInsets.only(right: 92.0),
                       child: Text(
                         slot.name,
-                        style: const TextStyle(
+                        style: GoogleFonts.teko(
                             color: Colors.white,
-                            fontSize: 48,
-                            fontWeight: FontWeight.bold),
+                            fontSize: 38,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.w700),
                       ),
                     ),
                   ),

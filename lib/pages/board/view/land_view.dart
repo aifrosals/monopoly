@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -26,57 +27,60 @@ class LandView extends StatelessWidget {
 
     return InkWell(
       onTap: onSlotClick,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 1.0),
-        child: SizedBox(
-          child: Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: slot.color,
-                  borderRadius: const BorderRadius.all(Radius.circular(12))),
-              child: Stack(
-                children: [
-                  slot.owner != null
-                      ? Positioned(
-                          right: 0,
-                          left: 120,
-                          child: Text(
-                            'owned by ${slot.owner!.id}',
-                            style: TextStyle(color: Colors.white),
-                          ))
-                      : const SizedBox(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Stack(
-                        children: [
-                          Image.asset('assets/images/land.png'),
-                          slot.status == 'for_sell'
-                              ? Positioned.fill(
-                                  child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child:
-                                      Image.asset('assets/images/for_sale.png'),
-                                ))
-                              : const SizedBox()
-                        ],
-                      ),
-                      Expanded(
-                        child: FittedBox(
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 1.0),
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: slot.color,
+                    borderRadius: const BorderRadius.all(Radius.circular(12))),
+                child: Stack(
+                  children: [
+                    slot.owner != null
+                        ? Positioned(
+                            right: 0,
+                            left: 120,
+                            child: Text(
+                              'owned by ${slot.owner!.id}',
+                              style: TextStyle(color: Colors.white),
+                            ))
+                        : const SizedBox(),
+                    Row(
+                      children: [
+                        Stack(
+                          children: [
+                            Image.asset('assets/images/land.png'),
+                            slot.status == 'for_sell'
+                                ? Positioned.fill(
+                                    child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Image.asset(
+                                        'assets/images/for_sale.png'),
+                                  ))
+                                : const SizedBox()
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        FittedBox(
                           child: Center(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                const SizedBox(
-                                  height: 50,
+                                SizedBox(
+                                  height: 40,
                                   child: Text(
                                     "For Sell",
-                                    style: TextStyle(
+                                    style: GoogleFonts.teko(
                                         color: Colors.white,
-                                        fontSize: 48,
-                                        fontWeight: FontWeight.bold),
+                                        fontSize: 38,
+                                        letterSpacing: 1.5,
+                                        fontWeight: FontWeight.w700),
                                   ),
                                 ),
                                 Padding(
@@ -141,14 +145,14 @@ class LandView extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

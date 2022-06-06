@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -39,45 +40,52 @@ class BusinessCenterView extends StatelessWidget {
                 children: [
                   slot.owner != null
                       ? Positioned(
-                          right: 0,
-                          left: 120,
+                      right: 0,
+                          left: 140,
                           child: Text(
                             'owned by ${slot.owner!.id}',
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           ))
                       : const SizedBox(),
                   Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Stack(
-                          children: [
-                            Image.asset('assets/images/business_center.png'),
-                            slot.status == 'for_sell'
-                                ? Positioned.fill(
-                                    child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Image.asset(
-                                        'assets/images/for_sale.png'),
-                                  ))
-                                : const SizedBox()
-                          ],
-                        ),
+                      Stack(
+                        children: [
+                          Transform.translate(
+                              offset: const Offset(8, -13),
+                              child: Transform.scale(
+                                  scale: 1.35,
+                                  child: Image.asset(
+                                    'assets/images/business_center.png',
+                                    height: 140,
+                                    width: 140,
+                                  ))),
+                          slot.status == 'for_sell'
+                              ? Positioned.fill(
+                                  child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Image.asset(
+                                    'assets/images/for_sale.png',
+                                  ),
+                                ))
+                              : const SizedBox()
+                        ],
                       ),
                       const SizedBox(
-                        width: 40,
+                        width: 30,
                       ),
                       FittedBox(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(
-                              height: 49,
+                              height: 29,
                               child: Text(
                                 slot.name,
-                                style: const TextStyle(
+                                style: GoogleFonts.teko(
                                   color: Colors.white,
-                                  fontSize: 48,
+                                  fontSize: 28,
+                                  letterSpacing: 1.5,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

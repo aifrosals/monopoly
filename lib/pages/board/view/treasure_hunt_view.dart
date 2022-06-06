@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -45,19 +46,41 @@ class TreasureHuntView extends StatelessWidget {
                   Container(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Image.asset('assets/images/compass.png'),
+                      child:
+                          Image.asset('assets/images/treasure_hunt_icon.png'),
                     ),
                   ),
                   const SizedBox(
                     width: 16.0,
                   ),
-                  Expanded(
-                    child: Text(
-                      slot.name,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold),
+                  Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Treasure',
+                          style: GoogleFonts.teko(
+                            fontSize: 35,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.5,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Transform.translate(
+                          offset: Offset(0, -10),
+                          child: Text(
+                            'Hunt',
+                            style: GoogleFonts.teko(
+                              fontSize: 35,
+                              height: 1,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(

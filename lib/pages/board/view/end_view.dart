@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -55,19 +56,28 @@ class EndView extends StatelessWidget {
                             children: [
                               Text(
                                 "It is not",
-                                style: TextStyle(color: Colors.white),
+                                style: GoogleFonts.teko(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700),
                               ),
                               Text(
                                 slot.name,
-                                style: TextStyle(
+                                style: GoogleFonts.teko(
                                     color: Colors.white,
                                     fontSize: 48,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w700,
                                     height: 1),
                               ),
-                              Text(
-                                "Amazing Rewards",
-                                style: TextStyle(color: Colors.yellow),
+                              Transform.translate(
+                                offset: Offset(0, -10),
+                                child: Text(
+                                  "Amazing Rewards",
+                                  style: GoogleFonts.teko(
+                                      height: 1,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.yellow),
+                                ),
                               )
                             ],
                           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -50,14 +51,15 @@ class StartView extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(
+                          SizedBox(
                             height: 50,
                             child: Text(
                               "Start Here",
-                              style: TextStyle(
+                              style: GoogleFonts.teko(
                                   color: Colors.white,
                                   fontSize: 48,
-                                  fontWeight: FontWeight.bold),
+                                  letterSpacing: 1.5,
+                                  fontWeight: FontWeight.w700),
                             ),
                           ),
                           Row(

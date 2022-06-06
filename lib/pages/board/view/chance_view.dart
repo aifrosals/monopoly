@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -33,7 +34,7 @@ class ChanceView extends StatelessWidget {
               key: slot.endKey,
               decoration: BoxDecoration(
                   color: Colors.grey,
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       colorFilter: ColorFilter.mode(
@@ -55,10 +56,11 @@ class ChanceView extends StatelessWidget {
                   Expanded(
                     child: Text(
                       slot.name,
-                      style: const TextStyle(
+                      style: GoogleFonts.teko(
                           color: Colors.white,
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 38,
+                          letterSpacing: 1.5,
+                          fontWeight: FontWeight.w700),
                     ),
                   ),
                 ],
