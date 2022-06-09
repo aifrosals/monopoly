@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:monopoly/pages/start_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
+import 'package:monopoly/providers/image_provider.dart';
 import 'package:monopoly/providers/transaction_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -13,17 +14,20 @@ void main() async {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider<UserProvider>(
         create: (context) => UserProvider(),
-      ),
-      ChangeNotifierProvider<BoardProvider>(
-        create: (context) => BoardProvider(),
-      ),
-      ChangeNotifierProvider<DiceProvider>(
-        create: (context) => DiceProvider(),
-      ),
-      ChangeNotifierProvider<TransactionProvider>(
-        create: (context) => TransactionProvider(),
-      ),
-    ], child: const MyApp()));
+    ),
+    ChangeNotifierProvider<BoardProvider>(
+      create: (context) => BoardProvider(),
+    ),
+    ChangeNotifierProvider<DiceProvider>(
+      create: (context) => DiceProvider(),
+    ),
+    ChangeNotifierProvider<TransactionProvider>(
+      create: (context) => TransactionProvider(),
+    ),
+    ChangeNotifierProvider<ImagesProvider>(
+      create: (context) => ImagesProvider(),
+    )
+  ], child: const MyApp()));
   }
 
 class MyApp extends StatelessWidget {

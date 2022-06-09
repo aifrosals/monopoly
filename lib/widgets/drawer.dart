@@ -3,6 +3,7 @@ import 'package:monopoly/pages/contact_us_page.dart';
 import 'package:monopoly/pages/guest_register_or_logout_page.dart';
 import 'package:monopoly/pages/guest_register_page.dart';
 import 'package:monopoly/pages/learn_more_page.dart';
+import 'package:monopoly/pages/profile_page.dart';
 import 'package:monopoly/pages/transaction_page.dart';
 import 'package:monopoly/pages/user_login_page.dart';
 import 'package:monopoly/providers/user_provider.dart';
@@ -20,6 +21,16 @@ class MonopolyDrawer extends StatelessWidget {
           children: [
             const SizedBox(
               height: 5,
+            ),
+            ListTile(
+              title: const Text('Profile'),
+              trailing: const Icon(Icons.account_circle_rounded),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfilePage()));
+              },
             ),
             ListTile(
               title: const Text('Transactions'),
