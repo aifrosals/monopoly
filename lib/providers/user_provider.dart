@@ -277,7 +277,10 @@ class UserProvider extends ChangeNotifier {
       //  user.id = id;
       //   user.currentSlot = resData['current_slot'];
       debugPrint(' credits from server ${resData['credits']}');
+
       _user = User.fromJson(resData);
+      _user.token = 'user3';
+      debugPrint('user token ${_user.token}');
     } catch (error, st) {
       debugPrint('UserProvider $error $st');
     } finally {

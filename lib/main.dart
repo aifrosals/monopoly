@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monopoly/firebase_options.dart';
 import 'package:monopoly/pages/start_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
@@ -11,9 +13,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'config/values.dart';
 
 void main() async {
-    runApp(MultiProvider(providers: [
-      ChangeNotifierProvider<UserProvider>(
-        create: (context) => UserProvider(),
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<UserProvider>(
+      create: (context) => UserProvider(),
     ),
     ChangeNotifierProvider<BoardProvider>(
       create: (context) => BoardProvider(),
@@ -28,7 +30,10 @@ void main() async {
       create: (context) => ImagesProvider(),
     )
   ], child: const MyApp()));
-  }
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

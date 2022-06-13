@@ -36,7 +36,7 @@ class BoardProvider extends ChangeNotifier {
 // value for test purpose
 //  int _characterIndex = 0;
 
-  double _characterTop = 15;
+  double _characterTop = 20;
 
   double _showMessageOpacity = 0;
 

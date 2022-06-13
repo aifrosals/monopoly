@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class User {
   String id;
+  String? tokenImageUrl;
+  String? profileImageUrl;
   int? currentSlot;
   int? dice;
   int credits;
@@ -34,6 +36,8 @@ class User {
       required this.cash,
       required this.items,
       this.token,
+      this.tokenImageUrl,
+      this.profileImageUrl,
       this.nextDiceUpdate,
       required this.guest,
       this.currentSlot});
@@ -76,6 +80,8 @@ class User {
         cash: json['cash'] ?? 0,
         guest: json['guest'] ?? true,
         nextDiceUpdate: json['next_dice_update'],
+        tokenImageUrl: json['token_image_url'],
+        profileImageUrl: json['profile_image_url'],
         bonus: bonus,
         items: items,
         shield: shield);

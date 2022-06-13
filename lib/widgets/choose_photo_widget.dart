@@ -6,8 +6,11 @@ import 'package:monopoly/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class ChoosePhoto extends StatefulWidget {
+  final bool profileImage;
+
   const ChoosePhoto({
     Key? key,
+    required this.profileImage,
   }) : super(key: key);
 
   @override
@@ -46,8 +49,14 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
                             backgroundColor: Colors.amber,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25))),
-                        onPressed: () {
-                          imagesProvider.chooseGallery(userProvider.user);
+                        onPressed: () async {
+                          if (widget.profileImage) {
+                            await imagesProvider
+                                .chooseGalleryProfile(userProvider.user);
+                          } else {
+                            await imagesProvider
+                                .chooseGallery(userProvider.user);
+                          }
                         },
                         child: const Text(
                           "Gallery,",
@@ -75,49 +84,53 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
           // const SizedBox(
           //   height: 15,
           // ),
-          Consumer<ImagesProvider>(
-              builder: (context, dailyReportProvider, child) {
-            if (dailyReportProvider.images.isEmpty) {
-              return const SizedBox();
+          Consumer<ImagesProvider>(builder: (context, imageProvider, child) {
+            if (imageProvider.imageUploading) {
+              return const CircularProgressIndicator();
             } else {
-              return SizedBox(
-                //decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-                width: double.infinity,
-                height: 120,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: dailyReportProvider.images.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Stack(children: [
-                          Padding(
-                            padding: const EdgeInsets.all(7.0),
-                            child: Image.file(
-                              File(dailyReportProvider.images[index]!.path),
-                              errorBuilder: (context, e, st) {
-                                return const Text('Error');
-                              },
-                            ),
-                          ),
-                          Positioned(
-                              child: InkWell(
-                            onTap: () {
-                              dailyReportProvider.removePhoto(index);
-                              //dailyReportProvider.removePhoto(dailyReportProvider.images![index]);
-                            },
-                            child: const Icon(
-                              Icons.cancel,
-                              color: Colors.red,
-                              size: 30,
-                            ),
-                          )),
-                        ]),
-                      );
-                    }),
-              );
+              return const SizedBox();
             }
+            // if (dailyReportProvider.images.isEmpty) {
+            //   return const SizedBox();
+            // } else {
+            //   return SizedBox(
+            //     //decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+            //     width: double.infinity,
+            //     height: 120,
+            //     child: ListView.builder(
+            //         scrollDirection: Axis.horizontal,
+            //         shrinkWrap: true,
+            //         itemCount: dailyReportProvider.images.length,
+            //         itemBuilder: (context, index) {
+            //           return Padding(
+            //             padding: const EdgeInsets.all(5.0),
+            //             child: Stack(children: [
+            //               Padding(
+            //                 padding: const EdgeInsets.all(7.0),
+            //                 child: Image.file(
+            //                   File(dailyReportProvider.images[index]!.path),
+            //                   errorBuilder: (context, e, st) {
+            //                     return const Text('Error');
+            //                   },
+            //                 ),
+            //               ),
+            //               Positioned(
+            //                   child: InkWell(
+            //                 onTap: () {
+            //                   dailyReportProvider.removePhoto(index);
+            //                   //dailyReportProvider.removePhoto(dailyReportProvider.images![index]);
+            //                 },
+            //                 child: const Icon(
+            //                   Icons.cancel,
+            //                   color: Colors.red,
+            //                   size: 30,
+            //                 ),
+            //               )),
+            //             ]),
+            //           );
+            //         }),
+            //   );
+            // }
           })
         ],
       ),

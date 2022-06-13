@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:monopoly/providers/user_provider.dart';
@@ -41,7 +44,10 @@ class SlotInformationDialog extends StatelessWidget {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: const Icon(Icons.cancel_outlined)),
+                        child: const Icon(
+                          Icons.cancel_outlined,
+                          color: Colors.white,
+                        )),
                   ),
                 )
               ],
@@ -50,15 +56,18 @@ class SlotInformationDialog extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 20,
+                  Text(
+                    slot.name,
+                    style: GoogleFonts.teko(
+                        fontSize: 34, fontWeight: FontWeight.w700),
                   ),
-                  Text('Name: ${slot.name}'),
                   const SizedBox(
                     height: 2,
                   ),
                   slotInfo(slot, userProvider.user),
-                  const SizedBox(height: 10,),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -66,8 +75,7 @@ class SlotInformationDialog extends StatelessWidget {
                             style: TextButton.styleFrom(
                                 backgroundColor: Colors.amber,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(25))),
+                                    borderRadius: BorderRadius.circular(25))),
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -102,13 +110,69 @@ class SlotInformationDialog extends StatelessWidget {
               slot.status == 'for_sell'
                   ? Column(
                       children: [
-                        const Text('For Urgent Sell'),
-                        Text('Half Selling Price: ${slot
-                            .getHalfSellingPrice()}'),
+                        SizedBox(
+                          width: 150,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('For Urgent Sell'),
+                              SizedBox(
+                                  width: 25,
+                                  child: Image.asset(
+                                      'assets/images/for_sale.png')),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 150,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                  'Half Selling Price: ${slot.getHalfSellingPrice()}'),
+                              SizedBox(
+                                  width: 25,
+                                  child:
+                                      Image.asset('assets/images/dollar.png')),
+                            ],
+                          ),
+                        ),
                       ],
                     )
-                  : Text('Upgraded Price: ${slot.updatedPrice}'),
-              Text('Selling Price: ${slot.getSellingPrice()}')
+                  : Column(
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Selling Price: ${slot.getSellingPrice()}'),
+                              SizedBox(
+                                  width: 25,
+                                  child:
+                                      Image.asset('assets/images/dollar.png')),
+                            ],
+                          ),
+                        ),
+                        slot.updatedPrice != null
+                            ? SizedBox(
+                                width: 150,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                        'Upgraded Price: ${slot.updatedPrice}'),
+                                    SizedBox(
+                                        width: 25,
+                                        child: Image.asset(
+                                            'assets/images/upgrade.png')),
+                                  ],
+                                ),
+                              )
+                            : const Text(''),
+                      ],
+                    ),
             ],
           );
         }
@@ -170,25 +234,71 @@ class SlotInformationDialog extends StatelessWidget {
   }
 
   Widget getPropertyStatusInfo(Slot slot, User user) {
+    debugPrint('${slot.owner?.profileImageUrl}');
     if (slot.owner != null && slot.owner!.serverId == user.serverId) {
-      return Column(children: [
-        const Text(
-          'Owned by you', style: TextStyle(fontWeight: FontWeight.bold),),
-        Text('Rent: ${slot.getRent()}'),
-        ],);
-    }
-    else if (slot.owner != null && slot.owner!.serverId != user.serverId) {
-      return Column(children: [
-        Text('Owned by ${slot.owner!.id}',
-          style: const TextStyle(fontWeight: FontWeight.bold),),
-        Text('Rent: ${slot.getRent()}'),
-
-      ],);
-    }
-    else {
-      return const Text('For Sell');
+      return Column(
+        children: [
+          const Text(
+            'Owned by you',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          slot.owner!.profileImageUrl != null
+              ? SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CachedNetworkImage(
+                      imageUrl: slot.owner!.profileImageUrl!))
+              : const Icon(
+                  CupertinoIcons.person_alt_circle,
+                  color: Colors.black,
+                ),
+          SizedBox(
+            width: 150,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Rent: ${slot.getRent()}'),
+                SizedBox(
+                    width: 25, child: Image.asset('assets/images/payment.png')),
+              ],
+            ),
+          ),
+        ],
+      );
+    } else if (slot.owner != null && slot.owner!.serverId != user.serverId) {
+      return Column(
+        children: [
+          Text(
+            'Owned by ${slot.owner!.id}',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          slot.owner!.profileImageUrl != null
+              ? SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: CachedNetworkImage(
+                      imageUrl: slot.owner!.profileImageUrl!))
+              : const Icon(
+                  CupertinoIcons.person_alt_circle,
+                  color: Colors.black,
+                ),
+          SizedBox(
+            width: 150,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Rent: ${slot.getRent()}'),
+                SizedBox(
+                    width: 25, child: Image.asset('assets/images/payment.png')),
+              ],
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        children: [const Text('For Sell'), Text('Buy for: 50')],
+      );
     }
   }
-
 }
-

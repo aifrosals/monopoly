@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
@@ -89,26 +90,39 @@ class _BoardPageState extends State<BoardPage> {
               }),
               SizedBox(
                 height: 30,
-                child: TextButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
+              child: TextButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const UserMenuPage()));
-                  },
-                  child: const Icon(
-                    CupertinoIcons.person_alt_circle,
-                    color: Colors.black,
-                  ),
                 ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const UserMenuPage()));
+                },
+                child: Consumer<UserProvider>(
+                    builder: (context, userProvider, child) {
+                  if (userProvider.user.profileImageUrl != null) {
+                    return SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CachedNetworkImage(
+                        imageUrl: userProvider.user.profileImageUrl!,
+                      ),
+                    );
+                  } else {
+                    return const Icon(
+                      CupertinoIcons.person_alt_circle,
+                      color: Colors.black,
+                    );
+                  }
+                }),
               ),
+            ),
               Consumer<BoardProvider>(builder: (context, boardProvider, child) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -201,19 +215,24 @@ class _BoardPageState extends State<BoardPage> {
                                       (index == userProvider.user.currentSlot &&
                                           boardProvider.isCharacterStatic)
                                           ? Positioned(
-                                        key: boardProvider
-                                            .staticCharacterKey,
-                                        right: 40,
+                                        key: boardProvider.staticCharacterKey,
+                                        right: 30,
                                         top: 15,
                                         child: Container(
                                           height: 25,
                                           width: 25,
-                                          decoration: const BoxDecoration(
+                                          decoration: BoxDecoration(
                                               image: DecorationImage(
-                                                  image: AssetImage(
-                                                      'assets/images/pawn.png')),
-                                              shape: BoxShape.circle,
-                                              color: Colors.lightGreen),
+                                                  image: userProvider.user
+                                                              .tokenImageUrl !=
+                                                          null
+                                                      ? CachedNetworkImageProvider(
+                                                              userProvider.user
+                                                                  .tokenImageUrl!)
+                                                          as ImageProvider
+                                                      : const AssetImage(
+                                                          'assets/images/pawn.png')),
+                                              color: Colors.transparent),
                                         ),
                                       )
                                           : const SizedBox(),
@@ -233,20 +252,27 @@ class _BoardPageState extends State<BoardPage> {
                         return boardProvider.isCharacterStatic == false
                             ? AnimatedPositioned(
                           key: boardProvider.characterKey,
-                          duration: const Duration(milliseconds: 500),
-                          top: boardProvider.characterTop,
-                          right: 40,
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 1000),
-                            height: boardProvider.characterHeight,
-                            width: boardProvider.characterWidth,
-                            decoration: const BoxDecoration(
-                                image: DecorationImage(image: AssetImage(
-                                    'assets/images/pawn.png'),),
-                                shape: BoxShape.circle,
-                                color: Colors.blue),
-                          ),
-                              )
+                              duration: const Duration(milliseconds: 500),
+                              top: boardProvider.characterTop,
+                              right: 30,
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 1000),
+                                height: boardProvider.characterHeight,
+                                width: boardProvider.characterWidth,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: userProvider.user.tokenImageUrl !=
+                                              null
+                                          ? CachedNetworkImageProvider(
+                                                  userProvider
+                                                      .user.tokenImageUrl!)
+                                              as ImageProvider
+                                          : const AssetImage(
+                                              'assets/images/pawn.png'),
+                                    ),
+                                    color: Colors.transparent),
+                              ),
+                            )
                             : const SizedBox();
                       }),
                     ],
