@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:monopoly/api/api_constants.dart';
 import 'package:monopoly/models/admin.dart';
-import 'package:http/http.dart' as http;
 import 'package:monopoly/models/time_series_login.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 

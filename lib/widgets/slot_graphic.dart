@@ -76,7 +76,7 @@ class SlotGraphic {
   }
 
   static Widget getSlotWidget(Slot slot) {
-    switch (slot.type) {
+    switch (slot.initialType) {
       case 'start':
         {
           return StartView(
@@ -90,25 +90,7 @@ class SlotGraphic {
         }
       case 'land':
         {
-          return LandView(
-            onSlotClick: () {
-              showDialog(
-                  context: Values.navigatorKey.currentContext!,
-                  builder: (context) => SlotInformationDialog(slot: slot));
-            },
-            slot: slot,
-          );
-        }
-      case 'house':
-        {
-          return HouseView(
-            slot: slot,
-            onSlotClick: () {
-              showDialog(
-                  context: Values.navigatorKey.currentContext!,
-                  builder: (context) => SlotInformationDialog(slot: slot));
-            },
-          );
+          return getPropertySlot(slot);
         }
       case 'chest':
         {
@@ -143,64 +125,9 @@ class SlotGraphic {
             },
           );
         }
-      case 'condo':
-        {
-          return CondoView(
-            slot: slot,
-            onSlotClick: () {
-              showDialog(
-                  context: Values.navigatorKey.currentContext!,
-                  builder: (context) => SlotInformationDialog(slot: slot));
-            },
-          );
-        }
-      case 'theme_park':
-        {
-          return ThemeParkView(
-            slot: slot,
-            onSlotClick: () {
-              showDialog(
-                  context: Values.navigatorKey.currentContext!,
-                  builder: (context) => SlotInformationDialog(slot: slot));
-            },
-          );
-        }
       case 'challenge':
         {
           return ChallengeView(
-            slot: slot,
-            onSlotClick: () {
-              showDialog(
-                  context: Values.navigatorKey.currentContext!,
-                  builder: (context) => SlotInformationDialog(slot: slot));
-            },
-          );
-        }
-      case 'shop':
-        {
-          return ShopView(
-            slot: slot,
-            onSlotClick: () {
-              showDialog(
-                  context: Values.navigatorKey.currentContext!,
-                  builder: (context) => SlotInformationDialog(slot: slot));
-            },
-          );
-        }
-      case 'business_center':
-        {
-          return BusinessCenterView(
-            slot: slot,
-            onSlotClick: () {
-              showDialog(
-                  context: Values.navigatorKey.currentContext!,
-                  builder: (context) => SlotInformationDialog(slot: slot));
-            },
-          );
-        }
-      case 'city':
-        {
-          return CityView(
             slot: slot,
             onSlotClick: () {
               showDialog(
@@ -256,5 +183,80 @@ class SlotGraphic {
       default:
         return const SizedBox();
     }
+  }
+}
+
+Widget getPropertySlot(Slot slot) {
+  switch (slot.level) {
+    case 0:
+      {
+        return LandView(
+            slot: slot,
+            onSlotClick: () {
+              showDialog(
+                  context: Values.navigatorKey.currentContext!,
+                  builder: (context) => SlotInformationDialog(slot: slot));
+            });
+      }
+    case 1:
+      {
+        return HouseView(
+            slot: slot,
+            onSlotClick: () {
+              showDialog(
+                  context: Values.navigatorKey.currentContext!,
+                  builder: (context) => SlotInformationDialog(slot: slot));
+            });
+      }
+    case 2:
+      {
+        return ShopView(
+            slot: slot,
+            onSlotClick: () {
+              showDialog(
+                  context: Values.navigatorKey.currentContext!,
+                  builder: (context) => SlotInformationDialog(slot: slot));
+            });
+      }
+    case 3:
+      {
+        return CondoView(
+            slot: slot,
+            onSlotClick: () {
+              showDialog(
+                  context: Values.navigatorKey.currentContext!,
+                  builder: (context) => SlotInformationDialog(slot: slot));
+            });
+      }
+    case 4:
+      {
+        return BusinessCenterView(
+            slot: slot,
+            onSlotClick: () {
+              showDialog(
+                  context: Values.navigatorKey.currentContext!,
+                  builder: (context) => SlotInformationDialog(slot: slot));
+            });
+      }
+    case 5:
+      {
+        return CityView(
+            slot: slot,
+            onSlotClick: () {
+              showDialog(
+                  context: Values.navigatorKey.currentContext!,
+                  builder: (context) => SlotInformationDialog(slot: slot));
+            });
+      }
+    default:
+      {
+        return LandView(
+            slot: slot,
+            onSlotClick: () {
+              showDialog(
+                  context: Values.navigatorKey.currentContext!,
+                  builder: (context) => SlotInformationDialog(slot: slot));
+            });
+      }
   }
 }

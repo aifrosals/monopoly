@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
+import 'package:monopoly/providers/template_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -11,12 +13,11 @@ class CityView extends StatelessWidget {
   final Slot slot;
   final Function() onSlotClick;
 
-  const CityView(
-      {Key? key,
-      this.socketProvider,
-      this.boardProvider,
-      required this.slot,
-      required this.onSlotClick})
+  const CityView({Key? key,
+    this.socketProvider,
+    this.boardProvider,
+    required this.slot,
+    required this.onSlotClick})
       : super(key: key);
 
   @override
@@ -39,12 +40,12 @@ class CityView extends StatelessWidget {
                 children: [
                   slot.owner != null
                       ? Positioned(
-                          right: 0,
-                          left: 120,
-                          child: Text(
-                            'owned by ${slot.owner!.id}',
-                            style: TextStyle(color: Colors.white),
-                          ))
+                      right: 0,
+                      left: 120,
+                      child: Text(
+                        'owned by ${slot.owner!.id}',
+                        style: TextStyle(color: Colors.white),
+                      ))
                       : const SizedBox(),
                   Row(
                     children: [
@@ -52,7 +53,18 @@ class CityView extends StatelessWidget {
                           width: 180,
                           child: Stack(
                             children: [
-                              Image.asset('assets/images/city.png'),
+                              Consumer<TemplateProvider>(
+                                  builder: (context, templateProvider, child) {
+                                if (templateProvider.templates.isNotEmpty &&
+                                    templateProvider.checkLevel(5)) {
+                                  return CachedNetworkImage(
+                                      imageUrl: templateProvider
+                                          .getTemplateByLevel(5)
+                                          .imageUrl);
+                                } else {
+                                  return Image.asset('assets/images/city.png');
+                                }
+                              }),
                               slot.status == 'for_sell'
                                   ? Positioned.fill(
                                       child: Padding(
@@ -66,7 +78,7 @@ class CityView extends StatelessWidget {
                       const SizedBox(
                         width: 20,
                       ),
-                      FittedBox(
+                      Expanded(
                         child: Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -74,12 +86,30 @@ class CityView extends StatelessWidget {
                             children: [
                               SizedBox(
                                 height: 55,
-                                child: Text(
-                                  slot.name,
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 48,
-                                      fontWeight: FontWeight.bold),
+                                child: FittedBox(
+                                  child: Consumer<TemplateProvider>(builder:
+                                      (context, templateProvider, child) {
+                                    if (templateProvider.templates.isNotEmpty &&
+                                        templateProvider.checkLevel(5)) {
+                                      return Text(
+                                        templateProvider
+                                            .getTemplateByLevel(5)
+                                            .name,
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 48,
+                                            fontWeight: FontWeight.bold),
+                                      );
+                                    } else {
+                                      return Text(
+                                        slot.name,
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 48,
+                                            fontWeight: FontWeight.bold),
+                                      );
+                                    }
+                                  }),
                                 ),
                               ),
                               Padding(
@@ -95,15 +125,15 @@ class CityView extends StatelessWidget {
                                       width: 3.0,
                                     ),
                                     slot.allStepCount != null &&
-                                            slot.allStepCount![userProvider
-                                                    .user.serverId] !=
-                                                null
+                                        slot.allStepCount![userProvider
+                                            .user.serverId] !=
+                                            null
                                         ? Text(
-                                            "${slot.allStepCount![userProvider.user.serverId]}",
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )
+                                      "${slot.allStepCount![userProvider.user.serverId]}",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )
                                         : const SizedBox(),
                                     const SizedBox(
                                       width: 12.0,

@@ -4,6 +4,7 @@ import 'package:monopoly/pages/onboarding/onboarding_main_page.dart';
 import 'package:monopoly/pages/user_login_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
+import 'package:monopoly/providers/template_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,9 @@ class _StartPageState extends State<StartPage> {
   @override
   void initState() {
     super.initState();
+    final templateProvider =
+        Provider.of<TemplateProvider>(context, listen: false);
+    templateProvider.getTemplates();
     checkSession();
   }
 

@@ -7,6 +7,7 @@ import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:monopoly/pages/learn_more_page.dart';
+import 'package:monopoly/providers/template_provider.dart';
 import 'package:monopoly/providers/timer_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/widgets/helping_dialog.dart';
@@ -64,6 +65,8 @@ class SocketProvider extends ChangeNotifier {
     socket.on('treasure_hunt', (data) => notifyTreasureHunt(data, user));
     socket.on('end', (data) => notifyBundleReward(data));
     socket.on('abrupt', (data) => debugPrint(data.toString()));
+    socket.on('templateDeactivate', (data) => notifyTemplateDeactivate(data));
+    socket.on('templateActivate', (data) => notifyTemplateActivate(data));
 
     socket.onConnectError((error) {
       debugPrint('socket connection error $error');
@@ -753,7 +756,6 @@ class SocketProvider extends ChangeNotifier {
 
   showRentMessage(dynamic data) {
     try {
-
       HelpingDialog.showServerResponseDialog('You have paid $data rent');
 
       final player = AudioCache();
@@ -764,11 +766,26 @@ class SocketProvider extends ChangeNotifier {
     }
   }
 
+  notifyTemplateDeactivate(dynamic data) {
+    if (Values.navigatorKey.currentContext != null) {
+      Provider.of<TemplateProvider>(Values.navigatorKey.currentContext!,
+              listen: false)
+          .getTemplates();
+    }
+  }
+
+  notifyTemplateActivate(dynamic data) {
+    if (Values.navigatorKey.currentContext != null) {
+      Provider.of<TemplateProvider>(Values.navigatorKey.currentContext!,
+              listen: false)
+          .getTemplates();
+    }
+  }
+
   disconnect() {
     socket.disconnect();
     socket.dispose();
   }
-
 
   int getSellingFactor(int level) {
     switch (level) {

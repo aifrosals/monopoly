@@ -81,7 +81,9 @@ class ChestView extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const Spacer(),
+                          const SizedBox(
+                            width: 10,
+                          ),
                           Padding(
                             padding:
                                 const EdgeInsets.only(top: 8.0, right: 20.0),

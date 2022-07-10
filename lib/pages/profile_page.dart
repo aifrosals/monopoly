@@ -45,6 +45,7 @@ class ProfilePage extends StatelessWidget {
                       borderRadius: const BorderRadius.all(Radius.circular(25)),
                       border: Border.all(color: Colors.yellow, width: 2)),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(
                         height: 20,
@@ -59,36 +60,36 @@ class ProfilePage extends StatelessWidget {
                         },
                         child: Consumer<UserProvider>(
                             builder: (context, userProvider, child) {
-                          if (userProvider.user.profileImageUrl != null) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: CachedNetworkImageProvider(
-                                          userProvider.user.profileImageUrl!)),
-                                  color: Colors.tealAccent,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(25)),
-                                  border: Border.all(
-                                      color: Colors.white, width: 2)),
-                              height: 120,
-                              width: 120,
-                            );
-                          } else {
-                            return Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.tealAccent,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(25)),
-                                  border: Border.all(
-                                      color: Colors.white, width: 2)),
-                              height: 120,
-                              width: 120,
-                              child: const Icon(
-                                CupertinoIcons.person_alt_circle,
-                              ),
-                            );
-                          }
-                        }),
+                              if (userProvider.user.profileImageUrl != null) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: CachedNetworkImageProvider(
+                                              userProvider.user.profileImageUrl!)),
+                                      color: Colors.tealAccent,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(25)),
+                                      border: Border.all(
+                                          color: Colors.white, width: 2)),
+                                  height: 120,
+                                  width: 120,
+                                );
+                              } else {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.tealAccent,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(25)),
+                                      border: Border.all(
+                                          color: Colors.white, width: 2)),
+                                  height: 120,
+                                  width: 120,
+                                  child: const Icon(
+                                    CupertinoIcons.person_alt_circle,
+                                  ),
+                                );
+                              }
+                            }),
                       ),
                       const SizedBox(
                         height: 20,
@@ -103,48 +104,48 @@ class ProfilePage extends StatelessWidget {
                       const SizedBox(
                         height: 50,
                       ),
-                      Text('Token',
-                          style: GoogleFonts.teko(
-                              fontSize: 40,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700)),
-                      SizedBox(
-                        height: 170,
-                        width: 170,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Consumer<UserProvider>(
-                                builder: (context, userProvider, child) {
-                              if (userProvider.user.tokenImageUrl != null) {
-                                return CircleAvatar(
-                                  minRadius: 65,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      userProvider.user.tokenImageUrl!),
-                                );
-                              } else {
-                                return Image.asset(
-                                  'assets/images/pawn.png',
-                                );
-                              }
-                            }),
-                            Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(100)),
-                                onTap: () {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      builder: (context) => const ChoosePhoto(
-                                            profileImage: false,
-                                          ));
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
+                      // Text('Token',
+                      //     style: GoogleFonts.teko(
+                      //         fontSize: 40,
+                      //         color: Colors.white,
+                      //         fontWeight: FontWeight.w700)),
+                      // SizedBox(
+                      //   height: 170,
+                      //   width: 170,
+                      //   child: Stack(
+                      //     alignment: Alignment.center,
+                      //     children: [
+                      //       Consumer<UserProvider>(
+                      //           builder: (context, userProvider, child) {
+                      //         if (userProvider.user.tokenImageUrl != null) {
+                      //           return CircleAvatar(
+                      //             minRadius: 65,
+                      //             backgroundImage: CachedNetworkImageProvider(
+                      //                 userProvider.user.tokenImageUrl!),
+                      //           );
+                      //         } else {
+                      //           return Image.asset(
+                      //             'assets/images/pawn.png',
+                      //           );
+                      //         }
+                      //       }),
+                      //       Material(
+                      //         color: Colors.transparent,
+                      //         child: InkWell(
+                      //           borderRadius: const BorderRadius.all(
+                      //               Radius.circular(100)),
+                      //           onTap: () {
+                      //             showModalBottomSheet(
+                      //                 context: context,
+                      //                 builder: (context) => const ChoosePhoto(
+                      //                       profileImage: false,
+                      //                     ));
+                      //           },
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // )
                     ],
                   ),
                 ),

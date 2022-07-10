@@ -58,15 +58,25 @@ class StartView extends StatelessWidget {
                               style: GoogleFonts.teko(
                                   color: Colors.white,
                                   fontSize: 48,
+                                  height: 1.2,
                                   letterSpacing: 1.5,
                                   fontWeight: FontWeight.w700),
                             ),
                           ),
-                          Row(
-                            children: [
-                              Icon(Icons.money),
-                              Text("20 Credits as you pass")
-                            ],
+                          Transform.translate(
+                            offset: Offset(0, -3),
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  'assets/images/dollar.png',
+                                  height: 20,
+                                ),
+                                Text(
+                                  " 20 Credits as you pass",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
                           )
                         ],
                       ),

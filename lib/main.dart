@@ -1,15 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/firebase_options.dart';
 import 'package:monopoly/pages/start_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/image_provider.dart';
+import 'package:monopoly/providers/template_provider.dart';
 import 'package:monopoly/providers/transaction_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'config/values.dart';
 
 void main() async {
@@ -28,7 +30,9 @@ void main() async {
     ),
     ChangeNotifierProvider<ImagesProvider>(
       create: (context) => ImagesProvider(),
-    )
+    ),
+    ChangeNotifierProvider<TemplateProvider>(
+        create: (context) => TemplateProvider())
   ], child: const MyApp()));
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -50,7 +54,7 @@ class MyApp extends StatelessWidget {
         scaffoldMessengerKey: Values.snackBarKey,
         title: 'Monopoly',
         theme: ThemeData(
-          textTheme: GoogleFonts.tekoTextTheme(
+          textTheme: GoogleFonts.poppinsTextTheme(
             Theme.of(context).textTheme,
           ),
           appBarTheme: AppBarTheme(

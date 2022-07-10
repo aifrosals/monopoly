@@ -29,14 +29,16 @@ class BoardProvider extends ChangeNotifier {
 
   List<Slot> _slots = [];
 
-  double _characterWidth = 25;
+  double _characterWidth = 100;
 
-  double _characterHeight = 25;
+  double _characterHeight = 100;
+
+  bool _isScrollOptionVisible = false;
 
 // value for test purpose
 //  int _characterIndex = 0;
 
-  double _characterTop = 20;
+  double _characterTop = 0;
 
   double _showMessageOpacity = 0;
 
@@ -54,6 +56,16 @@ class BoardProvider extends ChangeNotifier {
 
     notifyListeners();
   }*/
+
+  showScrollOption() {
+    _isScrollOptionVisible = true;
+    notifyListeners();
+  }
+
+  hideScrollOption() {
+    _isScrollOptionVisible = false;
+    notifyListeners();
+  }
 
   setScroll() {
     debugPrint('set scroll is working');
@@ -476,4 +488,6 @@ class BoardProvider extends ChangeNotifier {
   bool get isItemEffectActive => _isItemEffectActive;
 
   double get kSlotHeight => _kSlotHeight;
+
+  bool get isScrollOptionVisible => _isScrollOptionVisible;
 }

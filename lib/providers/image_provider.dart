@@ -56,8 +56,8 @@ class ImagesProvider extends ChangeNotifier {
         // request.fields["user"] = json.encode(user);
         // if (gallery.first != null) {
         //   request.files.add(
-        //       await http.MultipartFile.fromPath('file', gallery.first!.path));
-        // }
+        //       await http.MultipartFile.fromPath('file', image.path));
+        // }j
         //
         // // request.files.add(pic);
         // var response = await request.send();
