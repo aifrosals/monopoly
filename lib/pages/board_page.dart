@@ -288,6 +288,7 @@ class _BoardPageState extends State<BoardPage> {
                             return Stack(
                               children: [
                                 SizedBox(
+                                  key: boardProvider.slots[index].slotKey,
                                   height: boardProvider.kSlotHeight,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
@@ -614,16 +615,18 @@ class _BoardPageState extends State<BoardPage> {
                     builder: (context, boardProvider, child) {
                   if (boardProvider.isScrollOptionVisible) {
                     return Container(
+                      width: 150,
                       color: Palette.diceBackground,
                       child: Padding(
                         padding: const EdgeInsets.only(
-                            top: 8.0, bottom: 8.0, left: 15.0, right: 28.0),
+                            top: 8.0, bottom: 8.0, left: 15.0, right: 8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             InkWell(
                               onTap: () {
+                                boardProvider.scrollTop();
                                 boardProvider.hideScrollOption();
                               },
                               child: const Text('Top',
@@ -632,28 +635,42 @@ class _BoardPageState extends State<BoardPage> {
                             ),
                             InkWell(
                               onTap: () {
+                                boardProvider.scrollCenter();
                                 boardProvider.hideScrollOption();
                               },
-                              child: const Text(
-                                'Center',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 29),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'Center',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 29),
+                                  ),
+                                ],
                               ),
                             ),
                             InkWell(
                                 onTap: () {
+                                  boardProvider.scrollBottom();
                                   boardProvider.hideScrollOption();
                                 },
-                                child: const Text('Bottom',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 29))),
+                                child: Row(
+                                  children: [
+                                    const Text('Bottom',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 29)),
+                                  ],
+                                )),
                             InkWell(
                                 onTap: () {
                                   boardProvider.hideScrollOption();
                                 },
-                                child: Image.asset(
-                                  'assets/images/cancel.png',
-                                  color: Colors.white,
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/cancel.png',
+                                      color: Colors.white,
+                                    ),
+                                  ],
                                 ))
                           ],
                         ),
@@ -680,7 +697,7 @@ class _BoardPageState extends State<BoardPage> {
                             ),
                           )));
                 } else {
-                  return SizedBox();
+                  return const SizedBox();
                 }
               })
               // Align(

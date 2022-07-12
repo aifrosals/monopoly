@@ -67,6 +67,29 @@ class BoardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  scrollTop() {
+    Scrollable.ensureVisible(_slots.first.slotKey.currentContext!,
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeOut,
+        alignment: 0.2);
+  }
+
+  scrollBottom() {
+    Scrollable.ensureVisible(
+      _slots.last.slotKey.currentContext!,
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeOut,
+    );
+  }
+
+  scrollCenter() {
+    int index = _slots.length ~/ 2;
+    Scrollable.ensureVisible(_slots[index].slotKey.currentContext!,
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeOut,
+        alignment: 0.2);
+  }
+
   setScroll() {
     debugPrint('set scroll is working');
     if (_staticCharacterKey.currentContext != null) {

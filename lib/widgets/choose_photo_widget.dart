@@ -36,7 +36,7 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
               children: [
                 Text(
                   "Choose Photo",
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context).textTheme.headline4,
                 ),
                 const SizedBox(
                   height: 6,
@@ -59,7 +59,7 @@ class _ChoosePhotoState extends State<ChoosePhoto> {
                           }
                         },
                         child: const Text(
-                          "Gallery,",
+                          "Gallery",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

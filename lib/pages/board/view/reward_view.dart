@@ -43,7 +43,35 @@ class RewardView extends StatelessWidget {
                     flex: 7,
                     child: Stack(
                       children: [
-                        Positioned(
+                        Row(
+                          children: List.generate(
+                              5,
+                              (index) => const Padding(
+                                    padding: EdgeInsets.all(4.0),
+                                    child: Icon(
+                                      Icons.star_border,
+                                      color: Colors.yellow,
+                                    ),
+                                  )),
+                        ),
+                        slot.allStepCount != null &&
+                                slot.allStepCount![
+                                        userProvider.user.serverId] !=
+                                    null
+                            ? Row(
+                                children: List.generate(
+                                    slot.allStepCount![
+                                        userProvider.user.serverId],
+                                    (index) => const Padding(
+                                          padding: EdgeInsets.all(4.0),
+                                          child: Icon(
+                                            Icons.star,
+                                            color: Colors.yellow,
+                                          ),
+                                        )))
+                            : const SizedBox(),
+
+                        /*    Positioned(
                           top: 0,
                           left: 0,
                           child: Padding(
@@ -177,7 +205,7 @@ class RewardView extends StatelessWidget {
                                 ),
                               )
                             : const Positioned(
-                                top: 25, left: 170, child: SizedBox()),
+                                top: 25, left: 170, child: SizedBox()),*/
                       ],
                     ),
                   ),

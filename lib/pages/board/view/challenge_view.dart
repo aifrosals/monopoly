@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -54,7 +55,7 @@ class ChallengeView extends StatelessWidget {
                     children: [
                       Text(
                         slot.name,
-                        style: const TextStyle(
+                        style: GoogleFonts.teko(
                             color: Colors.white,
                             fontSize: 48,
                             fontWeight: FontWeight.bold),

@@ -28,6 +28,7 @@ class SocketProvider extends ChangeNotifier {
 
   bool _activeMove = true;
 
+  List<User> _offlineUsers = [];
   List<User> _users = [];
 
   SocketProvider(User user) {
@@ -658,7 +659,8 @@ class SocketProvider extends ChangeNotifier {
       debugPrint('User slot presence is updated $data');
       data as List;
       _users = data.map((e) => User.fromJson(e)).toList();
-      _users.removeWhere((element) => element.presence == 'online');
+      _offlineUsers = List.from(_users);
+      _offlineUsers.removeWhere((element) => element.presence == 'online');
     } catch (error, st) {
       debugPrint('$error $st');
     } finally {
@@ -721,7 +723,7 @@ class SocketProvider extends ChangeNotifier {
 
   getOfflineUsers(int slot) {
     int currentSlotUsers = 0;
-    for (var user in _users) {
+    for (var user in _offlineUsers) {
       if (slot == user.currentSlot) {
         currentSlotUsers = currentSlotUsers + 1;
       }
@@ -731,7 +733,7 @@ class SocketProvider extends ChangeNotifier {
 
   getOfflineUserData(int slot) {
     List<User> selectedSlotUsers = [];
-    for (var user in _users) {
+    for (var user in _offlineUsers) {
       if (slot == user.currentSlot) {
         selectedSlotUsers.add(user);
       }
@@ -782,6 +784,16 @@ class SocketProvider extends ChangeNotifier {
     }
   }
 
+  checkUserOnline(String sid) {
+    var result = _users.where(
+        (element) => element.serverId == sid && element.presence == 'online');
+    if (result.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   disconnect() {
     socket.disconnect();
     socket.dispose();
@@ -826,7 +838,7 @@ class SocketProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  List<User> get users => _users;
+  List<User> get offlineUsers => _offlineUsers;
 
   bool get activeMove => _activeMove;
 }
