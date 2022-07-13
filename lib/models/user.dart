@@ -19,28 +19,29 @@ class User {
   String diceUpdatedAt;
   String? nextDiceUpdate;
   String? token;
+  String email;
   bool guest;
 
-  User(
-      {required this.id,
-      required this.credits,
-      required this.dice,
-      required this.loops,
-      required this.bonus,
-      required this.premium,
-      required this.diceUpdatedAt,
-      required this.challengeProgress,
-      required this.serverId,
-      required this.shield,
-      required this.presence,
-      required this.cash,
-      required this.items,
-      this.token,
-      this.tokenImageUrl,
-      this.profileImageUrl,
-      this.nextDiceUpdate,
-      required this.guest,
-      this.currentSlot});
+  User({required this.id,
+    required this.credits,
+    required this.dice,
+    required this.loops,
+    required this.bonus,
+    required this.premium,
+    required this.diceUpdatedAt,
+    required this.challengeProgress,
+    required this.serverId,
+    required this.shield,
+    required this.presence,
+    required this.cash,
+    required this.items,
+    this.token,
+    this.tokenImageUrl,
+    this.profileImageUrl,
+    this.nextDiceUpdate,
+    required this.guest,
+    required this.email,
+    this.currentSlot});
 
   factory User.fromJson(Map<String, dynamic> json) {
     Bonus bonus = Bonus(active: false, moves: 0);
@@ -74,6 +75,7 @@ class User {
         currentSlot: json['current_slot'] ?? 0,
         challengeProgress: json['challenge_progress'] ?? 0,
         serverId: json['_id'],
+        email: json['email'] ?? '',
         diceUpdatedAt: json['dice_updated_at'] ?? '',
         premium: json['premium'] ?? false,
         token: json['token'],

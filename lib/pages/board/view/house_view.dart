@@ -169,12 +169,12 @@ class HouseView extends StatelessWidget {
           ),
           slot.status == 'for_sell'
               ? Positioned(
-                  left: 100,
-                  top: 70,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Image.asset('assets/images/for_sale.png'),
-                  ))
+              left: 85,
+              top: 30,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Image.asset('assets/images/for_sale.png', height: 60,),
+              ))
               : const SizedBox(),
           slot.owner != null
               ? Align(

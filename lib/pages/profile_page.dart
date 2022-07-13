@@ -65,7 +65,9 @@ class ProfilePage extends StatelessWidget {
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: CachedNetworkImageProvider(
-                                              userProvider.user.profileImageUrl!)),
+                                              userProvider.user
+                                                  .profileImageUrl!),
+                                          fit: BoxFit.cover),
                                       color: Colors.tealAccent,
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(25)),

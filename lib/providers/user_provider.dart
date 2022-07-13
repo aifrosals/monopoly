@@ -14,6 +14,7 @@ class UserProvider extends ChangeNotifier {
 
   User _user = User(
       token: '',
+      email: '',
       presence: 'offline',
       loops: 0,
       dice: 0,
@@ -302,6 +303,7 @@ class UserProvider extends ChangeNotifier {
   deleteSession() {
     const storage = FlutterSecureStorage();
     _user = User(
+        email: '',
         token: '',
         presence: 'offline',
         loops: 0,
