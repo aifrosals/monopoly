@@ -48,7 +48,13 @@ class HouseView extends StatelessWidget {
                         children: [
                           Consumer<TemplateProvider>(
                               builder: (context, templateProvider, child) {
-                            if (templateProvider.templates.isNotEmpty &&
+                            if (slot.image != null) {
+                              return CachedNetworkImage(
+                                imageUrl: slot.image!,
+                                height: 140,
+                                width: 140,
+                              );
+                            } else if (templateProvider.templates.isNotEmpty &&
                                 templateProvider.checkLevel(1)) {
                               return CachedNetworkImage(
                                   imageUrl: templateProvider

@@ -54,7 +54,13 @@ class BusinessCenterView extends StatelessWidget {
                                       scale: 1.35,
                                       child: Consumer<TemplateProvider>(builder:
                                           (context, templateProvider, child) {
-                                        if (templateProvider
+                                        if (slot.image != null) {
+                                          return CachedNetworkImage(
+                                            imageUrl: slot.image!,
+                                            height: 140,
+                                            width: 140,
+                                          );
+                                        } else if (templateProvider
                                                 .templates.isNotEmpty &&
                                             templateProvider.checkLevel(4)) {
                                           return CachedNetworkImage(
