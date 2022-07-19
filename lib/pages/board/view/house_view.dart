@@ -173,15 +173,6 @@ class HouseView extends StatelessWidget {
               ),
             ),
           ),
-          slot.status == 'for_sell'
-              ? Positioned(
-              left: 85,
-              top: 30,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Image.asset('assets/images/for_sale.png', height: 60,),
-              ))
-              : const SizedBox(),
           slot.owner != null
               ? Align(
                   alignment: Alignment.bottomLeft,
@@ -216,7 +207,21 @@ class HouseView extends StatelessWidget {
                                 )),
                               )),
                   ))
-              : const SizedBox()
+              : const SizedBox(),
+          slot.status == 'for_sell'
+              ? Positioned.fill(
+                  top: 30,
+                  child: Transform.translate(
+                    offset: Offset(-50, 0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Image.asset(
+                        'assets/images/for_sale.png',
+                        height: 60,
+                      ),
+                    ),
+                  ))
+              : const SizedBox(),
         ],
       ),
     );
