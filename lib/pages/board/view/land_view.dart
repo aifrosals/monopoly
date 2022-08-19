@@ -62,24 +62,31 @@ class LandView extends StatelessWidget {
                                     imageUrl: templateProvider
                                         .getTemplateByLevel(0)
                                         .imageUrl,
+                                    height: 140,
+                                    width: 140,
                                   ),
                                 );
                               } else {
-                                return Image.asset('assets/images/land.png');
+                                return Image.asset(
+                                  'assets/images/land.png',
+                                  height: 130,
+                                  width: 140,
+                                );
                               }
                             }),
                           ],
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(top: 18.0, bottom: 8.0),
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Expanded(
+                                SizedBox(
+                                  width: 120,
                                   child: FittedBox(
                                     child: Consumer<TemplateProvider>(builder:
                                         (context, templateProvider, child) {
@@ -98,10 +105,11 @@ class LandView extends StatelessWidget {
                                         );
                                       } else {
                                         return Text(
-                                          "For Sell",
+                                          "Land",
                                           style: GoogleFonts.teko(
                                               color: Colors.white,
-                                              fontSize: 40,
+                                              fontSize: 30,
+                                              height: 0.4,
                                               letterSpacing: 1.5,
                                               fontWeight: FontWeight.w700),
                                         );
@@ -109,70 +117,57 @@ class LandView extends StatelessWidget {
                                     }),
                                   ),
                                 ),
-                                Transform.translate(
-                                  offset: const Offset(0, -17),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: FittedBox(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          SizedBox(
-                                              width: 25,
-                                              child: Image.asset(
-                                                  'assets/images/walking.png')),
-                                          const SizedBox(
-                                            width: 3.0,
-                                          ),
-                                          slot.allStepCount != null &&
-                                                  slot.allStepCount![
-                                                          userProvider
-                                                              .user.serverId] !=
-                                                      null
-                                              ? Text(
-                                                  "${slot.allStepCount![userProvider.user.serverId]}",
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                )
-                                              : const SizedBox(),
-                                          const SizedBox(
-                                            width: 12.0,
-                                          ),
-                                          SizedBox(
-                                              width: 25,
-                                              child: Image.asset(
-                                                  'assets/images/dollar.png')),
-                                          const SizedBox(
-                                            width: 3.0,
-                                          ),
-                                          Text(
-                                            '${slot.status == 'for_sell' ? slot.getHalfSellingPrice() : slot.getSellingPrice()}',
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(
-                                            width: 12.0,
-                                          ),
-                                          SizedBox(
-                                              width: 25,
-                                              child: Image.asset(
-                                                  'assets/images/payment.png')),
-                                          const SizedBox(
-                                            width: 3.0,
-                                          ),
-                                          Text(
-                                            '${slot.getRent()}',
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                        width: 20,
+                                        child: Image.asset(
+                                            'assets/images/walking.png')),
+                                    const SizedBox(
+                                      width: 3.0,
+                                    ),
+                                    Text(
+                                      "${slot.allStepCount != null && slot.allStepCount![userProvider.user.serverId] != null ? slot.allStepCount![userProvider.user.serverId] : '10000'}",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      width: 12.0,
+                                    ),
+                                    SizedBox(
+                                        width: 20,
+                                        child: Image.asset(
+                                            'assets/images/dollar.png')),
+                                    const SizedBox(
+                                      width: 3.0,
+                                    ),
+                                    Text(
+                                      //    '${slot.status == 'for_sell' ? slot.getHalfSellingPrice() : slot.getSellingPrice()}',
+                                      '10000',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      width: 12.0,
+                                    ),
+                                    SizedBox(
+                                        width: 20,
+                                        child: Image.asset(
+                                            'assets/images/payment.png')),
+                                    const SizedBox(
+                                      width: 3.0,
+                                    ),
+                                    Text(
+                                      // '${slot.getRent()}',
+                                      '1000',
+                                      style: const TextStyle(
+                                        color: Colors.white,
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 )
                               ],
                             ),

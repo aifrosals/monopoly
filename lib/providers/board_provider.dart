@@ -92,6 +92,7 @@ class BoardProvider extends ChangeNotifier {
 
   setScroll() {
     debugPrint('set scroll is working');
+    //  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     if (_staticCharacterKey.currentContext != null) {
       Scrollable.ensureVisible(_staticCharacterKey.currentContext!,
           duration: const Duration(milliseconds: 1000),
@@ -99,7 +100,9 @@ class BoardProvider extends ChangeNotifier {
           alignment: 0.2);
       debugPrint('Scroll offset ${_scrollController.position.pixels}');
       setCharacterPositionAtBinding(_scrollController.position.pixels);
+      notifyListeners();
     }
+    // });
   }
 
   setEffectScroll(int number, String effect) async {
@@ -191,7 +194,10 @@ class BoardProvider extends ChangeNotifier {
     debugPrint(
         'static position ${position2.direction} ${position2.dx} ${position2.dy} ${position2.distance}');
     double topPadding =
-        ScreenConfig.paddingTop != 0.0 ? 56 + ScreenConfig.paddingTop : 85;
+        // ScreenConfig.paddingTop != 0.0 ? 56 + ScreenConfig.paddingTop : 85;
+        ScreenConfig.paddingTop != 0.0
+            ? 56 + ScreenConfig.paddingTop
+            : _kSlotHeight;
     if (scrollOffset != 0.0) {
       _characterTop = position2.dy + scrollOffset - topPadding;
     } else {
@@ -305,8 +311,8 @@ class BoardProvider extends ChangeNotifier {
     _characterWidth = 0;
     notifyListeners();
     await Future.delayed(const Duration(seconds: 1));
-    _characterHeight = 25;
-    _characterWidth = 25;
+    _characterHeight = 100;
+    _characterWidth = 100;
     notifyListeners();
     return user;
   }
@@ -332,8 +338,8 @@ class BoardProvider extends ChangeNotifier {
     setEffectScroll(moveOffset, 'worm_hole');
 
     await Future.delayed(const Duration(seconds: 2));
-    _characterHeight = 25;
-    _characterWidth = 25;
+    _characterHeight = 100;
+    _characterWidth = 100;
     notifyListeners();
     return user;
   }
@@ -342,11 +348,18 @@ class BoardProvider extends ChangeNotifier {
     Slot challengeSlot =
         _slots.firstWhere((element) => element.type == 'challenge');
     user.currentSlot = challengeSlot.index;
+
     Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
             listen: false)
         .updateUser(user);
-    await Future.delayed(const Duration(milliseconds: 500));
+
+    /// [second 1] gives the proper time to go and set the scroll
+    /// and make the static character to be detected otherwise it
+    /// will not be able to scroll and the focus goes to moving character
+    /// which position remains the chance position
+    await Future.delayed(const Duration(seconds: 1));
     setScroll();
+
     return user;
   }
 

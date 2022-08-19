@@ -1,12 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:monopoly/config/screen_config.dart';
 import 'package:monopoly/models/user.dart';
-import 'package:monopoly/pages/items_page.dart';
-import 'package:monopoly/pages/user_menu_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -65,23 +62,15 @@ class _BoardPageState extends State<BoardPage> {
                         const SizedBox(
                           width: 10,
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(7),
-                          child: Container(
-                            color: Palette.diceBackground,
-                            child: SizedBox(
-                              height: 33,
-                              width: 33,
-                              child: userProvider.user.bonus.active
-                                  ? Center(
-                                      child: Text(
-                                        'X2',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 19, color: Colors.yellow),
-                                      ),
-                                    )
-                                  : Center(
+                        userProvider.user.bonus.active
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(7),
+                                child: Container(
+                                  color: Palette.diceBackground,
+                                  child: const SizedBox(
+                                    height: 33,
+                                    width: 33,
+                                    child: Center(
                                       child: Text(
                                         'X2',
                                         textAlign: TextAlign.center,
@@ -92,39 +81,32 @@ class _BoardPageState extends State<BoardPage> {
                                         ),
                                       ),
                                     ),
-                            ),
-                          ),
-                        ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
                         const SizedBox(
                           width: 10,
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(7),
-                          child: Container(
-                            color: Color(0xff1780A1),
-                            child: SizedBox(
-                              height: 33,
-                              width: 33,
-                              child: FittedBox(
-                                child: Padding(
-                                    padding: const EdgeInsets.all(18.0),
-                                    child: userProvider.user.shield.active
-                                        ? Image.asset(
-                                            'assets/images/shield.png',
-                                            color: Colors.yellow,
-                                          )
-                                        // const Icon(
-                                        //   Icons.shield_rounded,
-                                        //   color: Colors.lightBlueAccent,
-                                        //   semanticLabel: 'Shield',
-                                        // )
-                                        : Image.asset(
+                        userProvider.user.shield.active
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(7),
+                                child: Container(
+                                  color: Color(0xff1780A1),
+                                  child: SizedBox(
+                                    height: 33,
+                                    width: 33,
+                                    child: FittedBox(
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(18.0),
+                                          child: Image.asset(
                                             'assets/images/shield.png',
                                           )),
-                              ),
-                            ),
-                          ),
-                        ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
                         Consumer<BoardProvider>(
                             builder: (context, boardProvider, child) {
                           return Padding(
