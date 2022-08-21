@@ -78,102 +78,109 @@ class ShopView extends StatelessWidget {
                             ],
                           ),
                           Expanded(
-                            child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 18.0, bottom: 8.0, right: 20),
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  SizedBox(
-                                    height: 50,
-                                    child: FittedBox(
-                                      child: Consumer<TemplateProvider>(builder:
-                                          (context, templateProvider, child) {
-                                        if (templateProvider
-                                                .templates.isNotEmpty &&
-                                            templateProvider.checkLevel(2)) {
-                                          return Text(
+                                  Consumer<TemplateProvider>(builder:
+                                      (context, templateProvider, child) {
+                                    if (templateProvider.templates.isNotEmpty &&
+                                        templateProvider.checkLevel(0)) {
+                                      return SizedBox(
+                                        width: templateProvider
+                                                    .getTemplateByLevel(0)
+                                                    .name
+                                                    .length <=
+                                                5
+                                            ? 100
+                                            : 140,
+                                        child: FittedBox(
+                                          child: Text(
                                             templateProvider
-                                                .getTemplateByLevel(2)
+                                                .getTemplateByLevel(0)
                                                 .name,
-                                            style: GoogleFonts.teko(
-                                                color: Colors.white,
-                                                fontSize: 48,
-                                                letterSpacing: 1.5,
-                                                fontWeight: FontWeight.bold),
-                                          );
-                                        } else {
-                                          return Text(
-                                            slot.name,
                                             style: GoogleFonts.teko(
                                                 color: Colors.white,
                                                 fontSize: 38,
                                                 letterSpacing: 1.5,
-                                                fontWeight: FontWeight.bold),
-                                          );
-                                        }
-                                      }),
-                                    ),
-                                  ),
-                                  FittedBox(
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        SizedBox(
-                                            width: 25,
-                                            child: Image.asset(
-                                                'assets/images/walking.png')),
-                                        const SizedBox(
-                                          width: 3.0,
-                                        ),
-                                        slot.allStepCount != null &&
-                                                slot.allStepCount![userProvider
-                                                        .user.serverId] !=
-                                                    null
-                                            ? Text(
-                                                "${slot.allStepCount![userProvider.user.serverId]}",
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )
-                                            : const SizedBox(),
-                                        const SizedBox(
-                                          width: 12.0,
-                                        ),
-                                        SizedBox(
-                                            width: 25,
-                                            child: Image.asset(
-                                                'assets/images/dollar.png')),
-                                        const SizedBox(
-                                          width: 3.0,
-                                        ),
-                                        Text(
-                                          '${slot.status == 'for_sell' ? slot.getHalfSellingPrice() : slot.getSellingPrice()}',
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(
-                                          width: 12.0,
-                                        ),
-                                        SizedBox(
-                                            width: 25,
-                                            child: Image.asset(
-                                                'assets/images/payment.png')),
-                                        const SizedBox(
-                                          width: 3.0,
-                                        ),
-                                        Text(
-                                          '${slot.getRent()}',
-                                          style: const TextStyle(
-                                            color: Colors.white,
+                                                fontWeight: FontWeight.w700),
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      );
+                                    } else {
+                                      return SizedBox(
+                                        width: 100,
+                                        child: FittedBox(
+                                          child: Text(
+                                            "Shop",
+                                            style: GoogleFonts.teko(
+                                                color: Colors.white,
+                                                fontSize: 30,
+                                                height: 0.4,
+                                                letterSpacing: 1.5,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(
+                                          width: 22,
+                                          child: Image.asset(
+                                              'assets/images/walking.png')),
+                                      const SizedBox(
+                                        width: 3.0,
+                                      ),
+                                      Text(
+                                        "${slot.allStepCount != null && slot.allStepCount![userProvider.user.serverId] != null ? slot.allStepCount![userProvider.user.serverId] : '0'}",
+                                        style: const TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        width: 7.0,
+                                      ),
+                                      SizedBox(
+                                          width: 22,
+                                          child: Image.asset(
+                                              'assets/images/dollar.png')),
+                                      const SizedBox(
+                                        width: 3.0,
+                                      ),
+                                      Text(
+                                        '${slot.status == 'for_sell' ? slot.getHalfSellingPrice() : slot.getSellingPrice()}',
+                                        style: const TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        width: 7.0,
+                                      ),
+                                      SizedBox(
+                                          width: 22,
+                                          child: Image.asset(
+                                              'assets/images/payment.png')),
+                                      const SizedBox(
+                                        width: 3.0,
+                                      ),
+                                      Text(
+                                        '${slot.getRent()}',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   )
                                 ],
                               ),

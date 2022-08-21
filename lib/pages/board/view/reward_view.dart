@@ -62,24 +62,36 @@ class RewardView extends StatelessWidget {
                         ),
                       ),
                       slot.allStepCount != null &&
-                          slot.allStepCount![
-                          userProvider.user.serverId] !=
-                              null
-                          ? Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: List.generate(
-                              slot.allStepCount![
-                              userProvider.user.serverId],
-                                  (index) =>
-                              const Padding(
-                                padding: EdgeInsets.all(4.0),
-                                child: Icon(
-                                  Icons.star,
-                                  size: 33,
-                                  color: Colors.yellow,
-                                ),
-                              )))
+                              slot.allStepCount![userProvider.user.serverId] !=
+                                  null
+                          ? Align(
+                              alignment: Alignment.center,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: List.generate(
+                                    5,
+                                    (index) => index <
+                                            slot.allStepCount![
+                                                userProvider.user.serverId]
+                                        ? const Padding(
+                                            padding: EdgeInsets.all(4.0),
+                                            child: Icon(
+                                              Icons.star,
+                                              size: 33,
+                                              color: Colors.yellow,
+                                            ),
+                                          )
+                                        : const Padding(
+                                            padding: EdgeInsets.all(4.0),
+                                            child: Icon(
+                                              Icons.star_border,
+                                              size: 33,
+                                              color: Colors.yellow,
+                                            ),
+                                          )),
+                              ),
+                            )
                           : const SizedBox(),
 
                       /*    Positioned(

@@ -6,7 +6,6 @@ class Slot {
   String name;
   GlobalKey? endKey;
   GlobalKey slotKey;
-
   /// type indicates the current type of the slot
   String type;
   String? image;
