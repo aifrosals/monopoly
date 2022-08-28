@@ -49,7 +49,7 @@ class SocketProvider extends ChangeNotifier {
         (data) => updateSlotPresence(data)); // Check for all users
     socket.on('check_board',
         (data) => updateBoard(data)); // Check for the slots update
-    socket.on('buy_land', (data) => notifyBuyLand());
+    socket.on('buy_land', (data) => notifyBuyLand(data));
     socket.on('upgrade_slot', (data) => notifyUpgradeSlot(data));
     socket.on('buy_owned_slot', (data) => notifyBuyOwnedSlot(data));
     socket.on(
@@ -103,8 +103,9 @@ class SocketProvider extends ChangeNotifier {
     }
   }
 
-  notifyBuyLand() {
+  notifyBuyLand(dynamic data) {
     try {
+      Slot land = Slot.fromJson(data);
       User user = Provider.of<UserProvider>(Values.navigatorKey.currentContext!,
               listen: false)
           .user;
@@ -130,7 +131,7 @@ class SocketProvider extends ChangeNotifier {
                         return Text('time left: ${timerProvider.time}');
                       }),
                       const Text('Buy Land'),
-                      const Text('Buy Land for 50 credits'),
+                      Text('Buy Land for ${50 + 1 + land.index} credits'),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -212,50 +213,13 @@ class SocketProvider extends ChangeNotifier {
               listen: false)
           .user;
       debugPrint('upgradeSlot userslot ${user.currentSlot}');
-      int price = 0;
+
       String name = '';
       Slot slot = Slot.fromJson(data);
       int level = slot.level ?? 100;
 
-      // TODO: remove this logic from here and add it in the slot class
-      switch (level) {
-        case 0:
-          {
-            price = 100;
-            name = 'House';
-          }
-          break;
-        case 1:
-          {
-            price = 200;
-            name = 'Shop';
-          }
-          break;
-        case 2:
-          {
-            price = 400;
-            name = 'Condo';
-          }
-          break;
-        case 3:
-          {
-            price = 800;
-            name = 'Business center or a Theme Park';
-          }
-          break;
-        case 4:
-          {
-            price = 1600;
-            name = "city";
-          }
-          break;
-        default:
-          {}
-          break;
-      }
-
-      if (user.credits < price) {
-        HelpingDialog.showNotEnoughCredUpgradeDialog(price);
+      if (user.credits < slot.getUpgradingPrice()) {
+        HelpingDialog.showNotEnoughCredUpgradeDialog(slot.getUpgradingPrice() ?? 0);
         return;
       }
       showDialog(
@@ -321,7 +285,7 @@ class SocketProvider extends ChangeNotifier {
                                   }
                                 },
                                 child: Text(
-                                  'Upgrade this place into a $name for $price credits',
+                                  'Upgrade this place into a $name for ${slot.getUpgradingPrice()} credits',
                                   textAlign: TextAlign.center,
                                 ),
                                 style:

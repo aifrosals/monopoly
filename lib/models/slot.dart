@@ -79,6 +79,15 @@ class Slot {
     return (getSellingPrice() / 2).ceil();
   }
 
+  int getUpgradingPrice() {
+    if (price != null && level != null) {
+      int sellingPrice = price! * getUpgradingFactor(level!);
+      return sellingPrice;
+    } else {
+      return 0;
+    }
+  }
+
   int getSellingPrice() {
     if (updatedPrice != null && level != null) {
       int sellingPrice = updatedPrice! * getSellingFactor(level!);
@@ -113,6 +122,39 @@ class Slot {
       case 5:
         {
           return 4;
+        }
+      default:
+        {
+          return 1;
+        }
+    }
+  }
+
+  int getUpgradingFactor(int level) {
+    switch (level) {
+      case 0:
+        {
+          return 2;
+        }
+      case 1:
+        {
+          return 4;
+        }
+      case 2:
+        {
+          return 8;
+        }
+      case 3:
+        {
+          return 16;
+        }
+      case 4:
+        {
+          return 32;
+        }
+      case 5:
+        {
+          return 1;
         }
       default:
         {

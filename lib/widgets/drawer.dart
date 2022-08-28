@@ -34,6 +34,9 @@ class MonopolyDrawer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Image.asset(

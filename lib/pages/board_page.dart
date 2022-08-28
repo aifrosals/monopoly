@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:monopoly/config/screen_config.dart';
 import 'package:monopoly/models/user.dart';
+import 'package:monopoly/pages/notifications_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
 import 'package:monopoly/providers/socket_provider.dart';
@@ -41,6 +42,7 @@ class _BoardPageState extends State<BoardPage> {
       lazy: false,
       create: (context) => SocketProvider(userProvider.user),
       child: Scaffold(
+        backgroundColor: Color(0xffEBEBEB),
         drawer: const MonopolyDrawer(),
         appBar: AppBar(
           title:
@@ -148,11 +150,16 @@ class _BoardPageState extends State<BoardPage> {
               );
             }),
             Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: Icon(
-                Icons.notifications,
-                size: 33,
-                color: Colors.grey[800],
+              padding: const EdgeInsets.only(right: 2.0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.notifications,
+                  size: 33,
+                  color: Colors.grey[800],
+                ),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationsPage()));
+                },
               ),
             )
             /*      Consumer<SocketProvider>(

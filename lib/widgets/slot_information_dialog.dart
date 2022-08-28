@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:monopoly/models/slot.dart';
 import 'package:monopoly/models/user.dart';
+import 'package:monopoly/pages/learn_more_page.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:monopoly/widgets/slot_graphic.dart';
 import 'package:provider/provider.dart';
@@ -56,10 +57,28 @@ class SlotInformationDialog extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  Text(
-                    slot.name,
-                    style: GoogleFonts.teko(
-                        fontSize: 34, fontWeight: FontWeight.w700),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        slot.name,
+                        style: GoogleFonts.teko(
+                            fontSize: 34, fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(width: 10,),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => LearnMorePage()));
+                        },
+                        child: CircleAvatar(
+                          radius: 10,
+                          backgroundColor: Colors.grey[300],
+                          child: Center(
+                            child: Icon(Icons.question_mark, size: 10,)
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                   const SizedBox(
                     height: 2,
@@ -106,6 +125,7 @@ class SlotInformationDialog extends StatelessWidget {
         {
           return Column(
             children: [
+              slot.level! > 0 ? Text('Level: ${slot.level}') : const SizedBox(),
               getPropertyStatusInfo(slot, user),
               slot.status == 'for_sell'
                   ? Column(
@@ -129,7 +149,7 @@ class SlotInformationDialog extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                  'Half Selling Price: ${slot.getHalfSellingPrice()}'),
+                                  'Discounted Price: ${slot.getHalfSellingPrice()}'),
                               SizedBox(
                                   width: 25,
                                   child:
@@ -154,7 +174,7 @@ class SlotInformationDialog extends StatelessWidget {
                             ],
                           ),
                         ),
-                        slot.updatedPrice != null
+                        slot.updatedPrice != null && slot.level != 5
                             ? SizedBox(
                                 width: 150,
                                 child: Row(
@@ -162,7 +182,7 @@ class SlotInformationDialog extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                        'Upgraded Price: ${slot.updatedPrice}'),
+                                        'Price to upgrade: ${slot.getUpgradingPrice()}'),
                                     SizedBox(
                                         width: 25,
                                         child: Image.asset(
@@ -297,7 +317,7 @@ class SlotInformationDialog extends StatelessWidget {
       );
     } else {
       return Column(
-        children: [const Text('For Sell'), Text('Buy for: 50')],
+        children: [const Text('For sale'), Text('Buy for: ${50 + 1 + slot.index}')],
       );
     }
   }
