@@ -400,44 +400,6 @@ class _BoardPageState extends State<BoardPage> {
                 ),
               ),
 
-              // Column(
-              //   crossAxisAlignment: CrossAxisAlignment.center,
-              //   children: [
-              //     //TODO: Add according to the top padding
-              //     SizedBox(
-              //       height: ScreenConfig.paddingTop + 10,
-              //     ),
-              //     Align(
-              //       alignment: Alignment.center,
-              //       child: Consumer<BoardProvider>(
-              //           builder: (context, boardProvider, child) {
-              //             return AnimatedOpacity(
-              //               opacity: boardProvider.showMessageOpacity,
-              //               duration: const Duration(milliseconds: 2000),
-              //               child: Container(
-              //                   decoration: BoxDecoration(
-              //                       color: Colors.white.withOpacity(0.8)),
-              //                   child: Padding(
-              //                     padding: const EdgeInsets.all(8.0),
-              //                     child: Row(
-              //                       mainAxisAlignment:
-              //                       MainAxisAlignment.spaceBetween,
-              //                       children: [
-              //                         Text(boardProvider.message),
-              //                         InkWell(
-              //                           onTap: () {
-              //                             boardProvider.hideMessage();
-              //                           },
-              //                           child: const Icon(Icons.cancel_outlined),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   )),
-              //             );
-              //           }),
-              //     )
-              //   ],
-              // ),
               Consumer3<UserProvider, BoardProvider, SocketProvider>(builder:
                   (context, userProvider, boardProvider, socketProvider,
                       child) {
@@ -810,6 +772,7 @@ class _BoardPageState extends State<BoardPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      /// Consumer for back button
                       Consumer<SocketProvider>(
                           builder: (context, socketProvider, child) {
                         return socketProvider.activeMove
@@ -861,12 +824,15 @@ class _BoardPageState extends State<BoardPage> {
                                 onPressed: () {},
                               );
                       }),
+                      /// Consumer for active move collapse it for easy view
                       Consumer<SocketProvider>(
                           builder: (context, socketProvider, child) {
                         return socketProvider.activeMove
                             ? FloatingActionButton(
                                 onPressed: () async {
                                   socketProvider.disableMove();
+                                  final player = AudioCache();
+                                  player.play('sounds/dice_roll.mp3');
                                   int diceFace = diceProvider.getOne();
                                   await boardProvider.animateA(diceFace);
                                   userProvider.setCurrentSlot(diceFace);
@@ -878,35 +844,53 @@ class _BoardPageState extends State<BoardPage> {
                                   debugPrint(
                                       'user loop count ${userProvider.user.loops}');
                                 },
-                                child: Consumer<DiceProvider>(
-                                    builder: (context, diceProvider, child) {
-                                  return Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text('dice',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      diceProvider.face != 0
-                                          ? Text('${diceProvider.face}',
-                                              style: const TextStyle(
-                                                  color: Colors.white))
-                                          : const SizedBox()
-                                    ],
-                                  );
-                                }),
-                                backgroundColor: Colors.pinkAccent,
+                                child: CircleAvatar(
+                                  maxRadius: 36,
+                                  backgroundColor: Palette.diceBackground,
+                                  child:
+                                  Consumer2<UserProvider, DiceProvider>(
+                                      builder: (context, userProvider,
+                                          diceProvider, child) {
+                                        return Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                                height: 45,
+                                                width: 45,
+                                                child: RiveAnimation.asset(
+                                                  'assets/animations/dice.riv',
+                                                  animations: [
+                                                    'sFace${diceProvider.face}'  /// static face
+                                                  ],
+                                                )),
+                                          ],
+                                        );
+                                      }),
+                                ),
+                                backgroundColor: Colors.white,
                               )
                             : FloatingActionButton(
                                 child: Consumer<DiceProvider>(
                                     builder: (context, diceProvider, child) {
                                   return Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
                                     children: [
-                                      diceProvider.face != 0
-                                          ? Text('${diceProvider.face}',
-                                              style: const TextStyle(
-                                                  color: Colors.white))
-                                          : const SizedBox()
+                                      CircleAvatar(
+                                        maxRadius: 36,
+                                        backgroundColor:
+                                        Palette.diceBackground,
+                                        child: SizedBox(
+                                            height: 50,
+                                            width: 50,
+                                            child: RiveAnimation.asset(
+                                              'assets/animations/dice.riv',
+                                              animations: [
+                                                'face${diceProvider.face}'
+                                              ],
+                                            )),
+                                      )
                                     ],
                                   );
                                 }),
@@ -918,7 +902,7 @@ class _BoardPageState extends State<BoardPage> {
                   ),
                 ),
               )
-            : SizedBox(
+            : SizedBox(   /// user is not user2
                 height: 85,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20.0),
@@ -964,20 +948,18 @@ class _BoardPageState extends State<BoardPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          // Text('dice${diceProvider.face != 0
-                                          //     ? ': ${diceProvider.face}'
-                                          //     : ''}',
-                                          //     style: const TextStyle(
-                                          //         color: Colors.white)),
-                                          SizedBox(
-                                              height: 45,
-                                              width: 45,
-                                              child: RiveAnimation.asset(
-                                                'assets/animations/dice.riv',
-                                                animations: [
-                                                  'sFace${diceProvider.face}'
-                                                ],
-                                              )),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 8.0),
+                                            child: SizedBox(
+                                                height: 45,
+                                                width: 45,
+                                                child: RiveAnimation.asset(
+                                                  'assets/animations/dice.riv',
+                                                  animations: [
+                                                    'sFace${diceProvider.face}'  /// static face
+                                                  ],
+                                                )),
+                                          ),
                                           Transform.translate(
                                             offset: const Offset(0, -3),
                                             child: SizedBox(
@@ -1025,11 +1007,6 @@ class _BoardPageState extends State<BoardPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        // diceProvider.face != 0
-                                        //     ? Text('${diceProvider.face}',
-                                        //     style: const TextStyle(
-                                        //         color: Colors.white))
-                                        //     : const SizedBox()
                                         CircleAvatar(
                                           maxRadius: 36,
                                           backgroundColor:

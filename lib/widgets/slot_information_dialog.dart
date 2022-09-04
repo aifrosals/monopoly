@@ -61,21 +61,29 @@ class SlotInformationDialog extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
+                        //TODO: change the name according to the template
                         slot.name,
                         style: GoogleFonts.teko(
                             fontSize: 34, fontWeight: FontWeight.w700),
                       ),
-                      const SizedBox(width: 10,),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => LearnMorePage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LearnMorePage()));
                         },
                         child: CircleAvatar(
                           radius: 10,
                           backgroundColor: Colors.grey[300],
-                          child: Center(
-                            child: Icon(Icons.question_mark, size: 10,)
-                          ),
+                          child: const Center(
+                              child: Icon(
+                            Icons.question_mark,
+                            size: 10,
+                          )),
                         ),
                       )
                     ],
@@ -99,7 +107,7 @@ class SlotInformationDialog extends StatelessWidget {
                               Navigator.pop(context);
                             },
                             child: const Text(
-                              'OK',
+                              'Close',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
@@ -124,75 +132,111 @@ class SlotInformationDialog extends StatelessWidget {
       case 'land':
         {
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
+          (slot.owner != null && slot.owner!.serverId == user.serverId) ?
+              Column(children: [
+            const Text(
+              'Owned by you',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            slot.owner!.profileImageUrl != null
+                ? SizedBox(
+                height: 50,
+                width: 50,
+                child: CachedNetworkImage(
+                    imageUrl: slot.owner!.profileImageUrl!))
+                : const Icon(
+              CupertinoIcons.person_alt_circle,
+              color: Colors.black,
+            )
+              ],)
+                : const SizedBox(),
+
+     (slot.owner != null && slot.owner!.serverId != user.serverId) ?
+    Column(
+    children: [
+    Text(
+      'Owned by ${slot.owner!.id}',
+      style: const TextStyle(fontWeight: FontWeight.bold),
+    ),
+    slot.owner!.profileImageUrl != null
+        ? SizedBox(
+            height: 50,
+            width: 50,
+            child: CachedNetworkImage(
+                imageUrl: slot.owner!.profileImageUrl!))
+        : const Icon(
+            CupertinoIcons.person_alt_circle,
+            color: Colors.black,
+          ),
+              ],) : const SizedBox(),
+
               slot.level! > 0 ? Text('Level: ${slot.level}') : const SizedBox(),
-              getPropertyStatusInfo(slot, user),
-              slot.status == 'for_sell'
-                  ? Column(
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Padding(
+                padding: const EdgeInsets.only(left: 70.0),
+                child: Column(
+                  children: [
+                    getPropertyStatusInfo(slot, user),
+                    slot.status == 'for_sell'
+                        ? Column(
                             children: [
-                              const Text('For Urgent Sell'),
-                              SizedBox(
-                                  width: 25,
-                                  child: Image.asset(
-                                      'assets/images/for_sale.png')),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 150,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                  'Discounted Price: ${slot.getHalfSellingPrice()}'),
-                              SizedBox(
-                                  width: 25,
-                                  child:
-                                      Image.asset('assets/images/dollar.png')),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Selling Price: ${slot.getSellingPrice()}'),
-                              SizedBox(
-                                  width: 25,
-                                  child:
-                                      Image.asset('assets/images/dollar.png')),
-                            ],
-                          ),
-                        ),
-                        slot.updatedPrice != null && slot.level != 5
-                            ? SizedBox(
-                                width: 150,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                              Table(
+                                children: [
+                                  TableRow(
                                   children: [
-                                    Text(
-                                        'Price to upgrade: ${slot.getUpgradingPrice()}'),
-                                    SizedBox(
-                                        width: 25,
-                                        child: Image.asset(
-                                            'assets/images/upgrade.png')),
+                                    const Text('For Urgent Sell:'),
+                                    Row(
+                                      children: [
+                                        Text('   '),
+                                        const SizedBox(width: 5,),
+                                        Image.asset(
+                                            'assets/images/for_sale.png', height: 25, width: 25,),
+                                      ],
+                                    ),
+
                                   ],
                                 ),
-                              )
-                            : const Text(''),
+                                  TableRow(
+                                    children: [
+                                      Text(
+                                          'Discounted Price:'),
+                                      Row(
+                                        children: [
+                                          Text('${slot.getHalfSellingPrice()}'),
+                                          const SizedBox(width: 5,),
+
+                                          Image.asset('assets/images/dollar.png', height: 25, width: 25,),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+    ]
+                              ),
+                            ],
+                          )
+                        :
+
+                    Table(
+                      children: [
+                        TableRow(
+                          children: [
+                            Text('Selling Price:'),
+                            Row(
+                              children: [
+                                Text(slot.getSellingPrice().toString()),
+                                const SizedBox(width: 5,),
+                                Image.asset('assets/images/dollar.png', width: 25, height: 25,),
+                              ],
+                            ),
+                          ]
+                        ),
                       ],
                     ),
+                  ],
+                ),
+              ),
             ],
           );
         }
@@ -254,7 +298,6 @@ class SlotInformationDialog extends StatelessWidget {
   }
 
   Widget getPropertyStatusInfo(Slot slot, User user) {
-    debugPrint('${slot.owner?.profileImageUrl}');
     if (slot.owner != null && slot.owner!.serverId == user.serverId) {
       return Column(
         children: [
@@ -262,63 +305,83 @@ class SlotInformationDialog extends StatelessWidget {
             'Owned by you',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          slot.owner!.profileImageUrl != null
-              ? SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: CachedNetworkImage(
-                      imageUrl: slot.owner!.profileImageUrl!))
-              : const Icon(
-                  CupertinoIcons.person_alt_circle,
-                  color: Colors.black,
-                ),
-          SizedBox(
-            width: 150,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // slot.owner!.profileImageUrl != null
+          //     ? SizedBox(
+          //         height: 50,
+          //         width: 50,
+          //         child: CachedNetworkImage(
+          //             imageUrl: slot.owner!.profileImageUrl!))
+          //     : const Icon(
+          //         CupertinoIcons.person_alt_circle,
+          //         color: Colors.black,
+          //       ),
+          Table(
+            children:[ TableRow(
               children: [
-                Text('Rent: ${slot.getRent()}'),
-                SizedBox(
-                    width: 25, child: Image.asset('assets/images/payment.png')),
+                const Text('Rent:'),
+                Row(
+                  children: [
+                    Text('${slot.getRent()}'),
+                    const SizedBox(width: 5,),
+                    Image.asset('assets/images/payment.png', height: 25, width: 25,),
+                  ],
+                ),
               ],
             ),
+            ]
           ),
         ],
       );
     } else if (slot.owner != null && slot.owner!.serverId != user.serverId) {
       return Column(
         children: [
-          Text(
-            'Owned by ${slot.owner!.id}',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          slot.owner!.profileImageUrl != null
-              ? SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: CachedNetworkImage(
-                      imageUrl: slot.owner!.profileImageUrl!))
-              : const Icon(
-                  CupertinoIcons.person_alt_circle,
-                  color: Colors.black,
-                ),
-          SizedBox(
-            width: 150,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Rent: ${slot.getRent()}'),
-                SizedBox(
-                    width: 25, child: Image.asset('assets/images/payment.png')),
-              ],
-            ),
+          // Text(
+          //   'Owned by ${slot.owner!.id}',
+          //   style: const TextStyle(fontWeight: FontWeight.bold),
+          // ),
+          // slot.owner!.profileImageUrl != null
+          //     ? SizedBox(
+          //         height: 50,
+          //         width: 50,
+          //         child: CachedNetworkImage(
+          //             imageUrl: slot.owner!.profileImageUrl!))
+          //     : const Icon(
+          //         CupertinoIcons.person_alt_circle,
+          //         color: Colors.black,
+          //       ),
+          Table(
+              children:[ TableRow(
+                children: [
+                  Text('Rent:'),
+                  Row(
+                    children: [
+                      Text('${slot.getRent()}'),
+                      const SizedBox(width: 5,),
+                      Image.asset('assets/images/payment.png', height: 25, width: 25,),
+                    ],
+                  ),
+                ],
+              ),
+              ]
           ),
         ],
       );
     } else {
-      return Column(
-        children: [const Text('For sale'), Text('Buy for: ${50 + 1 + slot.index}')],
-      );
+      return
+        Center(
+          child: Table(
+
+            children:  [
+              TableRow(
+
+                children: [
+                  const Text('Buy for:'),
+                  Text('${50 + 1 + slot.index}'),
+                ]
+              )
+            ],
+          ),
+        );
     }
   }
 }

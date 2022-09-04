@@ -27,15 +27,9 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   _scrollListener() async {
-    debugPrint('yes');
     debugPrint(_scrollController.position.extentAfter.toString());
-    double maxScroll = _scrollController.position.maxScrollExtent;
-    double currentScroll = _scrollController.position.pixels;
-    double delta = MediaQuery.of(context).size.height * 0.1;
-    //  if (maxScroll - currentScroll <= delta) {
     if (_scrollController.position.extentAfter < 1) {
       transactionProvider.getPaginatedTransactions(userProvider.user);
-      debugPrint('yes');
     }
   }
 

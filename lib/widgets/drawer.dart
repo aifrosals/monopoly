@@ -10,7 +10,7 @@ import 'package:monopoly/pages/learn_more_page.dart';
 import 'package:monopoly/pages/profile_page.dart';
 import 'package:monopoly/pages/transaction_page.dart';
 import 'package:monopoly/pages/user_login_page.dart';
-import 'package:monopoly/pages/user_menu_page.dart';
+import 'package:monopoly/pages/user_property_page.dart';
 import 'package:monopoly/providers/socket_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -40,85 +40,87 @@ class MonopolyDrawer extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Image.asset(
-                            'assets/images/cancel.png', height: 25,),
+                            'assets/images/cancel.png',
+                            height: 25,
+                          ),
                         ),
                       )
                     ],
                   ),
                   DrawerHeader(
                       child: Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (
-                                          context) => const ProfilePage()));
-                            },
-                            child: CircleAvatar(
-                                radius: 40,
-                                backgroundColor: Colors.white,
-                                child: userProvider.user.profileImageUrl != null
-                                    ? CircleAvatar(
-                                  radius: 35,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                    userProvider.user.profileImageUrl!,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ProfilePage()));
+                        },
+                        child: CircleAvatar(
+                            radius: 40,
+                            backgroundColor: Colors.white,
+                            child: userProvider.user.profileImageUrl != null
+                                ? CircleAvatar(
+                                    radius: 35,
+                                    backgroundImage: CachedNetworkImageProvider(
+                                      userProvider.user.profileImageUrl!,
+                                    ),
+                                  )
+                                : const CircleAvatar(
+                                    radius: 35,
+                                    child: Center(
+                                        child: Icon(
+                                      CupertinoIcons.person_alt_circle,
+                                    )),
+                                  )),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    userProvider.user.id,
+                                    style: GoogleFonts.openSans(
+                                        fontSize: 22,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w700),
                                   ),
-                                )
-                                    : const CircleAvatar(
-                                  radius: 35,
-                                  child: Center(
-                                      child: Icon(
-                                        CupertinoIcons.person_alt_circle,
-                                      )),
-                                )),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
-                                    mainAxisSize: MainAxisSize.min,
+                                  Text(userProvider.user.email,
+                                      style: GoogleFonts.openSans(
+                                          color: Colors.grey)),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        userProvider.user.id,
+                                        'RM ${userProvider.user.cash}',
                                         style: GoogleFonts.openSans(
-                                            fontSize: 22,
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w700),
+                                            color: const Color(0xff00B215),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
                                       ),
-                                      Text(userProvider.user.email,
-                                          style: GoogleFonts.openSans(
-                                              color: Colors.grey)),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .spaceBetween,
-                                        children: [
-                                          Text(
-                                            'RM ${userProvider.user.cash}',
-                                            style: GoogleFonts.openSans(
-                                                color: Color(0xff00B215),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18),
-                                          ),
-                                          Image.asset('assets/images/edit.png',
-                                            height: 20,)
-                                        ],
+                                      Image.asset(
+                                        'assets/images/edit.png',
+                                        height: 20,
                                       )
                                     ],
-                                  ),
-                                ),
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      )),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
                   const SizedBox(
                     height: 5,
                   ),
@@ -133,10 +135,10 @@ class MonopolyDrawer extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                    ChangeNotifierProvider<
-                                        SocketProvider>.value(
-                                        value: socketProvider,
-                                        child: const ItemsPage())));
+                                        ChangeNotifierProvider<
+                                                SocketProvider>.value(
+                                            value: socketProvider,
+                                            child: const ItemsPage())));
                           },
                           child: SizedBox(
                             width: 130,
@@ -144,11 +146,11 @@ class MonopolyDrawer extends StatelessWidget {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: Color.fromRGBO(67, 170, 139, 1),
+                                    color: const Color.fromRGBO(67, 170, 139, 1),
                                     borderRadius: BorderRadius.circular(9),
                                   ),
-                                  margin: EdgeInsets.only(top: 45),
-                                  padding: EdgeInsets.only(top: 45),
+                                  margin: const EdgeInsets.only(top: 45),
+                                  padding: const EdgeInsets.only(top: 45),
                                   width: 130,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -176,8 +178,11 @@ class MonopolyDrawer extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (
-                                        context) => const UserMenuPage()));
+                                    builder: (context) =>
+                                        ChangeNotifierProvider<
+                                                SocketProvider>.value(
+                                            value: socketProvider,
+                                            child: const UserPropertyPage())));
                           },
                           child: SizedBox(
                             width: 130,
@@ -185,11 +190,11 @@ class MonopolyDrawer extends StatelessWidget {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: Color.fromRGBO(23, 128, 161, 1),
+                                    color: const Color.fromRGBO(23, 128, 161, 1),
                                     borderRadius: BorderRadius.circular(9),
                                   ),
-                                  margin: EdgeInsets.only(top: 45),
-                                  padding: EdgeInsets.only(top: 45),
+                                  margin: const EdgeInsets.only(top: 45),
+                                  padding: const EdgeInsets.only(top: 45),
                                   width: 130,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -217,8 +222,11 @@ class MonopolyDrawer extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   ListTile(
-                    title: Text('Transactions', style: GoogleFonts.openSans(
-                        fontSize: 28, color: Colors.grey),),
+                    title: Text(
+                      'Transactions',
+                      style: GoogleFonts.openSans(
+                          fontSize: 28, color: Colors.grey),
+                    ),
                     onTap: () {
                       Navigator.push(
                           context,
@@ -227,8 +235,9 @@ class MonopolyDrawer extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    title: Text('About Us', style: GoogleFonts.openSans(
-                        fontSize: 28, color: Colors.grey)),
+                    title: Text('About Us',
+                        style: GoogleFonts.openSans(
+                            fontSize: 28, color: Colors.grey)),
                     onTap: () {
                       Navigator.push(
                           context,
@@ -265,8 +274,9 @@ class MonopolyDrawer extends StatelessWidget {
                   //   );
                   // }),
                   ListTile(
-                    title: Text('Contact Us', style: GoogleFonts.openSans(
-                        fontSize: 28, color: Colors.grey)),
+                    title: Text('Contact Us',
+                        style: GoogleFonts.openSans(
+                            fontSize: 28, color: Colors.grey)),
                     onTap: () {
                       Navigator.push(
                           context,
@@ -275,22 +285,23 @@ class MonopolyDrawer extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    title: Text('Logout', style: GoogleFonts.openSans(
-                        fontSize: 28, color: Colors.grey)),
+                    title: Text('Logout',
+                        style: GoogleFonts.openSans(
+                            fontSize: 28, color: Colors.grey)),
                     onTap: () {
                       if (userProvider.user.guest) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                const GuestRegisterOrLogoutPage()));
+                                    const GuestRegisterOrLogoutPage()));
                       } else {
                         userProvider.deleteSession();
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const UserLoginPage()),
-                                (route) => false);
+                            (route) => false);
                       }
                     },
                   ),
@@ -319,20 +330,24 @@ class MonopolyDrawer extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                               color: Colors.teal.withAlpha(148),
-                              borderRadius: const BorderRadius.all(
-                                  Radius.circular(12))),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(12))),
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   color: Colors.teal,
-                                  borderRadius:
-                                  const BorderRadius.all(Radius.circular(12))),
-                              child: Center(child: Text('WithDrawl',
-                                style: GoogleFonts.teko(fontSize: 38,
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(12))),
+                              child: Center(
+                                  child: Text(
+                                'WithDrawl',
+                                style: GoogleFonts.teko(
+                                    fontSize: 38,
                                     letterSpacing: 1.2,
                                     fontWeight: FontWeight.w900,
-                                    color: Colors.white),)),
+                                    color: Colors.white),
+                              )),
                             ),
                           ),
                         ),

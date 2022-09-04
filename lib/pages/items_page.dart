@@ -37,7 +37,7 @@ class ItemsPage extends StatelessWidget {
                           boardProvider.isItemEffectActive
                               ? ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.amber,
+                                    backgroundColor: Colors.amber,
                                   ),
                                   onPressed: () {},
                                   child: const Text(
@@ -48,7 +48,7 @@ class ItemsPage extends StatelessWidget {
                                 )
                               : ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.amber,
+                                    backgroundColor: Colors.amber,
                                   ),
                                   onPressed: () async {
                                     bool res = await boardProvider
@@ -88,7 +88,7 @@ class ItemsPage extends StatelessWidget {
                           boardProvider.isItemEffectActive
                               ? ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.amber,
+                                    backgroundColor: Colors.amber,
                                   ),
                                   onPressed: () {},
                                   child: const Text(
@@ -99,7 +99,7 @@ class ItemsPage extends StatelessWidget {
                                 )
                               : ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.amber,
+                                    backgroundColor: Colors.amber,
                                   ),
                                   onPressed: () {
                                     boardProvider.kickUser(userProvider.user);
