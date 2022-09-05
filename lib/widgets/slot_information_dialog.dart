@@ -301,13 +301,11 @@ class SlotInformationDialog extends StatelessWidget {
     if (slot.owner != null && slot.owner!.serverId == user.serverId) {
       return Column(
         children: [
-          const Text(
-            'Owned by you',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
           // slot.owner!.profileImageUrl != null
           //     ? SizedBox(
-          //         height: 50,
+          //         height: 5
+
+          //         0,
           //         width: 50,
           //         child: CachedNetworkImage(
           //             imageUrl: slot.owner!.profileImageUrl!))

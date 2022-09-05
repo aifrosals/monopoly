@@ -214,6 +214,7 @@ class SocketProvider extends ChangeNotifier {
           .user;
       debugPrint('upgradeSlot userslot ${user.currentSlot}');
 
+
       String name = '';
       Slot slot = Slot.fromJson(data);
       int level = slot.level ?? 100;

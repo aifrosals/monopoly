@@ -58,11 +58,9 @@ class CondoView extends StatelessWidget {
                                   padding: const EdgeInsets.only(
                                       top: 18.0,
                                       bottom: 8.0,
-                                      right: 20,
                                       left: 22),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Consumer<TemplateProvider>(builder:

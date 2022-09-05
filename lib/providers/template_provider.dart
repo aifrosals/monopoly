@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:monopoly/api/api_constants.dart';
 import 'package:monopoly/models/template.dart';
 
+import '../models/slot.dart';
+
 class TemplateProvider extends ChangeNotifier {
   List<Template> _templates = [];
 
@@ -42,6 +44,35 @@ class TemplateProvider extends ChangeNotifier {
 
   Template getTemplateByLevel(int level) {
     return _templates.firstWhere((element) => element.level == level);
+  }
+
+  String getUpgradeName(int level) {
+
+    if(_templates.isNotEmpty && checkLevel(level + 1)) {
+      return _templates[level + 1].name;
+    }
+    else {
+      switch (level) {
+        case 0: {
+          return 'House';
+        }
+        case 1: {
+          return 'Shop';
+        }
+        case 2: {
+          return 'Condo';
+        }
+        case 3: {
+          return 'Business Center';
+        }
+        case 4: {
+          return 'City';
+        }
+        default: {
+          return 'none';
+        }
+      }
+    }
   }
 
   List<Template> get templates => _templates;
