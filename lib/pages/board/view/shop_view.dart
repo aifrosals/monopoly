@@ -66,7 +66,10 @@ class ShopView extends StatelessWidget {
                                           return CachedNetworkImage(
                                               imageUrl: templateProvider
                                                   .getTemplateByLevel(2)
-                                                  .imageUrl);
+                                                  .imageUrl,
+                                            height: 140,
+                                            width: 140,
+                                          );
                                         } else {
                                           return Image.asset(
                                             'assets/images/shop.png',

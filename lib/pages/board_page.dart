@@ -949,7 +949,7 @@ class _BoardPageState extends State<BoardPage> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 8.0),
+                                            padding: const EdgeInsets.only(left: 0.0),
                                             child: SizedBox(
                                                 height: 45,
                                                 width: 45,

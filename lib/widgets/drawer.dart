@@ -13,6 +13,7 @@ import 'package:monopoly/pages/user_login_page.dart';
 import 'package:monopoly/pages/user_property_page.dart';
 import 'package:monopoly/providers/socket_provider.dart';
 import 'package:monopoly/providers/user_provider.dart';
+import 'package:monopoly/widgets/helping_dialog.dart';
 import 'package:provider/provider.dart';
 
 class MonopolyDrawer extends StatelessWidget {
@@ -319,6 +320,10 @@ class MonopolyDrawer extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const GuestRegisterPage()));
+                    } else {
+                      if(userProvider.user.cash <= 0) {
+                        HelpingDialog.showNotEnoughRMDialog();
+                      }
                     }
                   },
                   child: Padding(

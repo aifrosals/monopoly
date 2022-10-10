@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:monopoly/api/api_constants.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider extends ChangeNotifier {
   final _scrollController = ScrollController();
@@ -296,6 +297,15 @@ class UserProvider extends ChangeNotifier {
 
   Future<String?> loadSession() async {
     const storage = FlutterSecureStorage();
+    final prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getBool('first_run') ?? true) {
+      FlutterSecureStorage storage = const FlutterSecureStorage();
+
+      await storage.deleteAll();
+
+      prefs.setBool('first_run', false);
+    }
     String? token = await storage.read(key: 'token');
     return token;
   }

@@ -69,7 +69,7 @@ class LandView extends StatelessWidget {
                               } else {
                                 return Image.asset(
                                   'assets/images/land.png',
-                                  height: 130,
+                                  height: 140,
                                   width: 140,
                                 );
                               }

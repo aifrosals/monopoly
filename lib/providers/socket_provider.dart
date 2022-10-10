@@ -219,7 +219,7 @@ class SocketProvider extends ChangeNotifier {
       Slot slot = Slot.fromJson(data);
       int level = slot.level ?? 100;
 
-      if (user.credits < slot.getUpgradingPrice()) {
+      if (user.credits < slot.getUpgradingPrice() && slot.level != null) {
         HelpingDialog.showNotEnoughCredUpgradeDialog(slot.getUpgradingPrice() ?? 0);
         return;
       }
@@ -286,7 +286,7 @@ class SocketProvider extends ChangeNotifier {
                                   }
                                 },
                                 child: Text(
-                                  'Upgrade this place into a $name for ${slot.getUpgradingPrice()} credits',
+                                  'Upgrade this place into a ${Provider.of<TemplateProvider>(Values.navigatorKey.currentContext!, listen: false).getUpgradeName(slot.level!)} for ${slot.getUpgradingPrice()} credits',
                                   textAlign: TextAlign.center,
                                 ),
                                 style:

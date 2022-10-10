@@ -179,4 +179,60 @@ class HelpingDialog {
               ),
             ));
   }
+
+  static showNotEnoughRMDialog() {
+    showDialog(
+        context: Values.navigatorKey.currentContext!,
+        builder: (context) =>
+            Dialog(
+              child: SizedBox(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Align(
+                    //   alignment: Alignment.topRight,
+                    //   child: InkWell(
+                    //     onTap: () {
+                    //       Navigator.pop(context);
+                    //     },
+                    //     child: const Icon(Icons.cancel_outlined),
+                    //   ),
+                    // ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Sorry! you do not have RM Cash to withdraw',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextButton(
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.amber,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(25))),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'OK',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ));
+  }
 }

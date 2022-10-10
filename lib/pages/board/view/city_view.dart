@@ -46,141 +46,139 @@ class CityView extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          SizedBox(
-                              width: 180,
-                              child: Stack(
-                                children: [
-                                  Consumer<TemplateProvider>(builder:
-                                      (context, templateProvider, child) {
-                                    if (slot.image != null) {
-                                      return CachedNetworkImage(
-                                        imageUrl: slot.image!,
-                                        height: 140,
-                                        width: 140,
-                                      );
-                                    } else if (templateProvider
-                                            .templates.isNotEmpty &&
-                                        templateProvider.checkLevel(5)) {
-                                      return CachedNetworkImage(
-                                          imageUrl: templateProvider
-                                              .getTemplateByLevel(5)
-                                              .imageUrl);
-                                    } else {
-                                      return Image.asset(
-                                          'assets/images/city.png');
-                                    }
-                                  }),
-                                ],
-                              )),
-                          const SizedBox(
-                            width: 20,
+                          Stack(
+                            children: [
+                              Consumer<TemplateProvider>(builder:
+                                  (context, templateProvider, child) {
+                                if (slot.image != null) {
+                                  return CachedNetworkImage(
+                                    imageUrl: slot.image!,
+                                    height: 140,
+                                    width: 140,
+                                  );
+                                } else if (templateProvider
+                                        .templates.isNotEmpty &&
+                                    templateProvider.checkLevel(5)) {
+                                  return CachedNetworkImage(
+                                      imageUrl: templateProvider
+                                          .getTemplateByLevel(5)
+                                          .imageUrl,
+                                    height: 140,
+                                    width: 140,
+                                  );
+                                } else {
+                                  return Image.asset(
+                                      'assets/images/city.png', height: 140, width: 140,);
+                                }
+                              }),
+                            ],
                           ),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  top: 18.0, bottom: 8.0, right: 20),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Consumer<TemplateProvider>(builder:
-                                      (context, templateProvider, child) {
-                                    if (templateProvider.templates.isNotEmpty &&
-                                        templateProvider.checkLevel(0)) {
-                                      return SizedBox(
-                                        width: templateProvider
-                                                    .getTemplateByLevel(0)
-                                                    .name
-                                                    .length <=
-                                                5
-                                            ? 100
-                                            : 140,
-                                        child: FittedBox(
-                                          child: Text(
-                                            templateProvider
-                                                .getTemplateByLevel(0)
-                                                .name,
-                                            style: GoogleFonts.teko(
-                                                color: Colors.white,
-                                                fontSize: 38,
-                                                letterSpacing: 1.5,
-                                                fontWeight: FontWeight.w700),
+                                  top: 18.0, bottom: 8.0,),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Consumer<TemplateProvider>(builder:
+                                        (context, templateProvider, child) {
+                                      if (templateProvider.templates.isNotEmpty &&
+                                          templateProvider.checkLevel(0)) {
+                                        return SizedBox(
+                                          width: templateProvider
+                                                      .getTemplateByLevel(0)
+                                                      .name
+                                                      .length <=
+                                                  5
+                                              ? 100
+                                              : 140,
+                                          child: FittedBox(
+                                            child: Text(
+                                              templateProvider
+                                                  .getTemplateByLevel(0)
+                                                  .name,
+                                              style: GoogleFonts.teko(
+                                                  color: Colors.white,
+                                                  fontSize: 38,
+                                                  letterSpacing: 1.5,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    } else {
-                                      return SizedBox(
-                                        width: 100,
-                                        child: FittedBox(
-                                          child: Text(
-                                            "City",
-                                            style: GoogleFonts.teko(
-                                                color: Colors.white,
-                                                fontSize: 30,
-                                                height: 0.4,
-                                                letterSpacing: 1.5,
-                                                fontWeight: FontWeight.w700),
+                                        );
+                                      } else {
+                                        return SizedBox(
+                                          width: 100,
+                                          child: FittedBox(
+                                            child: Text(
+                                              "City",
+                                              style: GoogleFonts.teko(
+                                                  color: Colors.white,
+                                                  fontSize: 30,
+                                                  height: 0.4,
+                                                  letterSpacing: 1.5,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
                                           ),
+                                        );
+                                      }
+                                    }),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        SizedBox(
+                                            width: 22,
+                                            child: Image.asset(
+                                                'assets/images/walking.png')),
+                                        const SizedBox(
+                                          width: 3.0,
                                         ),
-                                      );
-                                    }
-                                  }),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(
-                                          width: 22,
-                                          child: Image.asset(
-                                              'assets/images/walking.png')),
-                                      const SizedBox(
-                                        width: 3.0,
-                                      ),
-                                      Text(
-                                        "${slot.allStepCount != null && slot.allStepCount![userProvider.user.serverId] != null ? slot.allStepCount![userProvider.user.serverId] : '0'}",
-                                        style: const TextStyle(
+                                        Text(
+                                          "${slot.allStepCount != null && slot.allStepCount![userProvider.user.serverId] != null ? slot.allStepCount![userProvider.user.serverId] : '0'}",
+                                          style: const TextStyle(
+                                              fontSize: 10,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(
+                                          width: 7.0,
+                                        ),
+                                        SizedBox(
+                                            width: 22,
+                                            child: Image.asset(
+                                                'assets/images/dollar.png')),
+                                        const SizedBox(
+                                          width: 3.0,
+                                        ),
+                                        Text(
+                                          '${slot.status == 'for_sell' ? slot.getHalfSellingPrice() : slot.getSellingPrice()}',
+                                          style: const TextStyle(
+                                              fontSize: 10,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(
+                                          width: 7.0,
+                                        ),
+                                        SizedBox(
+                                            width: 22,
+                                            child: Image.asset(
+                                                'assets/images/payment.png')),
+                                        const SizedBox(
+                                          width: 3.0,
+                                        ),
+                                        Text(
+                                          '${slot.getRent()}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
                                             fontSize: 10,
                                             color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(
-                                        width: 7.0,
-                                      ),
-                                      SizedBox(
-                                          width: 22,
-                                          child: Image.asset(
-                                              'assets/images/dollar.png')),
-                                      const SizedBox(
-                                        width: 3.0,
-                                      ),
-                                      Text(
-                                        '${slot.status == 'for_sell' ? slot.getHalfSellingPrice() : slot.getSellingPrice()}',
-                                        style: const TextStyle(
-                                            fontSize: 10,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(
-                                        width: 7.0,
-                                      ),
-                                      SizedBox(
-                                          width: 22,
-                                          child: Image.asset(
-                                              'assets/images/payment.png')),
-                                      const SizedBox(
-                                        width: 3.0,
-                                      ),
-                                      Text(
-                                        '${slot.getRent()}',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 10,
-                                          color: Colors.white,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  )
-                                ],
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
