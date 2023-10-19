@@ -4,7 +4,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:monopoly/api/api_constants.dart';
 import 'package:monopoly/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:monopoly/widgets/helping_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../config/values.dart';
 
 class UserProvider extends ChangeNotifier {
   final _scrollController = ScrollController();
@@ -296,18 +299,23 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<String?> loadSession() async {
-    const storage = FlutterSecureStorage();
-    final prefs = await SharedPreferences.getInstance();
+    try {
+      const storage = FlutterSecureStorage();
+      final prefs = await SharedPreferences.getInstance();
 
-    if (prefs.getBool('first_run') ?? true) {
-      FlutterSecureStorage storage = const FlutterSecureStorage();
+      if (prefs.getBool('first_run') ?? true) {
+        FlutterSecureStorage storage = const FlutterSecureStorage();
 
-      await storage.deleteAll();
+        await storage.deleteAll();
 
-      prefs.setBool('first_run', false);
+        prefs.setBool('first_run', false);
+      }
+      String? token = await storage.read(key: 'token');
+      return token;
+    } catch(e, st) {
+      debugPrint('error loading session $e $st');
+      return null;
     }
-    String? token = await storage.read(key: 'token');
-    return token;
   }
 
   deleteSession() {
@@ -403,6 +411,44 @@ class UserProvider extends ChangeNotifier {
     debugPrint('update user gets called ${user.currentSlot}');
     _user = user;
     notifyListeners();
+  }
+
+  forgetPassword(String email) async {
+    {
+      try {
+        Uri url =
+        Uri.parse('${ApiConstants.domain}${ApiConstants.forgetPassword}');
+        var body = {
+          'email': email,
+        };
+        debugPrint('$url');
+        HelpingDialog.showLoadingDialog();
+        var response = await http.post(
+          url,
+          body: json.encode(body),
+          headers: {'Content-Type': 'application/json'},
+        );
+     Navigator.pop(Values.navigatorKey.currentContext!);
+        if (response.statusCode == 200) {
+         HelpingDialog.showServerResponseDialog(response.body);
+        } else if (response.statusCode == 400 ||
+            response.statusCode == 401 ||
+            response.statusCode == 402 ||
+            response.statusCode == 403 ||
+            response.statusCode == 405) {
+          _sessionError = response.body;
+           HelpingDialog.showServerResponseDialog(response.body);
+        } else {
+          HelpingDialog.showServerResponseDialog(response.body);
+
+        }
+      } catch (error, st) {
+        debugPrint('UserProvider $error $st');
+        HelpingDialog.showServerResponseDialog('Unknown error $error');
+      } finally {
+        notifyListeners();
+      }
+    }
   }
 
   User get user => _user;

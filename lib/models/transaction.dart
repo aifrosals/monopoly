@@ -39,7 +39,7 @@ class Transaction {
     return Transaction(
         type: json['type'],
         slot: _slot,
-        amount: json['amount'],
+        amount: json['amount'] ?? 0,
         buyer: json['buyer'],
         seller: json['seller'] ?? '',
         buyerName: json['buyer_name'],

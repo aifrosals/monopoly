@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -243,7 +244,10 @@ class BoardProvider extends ChangeNotifier {
           'message': 'Unknown server error ${response.statusCode}'
         };
       }
-    } catch (error, st) {
+    } on SocketException catch(e, st) {
+      return {'status': false, 'message': 'IE0'};
+    }
+    catch (error, st) {
       debugPrint('BoardProvider $error $st');
       return {'status': false, 'message': 'Unknown error'};
     } finally {

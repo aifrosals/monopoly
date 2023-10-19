@@ -1,10 +1,18 @@
 class ApiConstants {
-  // static const String domain = 'http://172.168.1.101:3000/';
-  // static const String socketPoint = 'http://172.168.1.101:3000/';
+  static const String domain = 'http://192.168.10.57:3000/';
+  static const String socketPoint = 'http://192.168.10.57:3000/';
 
-  static const String domain = 'https://desolate-sierra-90130.herokuapp.com/';
-  static const String socketPoint =
-      'https://desolate-sierra-90130.herokuapp.com/';
+  // static const String domain = 'https://desolate-sierra-90130.herokuapp.com/';
+  // static const String socketPoint =
+  //     'https://desolate-sierra-90130.herokuapp.com/';
+
+  // static const String domain = 'https://phpstack-567009-2989311.cloudwaysapps.com/';
+  // static const String socketPoint = 'wss://phpstack-567009-2989311.cloudwaysapps.com/';
+
+
+  // static const String domain = 'http://rocketreward.club/';
+  // static const String socketPoint =
+  //     'http://rocketreward.club/';
 
   /// User
   static const String registerUserWithEmail = 'registerUserWithEmail';
@@ -16,6 +24,7 @@ class ApiConstants {
   static const String slots = 'getSlots';
   static const String uploadTokenImage = 'uploadTokenImage';
   static const String uploadProfileImage = 'uploadProfileImage';
+  static const String forgetPassword = 'forgetPassword';
 
   /// GameActions
   static const String buyLand = 'buyLand';

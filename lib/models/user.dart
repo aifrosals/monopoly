@@ -65,10 +65,11 @@ class User {
     } catch (error, st) {
       debugPrint('user items parsing error $error');
     }
+    
 
     return User(
         id: json['id'],
-        credits: json['credits'] ?? 0,
+        credits: json['credits'].toInt() ?? 0,
         dice: json['dice'] ?? 0,
         loops: json['loops'] ?? 0,
         presence: json['presence'] ?? 'none',

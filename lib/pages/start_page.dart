@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monopoly/pages/board_page.dart';
+import 'package:monopoly/pages/no_internet_connection_page.dart';
 import 'package:monopoly/pages/onboarding/onboarding_main_page.dart';
 import 'package:monopoly/pages/user_login_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
@@ -42,10 +43,19 @@ class _StartPageState extends State<StartPage> {
           diceProvider.resetFace();
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const BoardPage()));
-        } else {
+        }
+          else if(res['status'] == false && res['message'] == 'IE0') {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const NoInternetConnectionPage()));
+        }
+         else {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const UserLoginPage()));
         }
+      }
+      else {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const UserLoginPage()));
       }
     }
   }

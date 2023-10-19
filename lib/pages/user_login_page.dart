@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monopoly/config/validator.dart';
 import 'package:monopoly/pages/board_page.dart';
+import 'package:monopoly/pages/forgot_password_page.dart';
 import 'package:monopoly/pages/user_sign_up_page.dart';
 import 'package:monopoly/providers/board_provider.dart';
 import 'package:monopoly/providers/dice_provider.dart';
@@ -91,6 +92,15 @@ class _UserLoginPageState extends State<UserLoginPage> {
                     decoration:
                         const InputDecoration.collapsed(hintText: 'Password'),
                   ),
+                ),
+                const SizedBox(height: 10,),
+                InkWell(
+                  onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordPage()));
+                  },
+                  child: const Align(
+                      alignment: Alignment.topRight,
+                      child: Text('Forgot Password?')),
                 ),
                 const SizedBox(height: 10),
                 TextButton(
